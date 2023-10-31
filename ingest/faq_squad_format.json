@@ -1,0 +1,358 @@
+{
+  "data": [
+    {
+      "paragraphs": [
+        {
+          "context": "The number of peers required to endorse a transaction is driven by the endorsement policy that is specified in the chaincode definition.",
+          "qas": [
+            {
+              "question": "How many peers in the network need to endorse a transaction?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "The number of peers required to endorse a transaction is driven by the endorsement policy that is specified in the chaincode definition.",
+                  "answer_start": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Clients only need to connect to as many peers as are required by the endorsement policy for the chaincode.",
+          "qas": [
+            {
+              "question": "Does an application client need to connect to all peers?",
+              "id": "q2",
+              "answers": [
+                {
+                  "text": "Clients only need to connect to as many peers as are required by the endorsement policy for the chaincode.",
+                  "answer_start": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "There are various aspects to data privacy. First, you can segregate your network into channels, where each channel represents a subset of participants that are authorized to see the data for the chaincodes that are deployed to that channel.",
+          "qas": [
+            {
+              "question": "How can I ensure my privacy?",
+              "id": "q3",
+              "answers": [
+                {
+                  "text": "you can segregate your network into channels, where each channel represents a subset of participants that are authorized to see the data for the chaincodes that are deployed to that channel.",
+                  "answer_start": 50
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Second, you can use private-data to keep ledger data private from other organizations on the channel. A private data collection allows a defined subset of organizations on a channel the ability to endorse, commit, or query private data without having to create a separate channel. Other participants on the channel receive only a hash of the data. For more information refer to the Using Private Data in Fabric tutorial. Note that the key concepts topic also explains when to use private data instead of a channel.",
+          "qas": [
+            {
+              "question": "How can keep data private from other organizations?",
+              "id": "q4",
+              "answers": [
+                {
+                  "text": "you can use private-data to keep ledger data private from other organizations on the channel. A private data collection allows a defined subset of organizations on a channel the ability to endorse, commit, or query private data without having to create a separate channel.",
+                  "answer_start": 8
+                },
+                {
+                  "text": "A private data collection allows a defined subset of organizations on a channel the ability to endorse, commit, or query private data without having to create a separate channel. Other participants on the channel receive only a hash of the data.",
+                  "answer_start": 102
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Third, as an alternative to Fabric hashing the data using private data, the client application can hash or encrypt the data before calling chaincode. If you hash the data then you will need to provide a means to share the source data. If you encrypt the data then you will need to provide a means to share the decryption keys.",
+          "qas": [
+            {
+              "question": "How to encrypt data?",
+              "id": "q5",
+              "answers": [
+                {
+                  "text": "the client application can hash or encrypt the data before calling chaincode.",
+                  "answer_start": 72
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Fourth, you can restrict data access to certain roles in your organization, by building access control into the chaincode logic.",
+          "qas": [
+            {
+              "question": "How can I restrict data to access to certain roles?",
+              "id": "q6",
+              "answers": [
+                {
+                  "text": "by building access control into the chaincode logic.",
+                  "answer_start": 76
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Fifth, ledger data at rest can be encrypted via file system encryption on the peer, and data in-transit is encrypted via TLS.",
+          "qas": [
+            {
+              "question": "Ledger data can be encrypted?",
+              "id": "q7",
+              "answers": [
+                {
+                  "text": "via file system encryption on the peer, and data in-transit is encrypted via TLS.",
+                  "answer_start": 44
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Orderers receive endorsed transactions that are submitted from application clients. The endorsed payload contains the chaincode execution results including the ReadSet and WriteSet information. The orderers only validate the submitter’s identity and order transactions, they do not open the endorsed transactions. If you do not want the data to go through the orderers at all, then utilize the private data feature of Fabric. Alternatively, you can hash or encrypt the data in the client application before calling chaincode. If you encrypt the data then you will need to provide a means to share the decryption keys.",
+          "qas": [
+            {
+              "question": "Do the orderers see the transaction data?",
+              "id": "q8",
+              "answers": [
+                {
+                  "text": "via file system encryption on the peer, and data in-transit is encrypted via TLS.",
+                  "answer_start": 0
+                }
+              ]
+            },
+            {
+              "question": "How can I avoid data to go through the orderers at all?",
+              "id": "q9",
+              "answers": [
+                {
+                  "text": "If you do not want the data to go through the orderers at all, then utilize the private data feature of Fabric",
+                  "answer_start": 314
+                },
+                {
+                  "text": "via file system encryption on the peer, and data in-transit is encrypted via TLS.",
+                  "answer_start": 441
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "Hyperledger FAQ"
+    },
+    {
+      "paragraphs": [
+        {
+          "context": "In general terms, a blockchain is an immutable transaction ledger, maintained within a distributed network of peer nodes. These nodes each maintain a copy of the ledger by applying transactions that have been validated by a consensus protocol, grouped into blocks that include a hash that bind each block to the preceding block.",
+          "qas": [
+            {
+              "question": "What is a blockchain?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "a blockchain is an immutable transaction ledger, maintained within a distributed network of peer nodes",
+                  "answer_start": 18
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "The first and most widely recognized application of blockchain is the Bitcoin cryptocurrency, though others have followed in its footsteps. Ethereum, an alternative cryptocurrency, took a different approach, integrating many of the same characteristics as Bitcoin but adding smart contracts to create a platform for distributed applications. Bitcoin and Ethereum fall into a class of blockchain that we would classify as public permissionless blockchain technology. Basically, these are public networks, open to anyone, where participants interact anonymously.",
+          "qas": [
+            {
+              "question": "What is the first application of blockchain?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "The first and most widely recognized application of blockchain is the Bitcoin cryptocurrency, though others have followed in its footsteps",
+                  "answer_start": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "As the popularity of Bitcoin, Ethereum and a few other derivative technologies grew, interest in applying the underlying technology of the blockchain, distributed ledger and distributed application platform to more innovative enterprise use cases also grew. However, many enterprise use cases require performance characteristics that the permissionless blockchain technologies are unable (presently) to deliver. In addition, in many use cases, the identity of the participants is a hard requirement, such as in the case of financial transactions where Know-Your-Customer (KYC) and Anti-Money Laundering (AML) regulations must be followed.",
+          "qas": [
+            {
+              "question": "Why the interest in blockchain is growing?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "As the popularity of Bitcoin, Ethereum and a few other derivative technologies grew, interest in applying the underlying technology of the blockchain, distributed ledger and distributed application platform to more innovative enterprise use cases",
+                  "answer_start": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "For enterprise use, we need to consider the following requirements: Participants must be identified/identifiable, Networks need to be permissioned, High transaction throughput performance, Low latency of transaction confirmation, Privacy and confidentiality of transactions and data pertaining to business transactions",
+          "qas": [
+            {
+              "question": "What are the requirements for enterprise use?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "the following requirements: Participants must be identified/identifiable, Networks need to be permissioned, High transaction throughput performance, Low latency of transaction confirmation, Privacy and confidentiality of transactions and data pertaining to business transactions",
+                  "answer_start": 68
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "While many early blockchain platforms are currently being adapted for enterprise use, Hyperledger Fabric has been designed for enterprise use from the outset. The following sections describe how Hyperledger Fabric (Fabric) differentiates itself from other blockchain platforms and describes some of the motivation for its architectural decisions.",
+          "qas": [
+            {
+              "question": "Is Hyperledger fabric useful for enterprise?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "Hyperledger Fabric has been designed for enterprise use from the outset",
+                  "answer_start": 86
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Hyperledger Fabric is an open source enterprise-grade permissioned distributed ledger technology (DLT) platform, designed for use in enterprise contexts, that delivers some key differentiating capabilities over other popular distributed ledger or blockchain platforms.",
+          "qas": [
+            {
+              "question": "What is hyperledger fabric?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "Hyperledger Fabric is an open source enterprise-grade permissioned distributed ledger technology (DLT) platform, designed for use in enterprise contexts, that delivers some key differentiating capabilities over other popular distributed ledger or blockchain platforms.",
+                  "answer_start": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "One key point of differentiation is that Hyperledger was established under the Linux Foundation, which itself has a long and very successful history of nurturing open source projects under open governance that grow strong sustaining communities and thriving ecosystems. Hyperledger is governed by a diverse technical steering committee, and the Hyperledger Fabric project by a diverse set of maintainers from multiple organizations. It has a development community that has grown to over 35 organizations and nearly 200 developers since its earliest commits.",
+          "qas": [
+            {
+              "question": "What is the main difference from Hyperledger fabric and other blockchians?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "Hyperledger was established under the Linux Foundation",
+                  "answer_start": 41
+                }
+              ]
+            },
+            {
+              "question": "What is the governance of Hyperledger fabric?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "open governance that grow strong sustaining communities and thriving ecosystems",
+                  "answer_start": 189
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Fabric has a highly modular and configurable architecture, enabling innovation, versatility and optimization for a broad range of industry use cases including banking, finance, insurance, healthcare, human resources, supply chain and even digital music delivery.",
+          "qas": [
+            {
+              "question": "Which are some general uses cases application of Fabric?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "use cases including banking, finance, insurance, healthcare, human resources, supply chain and even digital music delivery",
+                  "answer_start": 139
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Fabric is the first distributed ledger platform to support smart contracts authored in general-purpose programming languages such as Java, Go and Node.js, rather than constrained domain-specific languages (DSL). This means that most enterprises already have the skill set needed to develop smart contracts, and no additional training to learn a new language or DSL is needed.",
+          "qas": [
+            {
+              "question": "Does fabric support general-purpose programming languages smart contracts?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "Fabric is the first distributed ledger platform to support smart contracts authored in general-purpose programming languages such as Java, Go and Node.js",
+                  "answer_start": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "The Fabric platform is also permissioned, meaning that, unlike with a public permissionless network, the participants are known to each other, rather than anonymous and therefore fully untrusted. This means that while the participants may not fully trust one another (they may, for example, be competitors in the same industry), a network can be operated under a governance model that is built off of what trust does exist between participants, such as a legal agreement or framework for handling disputes.",
+          "qas": [
+            {
+              "question": "What does permissioned mean?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "permissioned, meaning that, unlike with a public permissionless network, the participants are known to each other, rather than anonymous and therefore fully untrusted",
+                  "answer_start": 28
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "One of the most important of the platform's differentiators is its support for pluggable consensus protocols that enable the platform to be more effectively customized to fit particular use cases and trust models. For instance, when deployed within a single enterprise, or operated by a trusted authority, fully byzantine fault tolerant consensus might be considered unnecessary and an excessive drag on performance and throughput. In situations such as that, a crash fault-tolerant (CFT) consensus protocol might be more than adequate whereas, in a multi-party, decentralized use case, a more traditional byzantine fault tolerant (BFT) consensus protocol might be required.",
+          "qas": [
+            {
+              "question": "Does fabric can be an effective customized platform?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "the platform's differentiators is its support for pluggable consensus protocols that enable the platform to be more effectively customized to fit particular use cases and trust models",
+                  "answer_start": 29
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "Fabric can leverage consensus protocols that do not require a native cryptocurrency to incent costly mining or to fuel smart contract execution. Avoidance of a cryptocurrency reduces some significant risk/attack vectors, and absence of cryptographic mining operations means that the platform can be deployed with roughly the same operational cost as any other distributed system.",
+          "qas": [
+            {
+              "question": "Fabric require a native cryptocurrency?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "do not require a native cryptocurrency to incent costly mining or to fuel smart contract execution",
+                  "answer_start": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "context": "The combination of these differentiating design features makes Fabric one of the better performing platforms available today both in terms of transaction processing and transaction confirmation latency, and it enables privacy and confidentiality of transactions and the smart contracts (what Fabric calls “chaincode”) that implement them.",
+          "qas": [
+            {
+              "question": "What are performance of Hyperledger fabric in terms of transaction processing?",
+              "id": "q1",
+              "answers": [
+                {
+                  "text": "design features makes Fabric one of the better performing platforms available today both in terms of transaction processing and transaction confirmation latency",
+                  "answer_start": 41
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "title": "Hyperledger Introduction"
+    }
+  ],
+  "version": "2.0"
+}

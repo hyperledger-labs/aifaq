@@ -1,0 +1,205 @@
+[
+  {
+    "content": "The number of peers required to endorse a transaction is driven by the endorsement policy that is specified in the chaincode definition.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Clients only need to connect to as many peers as are required by the endorsement policy for the chaincode.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "There are various aspects to data privacy. First, you can segregate your network into channels, where each channel represents a subset of participants that are authorized to see the data for the chaincodes that are deployed to that channel.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Second, you can use private-data to keep ledger data private from other organizations on the channel. A private data collection allows a defined subset of organizations on a channel the ability to endorse, commit, or query private data without having to create a separate channel. Other participants on the channel receive only a hash of the data. For more information refer to the Using Private Data in Fabric tutorial. Note that the key concepts topic also explains when to use private data instead of a channel.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Third, as an alternative to Fabric hashing the data using private data, the client application can hash or encrypt the data before calling chaincode. If you hash the data then you will need to provide a means to share the source data. If you encrypt the data then you will need to provide a means to share the decryption keys.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Fourth, you can restrict data access to certain roles in your organization, by building access control into the chaincode logic.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Fifth, ledger data at rest can be encrypted via file system encryption on the peer, and data in-transit is encrypted via TLS.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Orderers receive endorsed transactions that are submitted from application clients. The endorsed payload contains the chaincode execution results including the ReadSet and WriteSet information. The orderers only validate the submitter’s identity and order transactions, they do not open the endorsed transactions.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "If you do not want the data to go through the orderers at all, then utilize the private data feature of Fabric. Alternatively, you can hash or encrypt the data in the client application before calling chaincode. If you encrypt the data then you will need to provide a means to share the decryption keys.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "The transaction simulation results are returned to the client by the endorser in the proposal response. If there are multiple endorsers, the client can check that the responses are all the same, and submit the results and endorsements for ordering and commitment. Ultimately the committing peers will validate or invalidate the transaction, and the client becomes aware of the outcome via an event, that the SDK makes available to the application client.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Within chaincode you can query based on keys. Keys can be queried by range, and composite keys can be modeled to enable equivalence queries against multiple parameters. For example a composite key of (owner,asset_id) can be used to query all assets owned by a certain entity. These key-based queries can be used for read-only queries against the ledger, as well as in transactions that update the ledger.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "If you model asset data as JSON in chaincode and use CouchDB as the state database, you can also perform complex rich queries against the chaincode data values, using the CouchDB JSON query language within chaincode. The application client can perform read-only queries, but these responses are not typically submitted as part of transactions to the ordering service.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "The chaincode API GetHistoryForKey() will return history of values for a key.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "The client can query multiple peers, compare their block heights, compare their query results, and favor the peers at the higher block heights.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Yes. We call this feature Chaincode. It is our interpretation of the smart contract method/algorithm, with additional features.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "A chaincode is programmatic code deployed on the network, where it is executed and validated by chain validators together during the consensus process. Developers can use chaincodes to develop business contracts, asset definitions, and collectively-managed decentralized applications.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "There are generally two ways to develop business contracts: the first way is to code individual contracts into standalone instances of chaincode; the second way, and probably the more efficient way, is to use chaincode to create decentralized applications that manage the life cycle of one or multiple types of business contracts, and let end users instantiate instances of contracts within these applications.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Users can use chaincode (for business rules) and membership service (for digital tokens) to design assets, as well as the logic that manages them.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "There are two popular approaches to defining assets in most blockchain solutions: the stateless UTXO model, where account balances are encoded into past transaction records; and the account model, where account balances are kept in state storage space on the ledger.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Each approach carries its own benefits and drawbacks. This blockchain technology does not advocate either one over the other. Instead, one of our first requirements was to ensure that both approaches can be easily implemented.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Chaincode can be written in any programming language and executed in containers. Currently, Go, Node.js and Java chaincode are supported.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "No. However, if you really need a native currency for your chain network, you can develop your own native currency with chaincode. One common attribute of native currency is that some amount will get transacted (the chaincode defining that currency will get called) every time a transaction is processed on its chain.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "The differences between any subsequent releases are provided together with the Releases.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Please use StackOverflow.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "This is explicitly not supported.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "Although this is possible, it is a highly discouraged configuration. By default the /Channel/Orderer/BlockValidation policy allows any valid certificate of the ordering organizations to sign blocks. If an organization is acting both in an ordering and application role, then this policy should be updated to restrict block signers to the subset of certificates authorized for ordering.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "A consensus plugin needs to implement the Consenter and Chain interfaces defined in the consensus package. There is a plugin built against raft . You can study it to learn more for your own implementation. The ordering service code can be found under the orderer package.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "This falls under reconfiguring the network. Please consult the topic on configtxlator.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  },
+  {
+    "content": "No date has been set. We are working towards a release during the 2.x cycle, i.e. it will come with a minor version upgrade in Fabric.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "hl1"
+    }
+  }
+]

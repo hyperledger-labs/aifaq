@@ -1,0 +1,9 @@
+[
+  {
+    "content": "The number of peers required to endorse a transaction is driven by the endorsement policy that is specified in the chaincode definition.",
+    "meta": {
+      "name": "Hyperledger FAQ",
+      "id": "q1"
+    }
+  }
+]
