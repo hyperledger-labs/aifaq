@@ -19,4 +19,11 @@ In this PoC I use Haystack ([Haystack by Deepset](https://haystack.deepset.ai/))
 Below an image of the architecture:\
 ![alt text](./images/architecture_modern_qa.drawio.png)
 
-I use Elastic Search as Retriever component.
+I use Elastic Search ([Elastic Search website](https://www.elastic.co/)) as Retriever component.
+
+## Installation
+
+For the installation istructions read the links below:\
+[Haystack installation](https://haystack.deepset.ai/integrations/elasticsearch-document-store)
+
+[Elastic Search Windows installation](https://www.elastic.co/guide/en/elasticsearch/reference/current/zip-windows.html)
