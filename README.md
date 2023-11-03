@@ -27,3 +27,20 @@ For the installation istructions read the links below:\
 [Haystack installation](https://haystack.deepset.ai/integrations/elasticsearch-document-store)
 
 [Elastic Search Windows installation](https://www.elastic.co/guide/en/elasticsearch/reference/current/zip-windows.html)
+
+## Ingestion files
+
+In ingest folder, you can find two kinds of files:
+
+1. es format (Elastic Search) which contains data for the unstructured documents
+2. one squad format file ([Stanford Question Anwsering Dataset](https://huggingface.co/datasets/squad_v2)) for the fine-tuning process
+
+## Current versione notes
+
+That is the first version of a PoC. Below a list of improvements that will be applied soon:
+
+1. Model: more sophisticated model (e.g. Zephyr 7B alpha)
+2. Dataset: currently I implemented only 2 documents as example, but real systems work with hundreds of documents
+3. Retriever: more sophisticated techniques use embeddings
+4. QA type: I will use generative (RAG) instead of extractive QA
+5. Hardware: now the system requires 10 minutes to ingest the files, GPU can help to save much time
