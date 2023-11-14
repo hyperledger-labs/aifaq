@@ -35,7 +35,7 @@ In ingest folder, you can find two kinds of files:
 1. es format (Elastic Search) which contains data for the unstructured documents
 2. one squad format file ([Stanford Question Anwsering Dataset](https://huggingface.co/datasets/squad_v2)) for the fine-tuning process
 
-## Current versione notes
+## Current version notes
 
 That is the first version of a PoC. Below a list of improvements that will be applied soon:
 
