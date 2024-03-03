@@ -1,46 +1,114 @@
-# Hyperledger QA PoC
+# Hyperledger QA PoC version 2
 
-This is a Proof-of-Concept application that allows you to ask questions to a python script chatbot, fine-tuned with Hyperledger Standard Documents.
-I implemented this first version, as mentee, during the Hyperledger Mentorship Program 2023.
+The scope of this Hyperledger Labs project is to support the users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. We are implementing an open source conversational AI tool which replies to the questions related to specific context. This is a proof-of-concept software which allows to create a chatbot using Google Colab (or local notebook which requires GPU). Here the official Wiki page: [Hyperledger Labs aifaq](https://labs.hyperledger.org/labs/aifaq.html). Please, read also the [Antitrust Policy and the Code of Conduct](https://wiki.hyperledger.org/pages/viewpage.action?pageId=41587043).
 
-## Use case
+## Background
 
-This NLP application allows people to access to the Hyperledger Standard Documentation.
-The scope of the lab is to support the Hyperledger users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. Large Language Models have yielded remarkable results, either pay and open source tools. Today we can implement a conversational AI tool which replies to questions related to specific context.
+The system is an open source Jupyter Notebook (derived from here [medium.com](https://levelup.gitconnected.com/building-a-private-ai-chatbot-2c071f6715ad)) which implements an AI chatbot. The idea is to implement an open source framework/template, as example, for other communities. Last results in open LLMs allow to have good performance using common HW resources.\
+Below the application architecture:
 
-## Architecture
+![LLM chatbot schema](/images/poc_schema_v2.png)
 
-The model is XML-R pre-trained ([HuggingFace deepset/xlm-roberta-large-squad2](https://huggingface.co/deepset/xlm-roberta-large-squad2)) with SQuAD Dataset. Below the architecture of the model:\
-![alt text](./images/xlm_r_architecture.drawio.png)
+We use RAG (Retrieval Augmented Generation [arxiv.org](https://arxiv.org/abs/2312.10997)) for question answering use case. That technique aims to improve LLM answers by incorporating knowledge from external database (e.g. vector database).
 
-## Pipeline
+The image depicts two workflow:
 
-In this PoC I use Haystack ([Haystack by Deepset](https://haystack.deepset.ai/)) to Build the QA pipeline.
-Below an image of the architecture:\
-![alt text](./images/architecture_modern_qa.drawio.png)
+1. The data ingestion workflow
+2. The chat workflow
 
-I use Elastic Search ([Elastic Search website](https://www.elastic.co/)) as Retriever component.
+During the ingestion phase, the system loads context documents and creates a vector database. In our case, the document sources are:
+
+- An online software guide (readthedocs template)
+- The GitHub issues and pull requests
+
+After the first phase, the system is ready to reply to user questions.
+
+Currently, we use the open source [HuggingFace Zephyr-7b-alpha](https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha). But, in the future we want to investigate other open source models. Moreover, the User Interface uses [Gradio](https://www.gradio.app/).
+
+## Open Source Version
+
+The software is under Apache 2.0 License (please check LICENSE and NOTICE files included). For the dependencies, it is [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html) compliant: the **LICENSE** file contains "pointers" to the dependency's licenses and a list of Apache 2.0-licensed dependecies ([Assembling LICENSE and NOTICE files](https://infra.apache.org/licensing-howto.html#mod-notice)).
 
 ## Installation
 
-For the installation istructions read the links below:\
-[Haystack installation](https://haystack.deepset.ai/integrations/elasticsearch-document-store)
+Below the main steps to set up the system:
 
-[Elastic Search Windows installation](https://www.elastic.co/guide/en/elasticsearch/reference/current/zip-windows.html)
+1. Download the **hyperledger_aifaq_poc_v3.ipynb** notebook file from the **src** folder
+2. Create a new Google Colab notebook
+3. Load the downloaded notebook file
+4. Set up the runtime GPU
+5. Set the URL and GitHub repo document sources
+6. Create a new GitHub personal token
+7. Add the token, as new secret, to the Google Colab notebook
 
-## Ingestion files
+The first step is straightforward: just click the **src** folder to open it, then click the **hyperledger_aifaq_poc_v3.ipynb** file and the click the button below:
 
-In ingest folder, you can find two kinds of files:
+![download button](/images/download_notebook_file.png)
 
-1. es format (Elastic Search) which contains data for the unstructured documents
-2. one squad format file ([Stanford Question Anwsering Dataset](https://huggingface.co/datasets/squad_v2)) for the fine-tuning process
+Now, in Google Drive click on **New** button -> **Other** and **Google Colaboratory**
+
+![new Google Colab notebook](/images/new_colab_notebook.png)
+
+Inside the new notebook, select the **File** menu, then select **Load notebook** and then click on the "Browse" button and select the downloaded file (hyperledger_aifaq_poc_v3.ipynb).
+
+We need a GPU to execute the notebook. So, we can set it up from the **Runtime** menu, then change runtime:
+
+![set up the runtime](/images/runtime_type.png)
+
+If you have a free account you can use only the T4 GPU.
+
+The notebook takes the documents for RAG from two sources:
+
+1. An online website
+2. A GitHub repository
+
+The image below shows how to set them up:
+
+![document sources](/images/document_sources.png)
+
+In our case, we get the **Hyperledger Iroha** readthedocs guide and its GitHub repository (getting issues and pull requests).
+Into **url** string we specify the website, while in **repo** string we set the GitHub repository.\\
+
+From your personal GitHub account, inside the profile settings, select the developer settings:
+
+![developer settings](/images/developer_settings.png)
+
+Then select the **fine-grained token**
+
+![fine-grained token](/images/fine_grained_token.png)
+
+and click on the generate button: now copy the token.\\
+Into the Google Colab notebook, select the **secret key** and add a new secret, like the image below:
+
+![github personal token](/images/github_personal_token.png)
+
+- The token must have the access to the notebook
+- The name should be **GITHUB_PERSONAL_ACCESS_TOKEN**
+- Past it inside the **Value** field
+
+## Usage
+
+Now, we can test the PoC by executing the notebook: in Google Colab notebook -> **Runtime menu**, select **Execute all**:
+
+- It will take 5-15 minutes (it depends on the GPU and the documents)
+- When the execution finishes, it loads an UI which allows to ask questions and replies in around 30 seconds
+
+Below an example:
+
+![UI Gradio example](/images/ui_gradio_question.png)
+
+For any reason, please, contact us on Discord Channel:
+
+- Server: Hyperledger
+- Channel: #aifaq
 
 ## Current version notes
 
-That is the first version of a PoC. Below a list of improvements that will be applied soon:
+That is a proof-of-concept: a list of future improvement below:
 
-1. Model: more sophisticated model (e.g. Zephyr 7B alpha)
-2. Dataset: currently I implemented only 2 documents as example, but real systems work with hundreds of documents
-3. Retriever: more sophisticated techniques use embeddings
-4. QA type: I will use generative (RAG) instead of extractive QA
-5. Hardware: now the system requires 10 minutes to ingest the files, GPU can help to save much time
+1. We want to implement a prototype starting from that PoC: container architecture installed on a GPU Cloud Server
+2. At the same time, we'd like to pass to the next step: the Hyperledger Incubation Stage
+3. We will investigate other open source models
+4. Evaluation of the system using standard metrics
+5. We would like to improve the system, some ideas are: fine-tuning, Corrective RAG, Decomposed LoRA
+6. Add "guardrails" which are a specific ways of controlling the output of a LLM, such as talking avoid specific topics, responding in a particular way to specific user requests, etc.
