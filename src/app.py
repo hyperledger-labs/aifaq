@@ -192,4 +192,4 @@ with gr.Blocks() as demo:
     clear = gr.ClearButton([msg, chatbot])
     msg.submit(create_conversation, [msg, chatbot], [msg, chatbot])
 
-demo.launch()
+demo.launch(share=True)
