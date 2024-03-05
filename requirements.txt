@@ -1,0 +1,11 @@
+transformers==4.38.1 # already satisfied
+peft==0.9.0
+accelerate==0.27.2
+bitsandbytes==0.42.0
+safetensors==0.4.2 # already satisfied
+sentencepiece==0.1.99 # already satisfied
+chromadb==0.4.24
+langchain==0.1.11
+sentence-transformers==2.5.1
+gradio==4.19.2
+bs4==0.0.2
