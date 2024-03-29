@@ -1,6 +1,6 @@
 # Hyperledger QA PoC version 2
 
-The scope of this Hyperledger Labs project is to support the users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. We are implementing an open source conversational AI tool which replies to the questions related to specific context. This is a proof-of-concept software which allows to create a chatbot using Google Colab (or local notebook which requires GPU). Here the official Wiki page: [Hyperledger Labs aifaq](https://labs.hyperledger.org/labs/aifaq.html). Please, read also the [Antitrust Policy and the Code of Conduct](https://wiki.hyperledger.org/pages/viewpage.action?pageId=41587043).
+The scope of this Hyperledger Labs project is to support the users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. We are implementing an open source conversational AI tool which replies to the questions related to specific context. This is a proof-of-concept software which allows to create a chatbot using Google Colab (or local notebook which requires GPU). Here the official Wiki page: [Hyperledger Labs aifaq](https://labs.hyperledger.org/labs/aifaq.html). Please, read also the [Antitrust Policy and the Code of Conduct](https://wiki.hyperledger.org/pages/viewpage.action?pageId=41587043). The meeting invitation is on the Hyperledger Labs calendar: [[Hyperledger Labs] FAQ AI Lab calls](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
 
 ## Background
 
