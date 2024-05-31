@@ -37,9 +37,11 @@ Below the main steps to set up the system:
 2. Create a new Google Colab notebook
 3. Load the downloaded notebook file
 4. Set up the runtime GPU
-5. Set the URL and GitHub repo document sources
-6. Create a new GitHub personal token
-7. Add the token, as new secret, to the Google Colab notebook
+5. Copy the ReadTheDocs on Google Drive
+6. Set up the Google Drive mount path
+7. Set the URL and GitHub repo document sources
+8. Create a new GitHub personal token
+9. Add the token, as new secret, to the Google Colab notebook
 
 The first step is straightforward: just click the **src** folder to open it, then click the **hyperledger_aifaq_poc_v3.ipynb** file and the click the button below:
 
@@ -57,17 +59,34 @@ We need a GPU to execute the notebook. So, we can set it up from the **Runtime**
 
 If you have a free account you can use only the T4 GPU.
 
-The notebook takes the documents for RAG from two sources:
+Now, download the on-line ReadTheDocs documentation, e.g. from [Hyperledger fabric ReadTheDocs](https://hyperledger-fabric.readthedocs.io/en/release-2.5/):
+
+Click on the **v: realease-2.5** and then click on Download:
+
+![readthedocs](/images/readthedocs.png)
+
+It should open a web page where it is possible to download the HTML version:
+
+![download readthedocs](/images/download_rtdocs.png)
+
+Unzip the file and copy folders and files on your Google Drive:
+
+![google drive readthedocs](/images/gdrive_rtdocs.png)
+
+Now, we can set the document sources. The notebook takes the documents for RAG from three sources:
 
 1. An online website
-2. A GitHub repository
+2. A local ReadTheDocs documentation
+3. A GitHub repository
 
 The image below shows how to set them up:
 
-![document sources](/images/document_sources.png)
+![document sources](/images/set_document_sources.png)
 
-In our case, we get the **Hyperledger Iroha** readthedocs guide and its GitHub repository (getting issues and pull requests).
+In our case, we get the **Hyperledger fabric** wiki page and its GitHub repository (getting issues and pull requests).
 Into **url** string we specify the website, while in **repo** string we set the GitHub repository.\\
+
+While, we should specify the ReadTheDocs **folderpath** and use it below.
 
 From your personal GitHub account, inside the profile settings, select the developer settings:
 
