@@ -2,6 +2,6 @@
 
 **Active Maintainers**
 
-| Name             | GitHub               | Chat     | email                        |
-| ---------------- | -------------------- | -------- | ---------------------------- |
-| Gianluca Capuzzi | [gcapuzzi][gcapuzzi] | gcapuzzi | <gianluca.posta78@gmail.com> |
+| Name             | GitHub   | Discord         | email                        |
+| ---------------- | -------- | --------------- | ---------------------------- |
+| Gianluca Capuzzi | gcapuzzi | gianlucacapuzzi | <gianluca.posta78@gmail.com> |

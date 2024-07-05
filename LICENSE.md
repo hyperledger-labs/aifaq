@@ -127,26 +127,6 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
     reproduction, and distribution of the Work otherwise complies with
     the conditions stated in this License.
 
-    This product bundles torch, which is available under a
-    "3-clause BSD" license. For details, see deps/torch/
-
-    This product bundles bitsandbytes, which is available under a
-    "MIT" license. For details, see deps/bitsandbytes/
-
-    This product bundles langchain, which is available under a
-    "MIT" license. For details, see deps/langchain/
-
-    This product bundles bs4, which is available under a
-    "MIT" license. For details, see deps/bs4/
-
-    This product bundles transformers, which is available under a
-    "Apache 2.0" license. For details, see deps/transformers/
-
-    This product bundles sentence-transformers, which is available under a
-    "Apache 2.0" license. For details, see deps/sentence-transformers/
-
-    This product bundles transformers, peft, accelerate, safetensors, sentencepiece, chromadb, sentence-transformers, gradio, sentence-transformers/all-mpnet-base-v2 model, filipealmeida/Mistral-7B-Instruct-v0.1-sharded model, which are available under an "Apache 2.0" license.
-
 5.  Submission of Contributions. Unless You explicitly state otherwise,
     any Contribution intentionally submitted for inclusion in the Work
     by You to the Licensor shall be under the terms and conditions of
