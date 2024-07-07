@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
+import Providers from "@/components/providers"
 
 const fontPrimary = Space_Grotesk({
   subsets: ["latin"],
@@ -32,7 +33,9 @@ export default function RootLayout({
           fontSecondary.variable
         )}>
         <div className="h-screen w-screen">
-          {children}
+          <Providers>
+            {children}
+          </Providers>
         </div>
       </body>
     </html>
