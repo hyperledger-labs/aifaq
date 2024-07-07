@@ -23,7 +23,7 @@ const ChatBottomBar = (props: Props) => {
         <div className="w-full max-w-3xl px-2 mx-auto">
             <div className='flex flex-col'>
                 <div className="flex flex-row bg-background p-2 rounded-3xl border items-end space-x-1 gap-1">
-                    <Button size='icon' variant='link' className="aspect-square rounded-full flex-shrink-0">
+                    <Button size='icon' variant='link' className="rounded-full flex-shrink-0">
                         <Paperclip />
                     </Button>
                     <TextareaAutosize
@@ -33,11 +33,11 @@ const ChatBottomBar = (props: Props) => {
                         maxRows={isMobile ? 4 : 8}
                         placeholder='Ask AIFAQ'
                     />
-                    <Button size='icon' variant='default' className="aspect-square rounded-full flex-shrink-0">
+                    <Button size='icon' variant='default' className="rounded-full flex-shrink-0">
                         <ArrowUp />
                     </Button>
                 </div>
-                <div className='flex justify-center text-xxs py-1 text-muted-foreground'>AIFAQ can make mistakes. Check important information.</div>
+                <div className='flex justify-center text-xxs py-1 text-muted-foreground text-center'>AIFAQ can make mistakes. Check important information.</div>
             </div>
         </div>
     )

@@ -1,5 +1,6 @@
 import React from 'react'
 import { IconHyperledger } from './icons/IconHyperledger'
+import ChatResponseOptions from './chat-response-options'
 
 type Props = {
     text: string
@@ -8,11 +9,14 @@ type Props = {
 const ChatResponse = ({ text }: Props) => {
     return (
         <div className='flex flex-row'>
-            <div className='h-10 w-10 rounded-full border aspect-square p-2'>
+            <div className='h-10 w-10 rounded-full border shrink-0 p-2'>
                 <IconHyperledger />
             </div>
-            <div className='w-fit p-2'>
-                {text}
+            <div className='flex flex-col'>
+                <div className='w-fit p-2'>
+                    {text}
+                </div>
+                <ChatResponseOptions text={text} />
             </div>
         </div>
     )
