@@ -20,15 +20,15 @@ const ChatBottomBar = (props: Props) => {
     }
 
     return (
-        <div className="w-full max-w-3xl px-2 mx-auto">
-            <div className='flex flex-col'>
-                <div className="flex flex-row bg-background p-2 rounded-3xl border items-end space-x-1 gap-1">
+        <div className="w-full max-w-3xl mx-auto">
+            <div className='flex flex-col mx-2'>
+                <div className="flex flex-row bg-background p-2 rounded-3xl border items-end gap-2">
                     <Button size='icon' variant='link' className="rounded-full flex-shrink-0">
                         <Paperclip />
                     </Button>
                     <TextareaAutosize
                         autoFocus
-                        className='flex-grow resize-none outline-none text-xl bg-transparent pb-1 w-full'
+                        className='flex-grow resize-none outline-none bg-transparent w-full pb-1'
                         minRows={1}
                         maxRows={isMobile ? 4 : 8}
                         placeholder='Ask AIFAQ'

@@ -32,7 +32,7 @@ export default function RootLayout({
           fontPrimary.variable,
           fontSecondary.variable
         )}>
-        <div className="h-screen w-screen">
+        <div className="min-h-screen w-full">
           <Providers>
             {children}
           </Providers>
