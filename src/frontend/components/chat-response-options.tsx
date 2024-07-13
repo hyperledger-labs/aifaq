@@ -3,6 +3,7 @@ import React from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { ThumbsUp, ThumbsDown, Share2, EllipsisVertical, Copy, Flag } from 'lucide-react'
 import { Button } from './ui/button'
+import { ResponsiveDialog } from './responsive-dialog'
 
 type Props = {
     text: string
@@ -17,9 +18,13 @@ const ChatResponseOptions = ({ text }: Props) => {
             <Button variant='highlight' size='icon' className='h-6 w-6'>
                 <ThumbsDown />
             </Button>
-            <Button variant='highlight' size='icon' className='h-6 w-6'>
-                <Share2 />
-            </Button>
+            <ResponsiveDialog
+                description={"Share this chat."}
+                title={"Share"}
+                trigger={<Button variant='highlight' size='icon' className='h-6 w-6'><Share2 /></Button>}
+            >
+                <div>Share this post</div>
+            </ResponsiveDialog>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant='highlight' size='icon' className='h-6 w-6'>
