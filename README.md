@@ -7,7 +7,7 @@ The scope of this Hyperledger Labs project is to support the users (users, devel
 The system is an open source python project which implements an AI chatbot that replies to HTTP requests. The idea is to implement an open source framework/template, as example, for other communities/organizations/companies. Last results in open LLMs allow to have good performance using common HW resources.\
 Below the application architecture:
 
-![LLM chatbot schema]<img src="./images/prototype_schema_v1.drawio.png" alt="LLM chatbot schema" width="750"/>
+<img src="./images/prototype_schema_v1.drawio.png" alt="LLM chatbot schema" width="750"/>
 
 We use RAG (Retrieval Augmented Generation [arxiv.org](https://arxiv.org/abs/2312.10997)) for question answering use case. That technique aims to improve LLM answers by incorporating knowledge from external database (e.g. vector database).
 
