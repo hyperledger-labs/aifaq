@@ -1,4 +1,4 @@
-# DEV Branch: Hyperledger Labs AIFAQ prototype
+# Hyperledger Labs AIFAQ prototype
 
 The scope of this Hyperledger Labs project is to support the users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. We are implementing an open source conversational AI tool which replies to the questions related to specific context. This is a prototype which allows to create a chatbot running a RESTful API which requires GPU. Here the official Wiki pages: [Hyperledger Labs aifaq](https://labs.hyperledger.org/labs/aifaq.html) and [Hyperledger Labs wiki](https://wiki.hyperledger.org/display/labs/AI+FAQ). Please, read also the [Antitrust Policy and the Code of Conduct](https://wiki.hyperledger.org/pages/viewpage.action?pageId=41587043). Every Monday we have a public meeting and the invitation is on the Hyperledger Labs calendar: [[Hyperledger Labs] FAQ AI Lab calls](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
 
@@ -7,7 +7,7 @@ The scope of this Hyperledger Labs project is to support the users (users, devel
 The system is an open source python project which implements an AI chatbot that replies to HTTP requests. The idea is to implement an open source framework/template, as example, for other communities/organizations/companies. Last results in open LLMs allow to have good performance using common HW resources.\
 Below the application architecture:
 
-<img src="./images/prototype_schema_v1.drawio.png" alt="LLM chatbot schema" width="750"/>
+![LLM chatbot schema]<img src="./images/prototype_schema_v1.drawio.png" alt="LLM chatbot schema" width="750"/>
 
 We use RAG (Retrieval Augmented Generation [arxiv.org](https://arxiv.org/abs/2312.10997)) for question answering use case. That technique aims to improve LLM answers by incorporating knowledge from external database (e.g. vector database).
 
