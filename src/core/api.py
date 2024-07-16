@@ -1,5 +1,5 @@
 from utils import load_yaml_file
-from main import get_conversation
+from main import get_ragchain
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -7,7 +7,7 @@ import uvicorn
 
 config_data = load_yaml_file("config.yaml")
 
-conversational_rag_chain = get_conversation()
+rag_chain = get_ragchain()
 
 # define the Query class that contains the question
 class Query(BaseModel):
@@ -24,20 +24,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# reply to GET requests, if the service is running
+# it replies to GET requests, if the service is running
 @app.get("/")
 def hello():
     return {"msg": "hello"}
 
-# reply to POST requests: '{"text": "How to install Hyperledger fabric?"}' 
+# reply to POST requests: '{"text": "How to install Hyperledger fabric?"}'
 @app.post("/query")
 def answer(q: Query):
     question = q.text
-    ai_msg_1 = conversational_rag_chain.invoke(
-        {"input": question}, 
-        config={"configurable": {"session_id": "1"}}, 
-        )["answer"]
+    result = rag_chain.invoke({"input": question})
 
-    return {"msg": ai_msg_1}
+    return {"msg": result}
 
 uvicorn.run(app,host=config_data["host"],port=config_data["port"])
