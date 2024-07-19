@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import MenuOptions from './menu-options';
 import { useWindowSize } from '../hooks/useWindowSize';
@@ -37,14 +37,12 @@ const Sidebar = (props: Props) => {
   return (
     <div className=''>
       {!sidebarOpen && showMenuIcon && (
-        <div className="fixed inset-0 bg-black bg-opacity-0 z-50">
-           <button
-            onClick={handleViewSidebar}
-            className="mt-1 ml-1 px-1 py-2 text-black rounded transition-all duration-300"
-          >
-            <Menu />
-          </button>
-        </div>
+        <button
+          onClick={handleViewSidebar}
+          className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300"
+        >
+          <Menu />
+        </button>
       )}
 
       <aside
