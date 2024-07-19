@@ -4,7 +4,6 @@ import MenuOptions from './menu-options';
 import { useWindowSize } from '../hooks/useWindowSize';
 import { Menu } from 'lucide-react';
 
-
 type Props = {
   isOpen: boolean;
   toggleSidebar: () => void;
@@ -23,25 +22,25 @@ const Sidebar = (props: Props) => {
   }, [isMobile]);
 
   return (
-    <div>
-      <aside
-        className={`fixed top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
-      </aside>
+    <div className=''>
       {!sidebarOpen && (
-        <aside className="w-full flex bg-transparent">
-          {/* this is button placed in the header of navbar */}
-          <button
+        <div className="fixed inset-0 bg-black bg-opacity-0 z-50">
+           <button
             onClick={handleViewSidebar}
-            className="mt-1 ml-2 px-1 py-2 text-black rounded transition-all duration-300"
+            className="mt-1 ml-1 px-1 py-2 text-black rounded transition-all duration-300"
           >
             <Menu />
           </button>
-        </aside>
+        </div>
       )}
+
+      <aside
+        className={`fixed top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } z-40`}
+      >
+        <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
+      </aside>
     </div>
   );
 };
