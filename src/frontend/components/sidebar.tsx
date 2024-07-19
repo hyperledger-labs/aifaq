@@ -11,6 +11,7 @@ type Props = {
 
 const Sidebar = (props: Props) => {
   const [sidebarOpen, setSideBarOpen] = useState(true);
+  const [showMenuIcon, setShowMenuIcon] = useState(false);
   const { isMobile } = useWindowSize({ initializeWithValue: true });
 
   const handleViewSidebar = () => {
@@ -21,9 +22,21 @@ const Sidebar = (props: Props) => {
     setSideBarOpen(!isMobile);
   }, [isMobile]);
 
+  useEffect(() => {
+    if (!sidebarOpen) {
+      const timer = setTimeout(() => {
+        setShowMenuIcon(true);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowMenuIcon(false);
+    }
+  }, [sidebarOpen]);
+
   return (
     <div className=''>
-      {!sidebarOpen && (
+      {!sidebarOpen && showMenuIcon && (
         <div className="fixed inset-0 bg-black bg-opacity-0 z-50">
            <button
             onClick={handleViewSidebar}
