@@ -1,7 +1,9 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import MenuOptions from './menu-options';
-import { IoIosArrowForward } from "react-icons/io";
+import { useWindowSize } from '../hooks/useWindowSize';
+import { Menu } from 'lucide-react';
+
 
 type Props = {
   isOpen: boolean;
@@ -10,24 +12,15 @@ type Props = {
 
 const Sidebar = (props: Props) => {
   const [sidebarOpen, setSideBarOpen] = useState(true);
+  const { isMobile } = useWindowSize({ initializeWithValue: true });
 
   const handleViewSidebar = () => {
     setSideBarOpen(!sidebarOpen);
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setSideBarOpen(true);
-      } else {
-        setSideBarOpen(false);
-      }
-    };
-
-    handleResize(); // Set initial state based on screen size
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    setSideBarOpen(!isMobile);
+  }, [isMobile]);
 
   return (
     <div>
@@ -39,12 +32,13 @@ const Sidebar = (props: Props) => {
         <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
       </aside>
       {!sidebarOpen && (
-        <aside className="h-full w-full flex items-center justify-center bg-transparent">
+        <aside className="w-full flex bg-transparent">
+          {/* this is button placed in the header of navbar */}
           <button
             onClick={handleViewSidebar}
-            className="px-1 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-300"
+            className="mt-1 ml-2 px-1 py-2 text-black rounded transition-all duration-300"
           >
-            <IoIosArrowForward size={25} />
+            <Menu />
           </button>
         </aside>
       )}
