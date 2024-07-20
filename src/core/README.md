@@ -56,16 +56,34 @@ Then, and copy-paste the github api repo code:
 
 ![Copy Paste Code](/images/copy_paste_code.png)
 
-and create two folders:
-
-1. chromadb (it will contains vector database files)
-2. rtdocs (it will contains the ReadTheDocs documentation)
 
 That version works with Hyperledger fabric documents (Wiki and ReadTheDocs).
 
+You can add your wiki links and ReadTheDocs link in the config.yaml file like this
+
+![alt text](image.png)
+
 ## Usage
 
-### Download ReadTheDocs documentation
+1. Clone the Repository
+2. Now use these commands to go to the core directory
+```bash 
+cd aifaq/src/core
+```
+
+## Docker Version
+
+Use this command to build the image:
+```bash 
+docker build -t aifaq .
+```
+Now run this command to run the container
+```bash 
+docker run -p 8080:8080 --gpus all aifaq
+```
+
+
+## Normal Version
 
 Open a new terminal:
 
@@ -74,38 +92,7 @@ Open a new terminal:
 and download the documentation executing the command below:
 
 ```console
-wget -r -A.html -P rtdocs https://hyperledger-fabric.readthedocs.io/en/release-2.5/
-
-```
-
-actually, after a minute we can interrupt (CTRL + C) because it starts to download previous versions:
-
-![Wget Command](/images/wget_rtdocs.png)
-
-Now, we can move into rtdocs folder and move the **release-2.5** content to **rtdocs**. We need to compress the content of the folder, moving there and use that command:
-
-![Compress files](/images/compress_files.png)
-
-and move the readthedocs.tar.gz to the parent directory (../):
-
-```console
-- mv readthedocs.tar.gz ..
-- cd ..
-```
-
-repeating the two commands until we are into rtdocs folder:
-
-![Move Command](/images/move_command.png)
-
-now remove hyperledger… folder and the content:
-
-![Compress files](/images/remove_command.png)
-
-uncompress the file here and remove compress file:
-
-```console
-- tar -xzvf rtdocs.tar.gz
-- rm rtdocs.tar.gz
+python fetchAndOrganizeData.py
 ```
 
 ### Install requirements
@@ -132,7 +119,9 @@ and confirm (it takes some minutes).
 
 Run the ingest.py script:
 
-![Run Ingest](/images/run_ingest.png)
+```console
+python ingest.py
+```
 
 it will create content in chromadb folder.
 
