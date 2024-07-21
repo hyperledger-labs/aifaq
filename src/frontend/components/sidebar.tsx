@@ -32,7 +32,7 @@ const Sidebar = (props: Props) => {
 
   useEffect(() => {
     setIsMounted(true);
-  },[isMounted]);
+  }, [isMounted]);
 
   useEffect(() => {
     setSideBarOpen(!isMobile);
@@ -49,7 +49,7 @@ const Sidebar = (props: Props) => {
       setShowMenuIcon(false);
     }
   }, [sidebarOpen]);
-  
+
   if (!isMounted) {
     return null;
   }
@@ -75,7 +75,7 @@ const Sidebar = (props: Props) => {
                 <button
                   className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300 ease-out"
                 >
-                  <Menu/>
+                  <Menu />
                 </button>
               </SheetTrigger>
               <SheetContent side={side} className="m-0 p-0">
@@ -93,9 +93,8 @@ const Sidebar = (props: Props) => {
       ) : (
         <>
           <aside
-            className={`${
-              sidebarOpen ? "relative translate-x-0" : "fixed -translate-x-full"
-            } top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-500 ease-in z-40`}
+            className={`${sidebarOpen ? "relative translate-x-0" : "fixed -translate-x-full"
+              } top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-500 ease-in z-40`}
             style={{
               transitionDelay: '0s',
               transitionDuration: '500ms',

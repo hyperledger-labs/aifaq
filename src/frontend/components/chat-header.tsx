@@ -1,7 +1,7 @@
-import React from 'react'
-import UserDropdown from './user-dropdown'
+import React from 'react';
+import UserDropdown from './user-dropdown';
 
-type Props = {}
+type Props = {};
 
 const ChatHeader = (props: Props) => {
     return (
@@ -12,4 +12,4 @@ const ChatHeader = (props: Props) => {
     )
 }
 
-export default ChatHeader
+export default ChatHeader;

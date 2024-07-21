@@ -1,21 +1,21 @@
-import { ReactNode } from 'react'
-import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { ReactNode } from 'react';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
 type Props = {
-    children: ReactNode
-}
+	children: ReactNode;
+};
 
 const Providers = ({ children }: Props) => {
-    return (
-        <NextThemesProvider
-            attribute='class'
-            defaultTheme='light'
-            enableSystem
-            disableTransitionOnChange
-        >
-            {children}
-        </NextThemesProvider>
-    )
-}
+	return (
+		<NextThemesProvider
+			attribute="class"
+			defaultTheme="light"
+			enableSystem
+			disableTransitionOnChange
+		>
+			{children}
+		</NextThemesProvider>
+	);
+};
 
-export default Providers
+export default Providers;
