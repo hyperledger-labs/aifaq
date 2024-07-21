@@ -1,6 +1,5 @@
 import Sidebar from "@/components/sidebar";
 import ChatHeader from "@/components/chat-header";
-import ChatBottomBar from "@/components/chat-bottom-bar";
 import WelcomeSection from "@/components/welcome-section";
 import ChatSection from "@/components/chat-section";
 
@@ -14,7 +13,6 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto bg-background">
           {chatSelected ? <WelcomeSection /> : <ChatSection />}
         </div>
-        <ChatBottomBar />
       </main>
     </div>
   );

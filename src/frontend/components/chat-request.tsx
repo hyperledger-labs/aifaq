@@ -1,17 +1,36 @@
-import React from 'react'
+"use client";
 
-type Props = {
-    text: string
+import React, { useState } from 'react';
+
+interface ChatRequestProps {
+    onSend: (message: string) => void;
 }
 
-const ChatRequest = ({ text }: Props) => {
+const ChatRequest = ({ onSend }: ChatRequestProps) => {
+    const [message, setMessage] = useState('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (message.trim()) {
+            onSend(message);
+            setMessage('');
+        }
+    };
+
     return (
-        <div className='flex justify-end'>
-            <div className='bg-muted w-fit px-4 py-2 rounded-xl max-w-[70%]'>
-                {text}
-            </div>
-        </div>
-    )
-}
+        <form onSubmit={handleSubmit}>
+            <input 
+                type="text" 
+                value={message} 
+                onChange={handleChange} 
+            />
+            <button type="submit">Send</button>
+        </form>
+    );
+};
 
-export default ChatRequest
+export default ChatRequest;
