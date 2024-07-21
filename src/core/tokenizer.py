@@ -1,5 +1,6 @@
 from transformers import AutoTokenizer
 
+
 # function for initializing tokenizer
 def initialize_tokenizer(model_name: str):
     """
