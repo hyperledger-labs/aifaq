@@ -7,8 +7,7 @@ on:
       - dev
   pull_request:
     branches:
-      - main
-      - dev
+      - "**"
 
 jobs:
   format-frontend:
@@ -29,10 +28,10 @@ jobs:
       - name: Format Frontend
         run: npm run format
 
-      - name: Check for Changes After Format
+      - name: Post Formatting Check
         run: git diff --exit-code
 
-  format-backend:
+  format-core:
     name: 'Format Core'
     runs-on: ubuntu-latest
 
@@ -57,7 +56,7 @@ jobs:
       - name: Format Backend
         run: |
           cd src/core
-          ./scripts/format.sh
+          sh scripts/format.sh
 
-      - name: Check for changes after format
+      - name: Post Formatting Check
         run: git diff --exit-code
