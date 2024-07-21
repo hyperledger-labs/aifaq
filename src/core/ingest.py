@@ -16,7 +16,7 @@ loader_web = RecursiveUrlLoader(url=config_data["url"])
 loader_rtdocs = ReadTheDocsLoader(config_data["folder_path"], encoding="utf-8")
 
 # merge all the document sources
-loader= MergedDataLoader(loaders=[loader_web, loader_rtdocs])
+loader = MergedDataLoader(loaders=[loader_web, loader_rtdocs])
 
 embeddings = embedding_function()
 
@@ -25,5 +25,9 @@ docs = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 splits = text_splitter.split_documents(docs)
 # save data into a directory
-vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings, persist_directory=config_data["persist_directory"])
+vectorstore = Chroma.from_documents(
+    documents=splits,
+    embedding=embeddings,
+    persist_directory=config_data["persist_directory"],
+)
 vectorstore.persist()
