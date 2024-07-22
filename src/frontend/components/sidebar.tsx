@@ -4,7 +4,6 @@ import MenuOptions from "./menu-options";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { FilePlus, Menu, PanelLeft } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
