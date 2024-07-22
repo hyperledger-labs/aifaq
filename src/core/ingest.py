@@ -6,7 +6,6 @@ from langchain_community.document_loaders import ReadTheDocsLoader
 from langchain_community.document_loaders.merge import MergedDataLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-import time
 from embeddings import embedding_function
 
 config_data = load_yaml_file("config.yaml")

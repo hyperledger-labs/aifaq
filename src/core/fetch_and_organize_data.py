@@ -2,7 +2,6 @@ import os
 import subprocess
 import shutil
 from urllib.parse import urlparse
-import time
 from utils import load_yaml_file
 
 def download_content(urls, folder_path):
@@ -39,7 +38,6 @@ def count_downloaded_files(base_path):
         print(f"Number of files downloaded: {count}")
     except Exception as e:
         print(f"An error occurred while counting files in {base_path}: {e}")
-    time.sleep(5)  
 
 
 def reorganize_files(src_path, dst_path):
