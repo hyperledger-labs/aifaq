@@ -65,32 +65,16 @@ You can add your wiki links and ReadTheDocs link in the config.yaml file like th
 
 ## Usage
 
-1. Clone the Repository
-2. Now use these commands to go to the core directory
-```bash 
-cd aifaq/src/core
-```
-
-## Docker Version
-
-Use this command to build the image:
-```bash 
-docker build -t aifaq .
-```
-Now run this command to run the container
-```bash 
-docker run -p 8080:8080 --gpus all aifaq
-```
-
-
-## Normal Version
-
 Open a new terminal:
 
 ![Open Terminal](/images/open_terminal.png)
 
 and download the documentation executing the command below:
-
+1. Clone the Repository
+2. Now use these commands to go to the core directory
+```bash 
+cd aifaq/src/core
+```
 ```console
 python fetchAndOrganizeData.py
 ```

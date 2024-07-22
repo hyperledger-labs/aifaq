@@ -27,14 +27,9 @@ docs = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 splits = text_splitter.split_documents(docs)
 
-# Print the number of chunks
 print(f"Number of chunks created: {len(splits)}")
-
-# Add a delay
-time.sleep(5)  # 2-second delay
 
 vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings, persist_directory=persist_directory)
 vectorstore.persist()
 
-# Print a completion message
 print("Vectorstore creation and persistence completed.")

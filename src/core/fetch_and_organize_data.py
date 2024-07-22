@@ -95,10 +95,7 @@ def main():
                     print(f"Download completed for {url}, but file reorganization failed.")
             except Exception as e:
                 print(f"An error occurred while processing {url}: {e}")
-            time.sleep(5)  # 5-second delay
-            count_total_files(folder_path)
-            time.sleep(3)
-        
+            count_total_files(folder_path)        
     else:
         print("No URLs found in config.yaml.")
 
