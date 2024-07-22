@@ -75,8 +75,9 @@ and download the documentation executing the command below:
 ```bash 
 cd aifaq/src/core
 ```
+3. Now run this file
 ```console
-python fetchAndOrganizeData.py
+python fetch_and_organize_data.py
 ```
 
 ### Install requirements
