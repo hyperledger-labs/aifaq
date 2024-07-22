@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import MenuOptions from "./menu-options";
 import { useWindowSize } from "../hooks/useWindowSize";
-import { FilePlus, Menu, PanelLeft } from "lucide-react";
-
+import { FilePlus, Menu } from "lucide-react";
 import {
   Sheet,
   SheetClose,
@@ -49,14 +48,16 @@ const Sidebar = (props: Props) => {
   }, [sidebarOpen]);
 
   return (
-    <div>
+    <div className="relative flex">
       {!sidebarOpen && showMenuIcon && (
-        <button
-          onClick={handleViewSidebar}
-          className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300"
-        >
-          <Menu />
-        </button>
+        <>
+          <button
+            onClick={handleViewSidebar}
+            className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300 ease-in-out"
+          >
+            <Menu />
+          </button>
+        </>
       )}
 
       {isMobile ? (
@@ -64,31 +65,40 @@ const Sidebar = (props: Props) => {
           {SHEET_SIDES.map((side) => (
             <Sheet key={side}>
               <SheetTrigger asChild>
-                <button className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300">
-                  <Menu />
+                <button
+                  className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300 ease-out"
+                >
+                  <Menu/>
                 </button>
               </SheetTrigger>
               <SheetContent side={side} className="m-0 p-0">
-                <SheetHeader className="m-0 p-0 h-full w-full bg-primary text-white py-1 px-2 transition-transform duration-300 ease-in-out">
+                <SheetHeader className="m-0 p-0 h-full w-full bg-primary text-white py-1 px-2 transition-transform duration-300 ease-out">
                   <div className="h-10 flex flex-row md:justify-between items-center">
                     <button className="ml-3 mt-1 rounded-xl bg-transparent text-background">
                       <FilePlus />
                     </button>
                   </div>
                 </SheetHeader>
-                <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
               </SheetContent>
             </Sheet>
           ))}
         </div>
       ) : (
-        <aside
-          className={`fixed top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-300 ease-in-out ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } z-40`}
-        >
-          <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
-        </aside>
+        <>
+          <aside
+            className={`${
+              sidebarOpen ? "relative translate-x-0" : "fixed -translate-x-full"
+            } top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-500 ease-in z-40`}
+            style={{
+              transitionDelay: '0s',
+              transitionDuration: '500ms',
+              transitionProperty: 'transform',
+              transitionTimingFunction: 'ease-in-out',
+            }}
+          >
+            <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
+          </aside>
+        </>
       )}
     </div>
   );
