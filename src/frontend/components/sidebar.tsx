@@ -15,8 +15,6 @@ import {
 } from "@/components/ui/sheet";
 
 type Props = {
-  isOpen: boolean;
-  toggleSidebar: () => void;
 };
 
 const SHEET_SIDES = ["left"] as const;
