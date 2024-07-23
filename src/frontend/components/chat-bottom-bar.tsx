@@ -18,7 +18,7 @@ const ChatBottomBar = ({ onSend }: Props) => {
     useEffect(() => {
         console.log('ChatBottomBar onSend:', onSend);
         setIsMounted(true);
-    }, [onSend]);
+    }, [isMounted]);
 
     if (!isMounted) {
         return null;
