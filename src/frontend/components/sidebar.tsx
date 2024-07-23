@@ -32,7 +32,7 @@ const Sidebar = (props: Props) => {
 
   useEffect(() => {
     setIsMounted(true);
-  },[]);
+  },[isMounted]);
 
   useEffect(() => {
     setSideBarOpen(!isMobile);
