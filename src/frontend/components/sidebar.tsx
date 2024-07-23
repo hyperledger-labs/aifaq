@@ -23,11 +23,16 @@ type SheetSide = (typeof SHEET_SIDES)[number];
 const Sidebar = (props: Props) => {
   const [sidebarOpen, setSideBarOpen] = useState(true);
   const [showMenuIcon, setShowMenuIcon] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { isMobile } = useWindowSize({ initializeWithValue: true });
 
   const handleViewSidebar = () => {
     setSideBarOpen(!sidebarOpen);
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+  },[]);
 
   useEffect(() => {
     setSideBarOpen(!isMobile);
@@ -44,6 +49,10 @@ const Sidebar = (props: Props) => {
       setShowMenuIcon(false);
     }
   }, [sidebarOpen]);
+  
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="relative flex">
