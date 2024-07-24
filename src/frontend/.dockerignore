@@ -3,3 +3,8 @@ node_modules
 .gitignore
 .env.example
 .env
+Dockerfile
+.dockerignore
+npm-debug.log
+README.md
+.next
