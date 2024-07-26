@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { IconHyperledger } from './icons/IconHyperledger';
 import ChatResponseOptions from './chat-response-options';

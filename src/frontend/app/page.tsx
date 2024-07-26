@@ -10,7 +10,7 @@ export default function Home() {
       <Sidebar />
       <main className="flex flex-col flex-1">
         <ChatHeader />
-        <div className="flex-1 overflow-y-auto bg-background">
+        <div className="flex-1 overflow-hidden bg-background">
           {chatSelected ? <WelcomeSection /> : <ChatSection />}
         </div>
       </main>
