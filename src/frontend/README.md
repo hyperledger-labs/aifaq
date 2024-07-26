@@ -41,30 +41,3 @@ Run the following command to start the Docker container in production mode:
 docker run -p 3000:3000 --rm aifaq-next:prod
 ```
 You should now be able to access your Next.js application in production mode at http://localhost:3000.
-
-
-**Development Setup**
-
-To set up and run the Next.js application in a development environment, follow these steps:
-
-1. Remove all data of Dockerfile 
-2. Copy the Dockerfile.dev and paste into Dockerfile
-3. Build the Docker Image
-
-Run the following command to build the Docker image for development:
-```
-docker build -t aifaq-next:dev .
-```
-
-4. Run the Docker Container
-
-```
-docker run -p 3000:3000 -v $(pwd):/app -v /app/node_modules --rm aifaq-next:dev
-
-
-or 
-
-docker run -p 3000:3000 <IMAGE ID>
-
-```
-You should now be able to access your Next.js application in development mode at http://localhost:3000.
