@@ -13,11 +13,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 
- ##Docker Installation Guide
+ ## Docker Installation Guide
 
  This guide provides instructions for setting up and running a Next.js application using Docker. There are two Docker configurations provided: one for development (Dockerfile.dev) and one for production (Dockerfile).
 
-###Prerequisites
+### Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
