@@ -38,7 +38,7 @@ const ChatSection = () => {
     }, [messages]);
 
     return (
-        <div className='flex flex-col items-center h-screen overflow-hidden'>
+        <div className='relative flex flex-col items-center h-screen overflow-hidden'>
             <div className='flex flex-col max-w-3xl w-full p-4 space-y-4 flex-grow overflow-y-auto' ref={chatContainerRef} style={{ paddingBottom: '5rem' }}>
                 {messages.map((msg, index) => (
                     <div key={index}>
@@ -47,7 +47,7 @@ const ChatSection = () => {
                     </div>
                 ))}
             </div>
-            <div className='fixed bottom-0 w-full flex justify-center'>
+            <div className='absolute bottom-10 w-full flex justify-center'>
                 <div className='max-w-3xl w-full p-4'>
                     <ChatBottomBar onSend={handleSend} />
                 </div>
