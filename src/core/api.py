@@ -24,6 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#added ..
+
 # reply to GET requests, if the service is running
 @app.get("/")
 def hello():
