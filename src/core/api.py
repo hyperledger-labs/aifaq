@@ -22,6 +22,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(main_router)
-app.include_router(api_router,rag_router,prefix="/api")
+api_router.include_router(rag_router)
+app.include_router(api_router,prefix="/api")
 
 uvicorn.run(app,host=config_data["host"],port=config_data["port"])
