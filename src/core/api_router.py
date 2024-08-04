@@ -1,14 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from main import get_conversation
 
 
-conversational_rag_chain = get_conversation()
-
-
-# define the Query class that contains the question
-class Query(BaseModel):
-    text: str
 
 #Conversation Request class that contains the question to be prompt 
 class ConversationRequest(BaseModel):
@@ -16,8 +9,6 @@ class ConversationRequest(BaseModel):
 #ConversationResponse class  that contains the answer of the prompt 
 class ConversationResponse(BaseModel):
     answer: str
-
-
 
 #Initialization of the router :
 api_router = APIRouter()
@@ -56,19 +47,6 @@ responses = {
                   "4. Regularly review and update security configurations and practices."
     }
 }
-
-
-
-# reply to POST requests: '{"text": "How to install Hyperledger fabric?"}' 
-@api_router.post("/query")
-def answer(q: Query):
-    question = q.text
-    ai_msg_1 = conversational_rag_chain.invoke(
-        {"input": question}, 
-        config={"configurable": {"session_id": "1"}}, 
-        )["answer"]
-
-    return {"msg": ai_msg_1}
 
 #post route where the user can ask questions and get response 
 @api_router.post("/conversation", response_model=ConversationResponse)
