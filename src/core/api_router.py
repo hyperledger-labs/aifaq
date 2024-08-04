@@ -52,7 +52,6 @@ responses = {
 @api_router.post("/conversation", response_model=ConversationResponse)
 def post_conversation(item: ConversationRequest) -> ConversationResponse:
     question_key = item.question.lower().replace(" ", "_").replace("?", "")
-    print(question_key)
     if question_key in responses:
         return ConversationResponse(answer=responses[question_key]['answer'])
     else:
