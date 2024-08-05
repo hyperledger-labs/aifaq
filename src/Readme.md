@@ -20,4 +20,5 @@ To check the frontend running on the lightining ai studio.
 ![alt text](image-1.png)
 
 4. Now update the port 3000 in here.
+
 ![alt text](image-2.png)
