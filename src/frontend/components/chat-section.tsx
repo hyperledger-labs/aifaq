@@ -1,13 +1,7 @@
-"use client";
-
-import React, {useRef, useEffect } from 'react';
-import ChatResponse from './chat-response';
+import React, { useRef, useEffect } from 'react';
+import { Message } from '@/lib/types';
 import ChatRequest from './chat-request';
-
-interface Message {
-    request: string;
-    response: string;
-}
+import ChatResponse from './chat-response';
 
 interface ChatSectionProps {
     messages: Message[];
@@ -23,12 +17,13 @@ const ChatSection: React.FC<ChatSectionProps> = ({ messages }) => {
     }, [messages]);
 
     return (
-        <div className='relative flex flex-col items-center h-screen overflow-hidden'>
-            <div className='flex flex-col max-w-3xl w-full p-4 space-y-4 flex-grow overflow-y-auto' ref={chatContainerRef} style={{ paddingBottom: '5rem' }}>
-                {messages.map((msg, index) => (
-                    <div key={index}>
-                        <ChatRequest request={msg.request} /> 
-                        <ChatResponse response={msg.response} /> 
+        <div className='relative flex flex-col items-center py-2'>
+            <div className='flex flex-col max-w-3xl w-full flex-grow space-y-2' ref={chatContainerRef}>
+                {messages.map((message, index) => (
+                    <div key={message.id}>
+                        {
+                            message.type === 0 ? <ChatRequest request={message.content} /> : <ChatResponse response={message.content} />
+                        }
                     </div>
                 ))}
             </div>

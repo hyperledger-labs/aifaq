@@ -8,7 +8,7 @@ interface Props {
 
 const ChatResponse = ({ response }: Props) => (
     <div className='flex flex-row space-x-4 p-4'>
-        <div className='h-10 w-10 rounded-full border shrink-0 p-2'>
+        <div className='h-10 w-10 rounded-full border shrink-0 p-2 bg-background'>
             <IconHyperledger />
         </div>
 

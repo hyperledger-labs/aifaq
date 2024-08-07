@@ -1,5 +1,4 @@
 import torch
-from utils import load_yaml_file
 from transformers import pipeline
 from langchain_huggingface import HuggingFacePipeline
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -11,7 +10,7 @@ from model import load_quantized_model
 from tokenizer import initialize_tokenizer
 from embeddings import embedding_function
 from session_history import get_session_history
-
+from utils import load_yaml_file
 
 def get_conversation():
     config_data = load_yaml_file("config.yaml")
