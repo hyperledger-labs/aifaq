@@ -35,6 +35,7 @@ def get_conversation():
             use_cache=True,
             device_map="auto",
             max_length=4096, # 4096
+            truncation=True,
             do_sample=True,
             top_k=5,
             num_return_sequences=1,
