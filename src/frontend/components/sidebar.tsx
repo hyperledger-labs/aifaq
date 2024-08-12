@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MenuOptions from "./menu-options";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { FilePlus, Menu } from "lucide-react";
+
 import {
   Sheet,
   SheetClose,
@@ -13,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import SidebarHistory from "./sidebarHistory";
 
 type Props = {
 };
@@ -85,6 +87,7 @@ const Sidebar = (props: Props) => {
                       <FilePlus />
                     </button>
                   </div>
+                  <SidebarHistory />
                 </SheetHeader>
               </SheetContent>
             </Sheet>
@@ -104,7 +107,9 @@ const Sidebar = (props: Props) => {
             }}
           >
             <MenuOptions isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} />
+            <SidebarHistory />
           </aside>
+          
         </>
       )}
     </div>
