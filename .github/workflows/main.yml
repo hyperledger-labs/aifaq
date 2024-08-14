@@ -16,19 +16,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
         with:
-          node-version: '20'
-
-      - name: Install Dependencies
-        run: yarn install
-        working-directory: src/frontend
-
-      - name: Format Frontend
-        run: yarn format
-        working-directory: src/frontend
+          prettier_options: --write src/frontend/**/*.{ts,tsx}
 
       - name: Post Formatting Check
         run: git diff --exit-code
@@ -57,8 +49,8 @@ jobs:
 
       - name: Format Backend
         run: |
-          cd src/core
           black .
+        working-directory: src/core
 
       - name: Post Formatting Check
         run: git diff --exit-code
