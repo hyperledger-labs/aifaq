@@ -38,11 +38,17 @@ export function ResponsiveDialog({
 	if (isDesktop) {
 		return (
 			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogTrigger asChild>{trigger}</DialogTrigger>
+				<DialogTrigger asChild>
+					{trigger}
+				</DialogTrigger>
 				<DialogContent className="max-w-xl">
 					<DialogHeader>
-						<DialogTitle className="font-primary">{title}</DialogTitle>
-						<DialogDescription>{description}</DialogDescription>
+						<DialogTitle className="font-primary">
+							{title}
+						</DialogTitle>
+						<DialogDescription>
+							{description}
+						</DialogDescription>
 					</DialogHeader>
 					{children}
 				</DialogContent>
@@ -52,16 +58,24 @@ export function ResponsiveDialog({
 
 	return (
 		<Drawer open={open} onOpenChange={setOpen}>
-			<DrawerTrigger asChild>{trigger}</DrawerTrigger>
+			<DrawerTrigger asChild>
+				{trigger}
+			</DrawerTrigger>
 			<DrawerContent>
 				<DrawerHeader className="text-left">
-					<DrawerTitle className="font-primary">{title}</DrawerTitle>
-					<DrawerDescription>{description}</DrawerDescription>
+					<DrawerTitle className="font-primary">
+						{title}
+					</DrawerTitle>
+					<DrawerDescription>
+						{description}
+					</DrawerDescription>
 				</DrawerHeader>
 				{children}
 				<DrawerFooter className="pt-2">
 					<DrawerClose asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline">
+							Cancel
+						</Button>
 					</DrawerClose>
 				</DrawerFooter>
 			</DrawerContent>

@@ -1,5 +1,9 @@
 import React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage
+} from '@/components/ui/avatar';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -23,15 +27,28 @@ const UserDropdown = (props: Props) => {
 					</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end" className="w-60">
+			<DropdownMenuContent
+				align="end"
+				className="w-60"
+			>
 				<DropdownMenuLabel className="flex flex-col">
-					<span className="text-base">John Doe</span>
-					<span className="text-xs font-normal text-muted-foreground">user@email.com</span>
+					<span className="text-base">
+						John Doe
+					</span>
+					<span className="text-xs font-normal text-muted-foreground">
+						user@email.com
+					</span>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>Profile</DropdownMenuItem>
-				<DropdownMenuItem>Settings</DropdownMenuItem>
-				<DropdownMenuItem>Logout</DropdownMenuItem>
+				<DropdownMenuItem>
+					Profile
+				</DropdownMenuItem>
+				<DropdownMenuItem>
+					Settings
+				</DropdownMenuItem>
+				<DropdownMenuItem>
+					Logout
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

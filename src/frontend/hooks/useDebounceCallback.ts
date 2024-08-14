@@ -1,4 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react';
+import {
+	useEffect,
+	useMemo,
+	useRef
+} from 'react';
 
 import debounce from 'lodash.debounce';
 import { useUnmount } from './useUnmount';
@@ -15,17 +19,22 @@ type ControlFunctions = {
 	isPending: () => boolean;
 };
 
-export type DebouncedState<T extends (...args: any) => ReturnType<T>> = ((
+export type DebouncedState<
+	T extends (...args: any) => ReturnType<T>
+> = ((
 	...args: Parameters<T>
 ) => ReturnType<T> | undefined) &
 	ControlFunctions;
 
-export function useDebounceCallback<T extends (...args: any) => ReturnType<T>>(
+export function useDebounceCallback<
+	T extends (...args: any) => ReturnType<T>
+>(
 	func: T,
 	delay = 500,
 	options?: DebounceOptions
 ): DebouncedState<T> {
-	const debouncedFunc = useRef<ReturnType<typeof debounce>>();
+	const debouncedFunc =
+		useRef<ReturnType<typeof debounce>>();
 
 	useUnmount(() => {
 		if (debouncedFunc.current) {
@@ -34,9 +43,15 @@ export function useDebounceCallback<T extends (...args: any) => ReturnType<T>>(
 	});
 
 	const debounced = useMemo(() => {
-		const debouncedFuncInstance = debounce(func, delay, options);
+		const debouncedFuncInstance = debounce(
+			func,
+			delay,
+			options
+		);
 
-		const wrappedFunc: DebouncedState<T> = (...args: Parameters<T>) => {
+		const wrappedFunc: DebouncedState<T> = (
+			...args: Parameters<T>
+		) => {
 			return debouncedFuncInstance(...args);
 		};
 
@@ -57,7 +72,11 @@ export function useDebounceCallback<T extends (...args: any) => ReturnType<T>>(
 
 	// Update the debounced function ref whenever func, wait, or options change
 	useEffect(() => {
-		debouncedFunc.current = debounce(func, delay, options);
+		debouncedFunc.current = debounce(
+			func,
+			delay,
+			options
+		);
 	}, [func, delay, options]);
 
 	return debounced;

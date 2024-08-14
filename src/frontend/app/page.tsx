@@ -1,4 +1,4 @@
-import Sidebar from "@/components/sidebar";
+import Sidebar from '@/components/sidebar';
 import ChatPage from '@/components/chat-page';
 
 export default function Home() {

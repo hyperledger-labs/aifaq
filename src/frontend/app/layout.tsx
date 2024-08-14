@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import {
+	Inter,
+	Space_Grotesk
+} from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import Providers from '@/components/providers';
@@ -27,7 +30,11 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={cn('font-secondary antialiased', fontPrimary.variable, fontSecondary.variable)}
+				className={cn(
+					'font-secondary antialiased',
+					fontPrimary.variable,
+					fontSecondary.variable
+				)}
 			>
 				<div className="min-h-screen w-full">
 					<Providers>{children}</Providers>
