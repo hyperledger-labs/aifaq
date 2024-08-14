@@ -3,10 +3,12 @@ import uvicorn
 from utils import load_yaml_file
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 # from routes.main import router as main_router
 from routes.test import router as test_router
 
 config_data = load_yaml_file("config.yaml")
+
 
 def create_app() -> FastAPI:
     # Create the FastAPI application
@@ -26,4 +28,5 @@ def create_app() -> FastAPI:
 
     return app
 
-uvicorn.run(create_app,host=config_data["host"],port=config_data["port"])
+
+uvicorn.run(create_app, host=config_data["host"], port=config_data["port"])

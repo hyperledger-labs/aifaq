@@ -12,6 +12,7 @@ from embeddings import embedding_function
 from session_history import get_session_history
 from utils import load_yaml_file
 
+
 def get_conversation():
     config_data = load_yaml_file("config.yaml")
 
