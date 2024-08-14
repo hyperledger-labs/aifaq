@@ -6,3 +6,4 @@ chromadb
 bitsandbytes
 accelerate
 uvicorn
+black

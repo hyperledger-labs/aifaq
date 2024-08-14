@@ -28,7 +28,9 @@ splits = text_splitter.split_documents(docs)
 
 print(f"Number of chunks created: {len(splits)}")
 
-vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings, persist_directory=persist_directory)
+vectorstore = Chroma.from_documents(
+    documents=splits, embedding=embeddings, persist_directory=persist_directory
+)
 vectorstore.persist()
 
 print("Vectorstore creation and persistence completed.")
