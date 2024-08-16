@@ -1,21 +1,3 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import MenuOptions from "./menu-options";
-import { useWindowSize } from "../hooks/useWindowSize";
-import { FilePlus, Menu } from "lucide-react";
-
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import SidebarHistory from "./sidebarHistory";
-=======
 'use client';
 import React, {
 	useEffect,
@@ -34,7 +16,7 @@ import {
 	SheetTitle,
 	SheetTrigger
 } from '@/components/ui/sheet';
-
+import SidebarHistory from "./sidebarHistory";
 
 type Props = {};
 
@@ -92,6 +74,7 @@ const Sidebar = (props: Props) => {
 					</button>
 				</>
 			)}
+
 			{isMobile ? (
 				<div>
 					{SHEET_SIDES.map((side) => (
@@ -111,6 +94,7 @@ const Sidebar = (props: Props) => {
 											<FilePlus />
 										</button>
 									</div>
+									<SidebarHistory />
 								</SheetHeader>
 							</SheetContent>
 						</Sheet>
@@ -136,6 +120,7 @@ const Sidebar = (props: Props) => {
 							isOpen={sidebarOpen}
 							toggleSidebar={handleViewSidebar}
 						/>
+						<SidebarHistory />
 					</aside>
 				</>
 			)}
