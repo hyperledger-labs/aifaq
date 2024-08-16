@@ -49,8 +49,7 @@ jobs:
 
       - name: Format Backend
         run: |
-          black .
-        working-directory: src/core
+          black src/core
 
       - name: Post Formatting Check
         run: git diff --exit-code
