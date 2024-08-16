@@ -1,56 +1,83 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState
+} from 'react';
 import { Button } from './ui/button';
 import { ArrowUp, Paperclip } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useWindowSize } from '@/hooks/useWindowSize';
+import { Message } from '@/lib/types';
+import { v4 as uuidv4 } from 'uuid';
+import { handleSend } from '@/lib/apis/fetcher';
 
 interface Props {
-    onSend: (message: string) => void;
+	onSend: (newMessage: Message) => void;
 }
 
 const ChatBottomBar = ({ onSend }: Props) => {
-    const [isMounted, setIsMounted] = useState(false);
-    const [message, setMessage] = useState('');
-    const { isMobile } = useWindowSize();
+	const [isMounted, setIsMounted] =
+		useState(false);
+	const [message, setMessage] = useState<Message>(
+		{
+			content: '',
+			type: 0,
+			id: '-1'
+		}
+	);
+	const { isMobile } = useWindowSize();
 
-    useEffect(() => {
-        console.log('ChatBottomBar onSend:', onSend);
-        setIsMounted(true);
-    }, [isMounted]);
+	useEffect(() => {
+		setIsMounted(true);
+	}, [isMounted]);
 
-    if (!isMounted) {
-        return null;
-    }
+	if (!isMounted) {
+		return null;
+	}
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setMessage(e.target.value);
-    };
+	const handleChange = (
+		e: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		setMessage({
+			...message,
+			content: e.target.value
+		});
+	};
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (message.trim()) {
-            onSend(message);
-            setMessage('');
-        }
-    };
+	const handleSubmit = (
+		e?: React.FormEvent | React.KeyboardEvent
+	) => {
+		if (e) {
+			e.preventDefault();
+			if ('key' in e && e.key !== 'Enter') {
+				return;
+			}
+		}
 
-    const handleSendButtonClick = () => {
-        if (message.trim()) {
-            onSend(message);
-            setMessage('');
-        }
-    };
+		if (message.content.trim()) {
+			const updatedMessage = {
+				...message,
+				id: uuidv4()
+			};
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit(e as unknown as React.FormEvent);
-        }
-    };
-
-    return (
+			handleSend(updatedMessage)
+				.then((value) => {
+					if (value !== undefined) {
+						onSend(updatedMessage);
+						onSend(value.message);
+					}
+				})
+				.catch()
+				.finally(() =>
+					setMessage({
+						...message,
+						content: ''
+					})
+				);
+		}
+	};
+  return (
         <div className="w-full max-w-3xl mx-auto">
             <div className='flex flex-col mx-2'>
                 <form className="flex flex-row bg-background p-2 rounded-3xl border items-end gap-2" onSubmit={handleSubmit}>

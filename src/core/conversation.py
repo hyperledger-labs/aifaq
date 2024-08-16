@@ -1,5 +1,4 @@
 import torch
-from utils import load_yaml_file
 from transformers import pipeline
 from langchain_huggingface import HuggingFacePipeline
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -11,6 +10,7 @@ from model import load_quantized_model
 from tokenizer import initialize_tokenizer
 from embeddings import embedding_function
 from session_history import get_session_history
+from utils import load_yaml_file
 
 
 def get_conversation():
@@ -22,24 +22,27 @@ def get_conversation():
 
     embeddings = embedding_function()
 
-    vectordb = Chroma(embedding_function=embeddings, persist_directory=config_data["persist_directory"])
+    vectordb = Chroma(
+        embedding_function=embeddings,
+        persist_directory=config_data["persist_directory"],
+    )
 
     # Retrieve and generate using the relevant snippets of the blog.
     retriever = vectordb.as_retriever()
 
     # build huggingface pipeline for using zephyr-7b-beta
     llm_pipeline = pipeline(
-            "text-generation",
-            model=model,
-            tokenizer=tokenizer,
-            use_cache=True,
-            device_map="auto",
-            max_length=4096, # 4096
-            do_sample=True,
-            top_k=5,
-            num_return_sequences=1,
-            eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.eos_token_id,
+        "text-generation",
+        model=model,
+        tokenizer=tokenizer,
+        use_cache=True,
+        device_map="auto",
+        max_length=4096,  # 4096
+        do_sample=True,
+        top_k=5,
+        num_return_sequences=1,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.eos_token_id,
     )
 
     # specify the llm

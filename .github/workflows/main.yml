@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  format-frontend:
+    name: 'Format Frontend'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
+        with:
+          prettier_options: --write src/frontend/**/*.{ts,tsx}
+
+      - name: Post Formatting Check
+        run: git diff --exit-code
+
+  format-core:
+    name: 'Format Core'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.12]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black
+
+      - name: Format Backend
+        run: |
+          black src/core
+
+      - name: Post Formatting Check
+        run: git diff --exit-code
