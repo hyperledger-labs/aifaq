@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import {
    DropdownMenu,
    DropdownMenuCheckboxItem,
@@ -18,27 +17,31 @@ import { historyData as mockHistoryData } from "./historyData";
 type Props = {};
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
-
-
 const SidebarHistory = (props: Props) => {
    const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
    const [historyData, setHistoryData] = useState<
       { id: number; title: string }[]
    >([]);
 
-   //get the data from backend when the backend is deployed 
-   //change the URL according to the deployed linked in backend
-//    useEffect(() => {
-//       // Fetch data from the local JSON file
-//       axios
-//          .get("/path/to/historyData.json")
-//          .then((response) => {
-//             setHistoryData(response.data);
-//          })
-//          .catch((error) => {
-//             console.error("Error fetching data:", error);
-//          });
-//    }, []);
+   //get the data from backend when the backend is ready
+   //change the URL according to the backend routes
+   // useEffect(() => {
+   //    const url = process.env.URL + "/history";
+
+   //    fetch(url)
+   //       .then((response) => {
+   //          if (!response.ok) {
+   //             throw new Error("Network response was not ok");
+   //          }
+   //          return response.json();
+   //       })
+   //       .then((data) => {
+   //          setHistoryData(data);
+   //       })
+   //       .catch((error) => {
+   //          console.error("Error fetching data:", error);
+   //       });
+   // }, []);
 
    useEffect(() => {
       // Set the mock data as the state
