@@ -1,8 +1,7 @@
 FROM node:20-alpine AS frontend-build
 WORKDIR /app/frontend
 COPY frontend .
-RUN yarn install && yarn build
-
+RUN yarn install
 
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04 AS backend-build
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,7 +14,6 @@ RUN apt-get update && \
 WORKDIR /app/core
 COPY core/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118
-
 
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 ENV DEBIAN_FRONTEND=noninteractive
