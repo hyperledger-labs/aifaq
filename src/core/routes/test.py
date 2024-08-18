@@ -1,7 +1,9 @@
 from typing import List
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
-import uuid
+import uuid, asyncio
+from fastapi.responses import StreamingResponse
+from typing import AsyncGenerator
 
 router = APIRouter(prefix="/api/test")
 
@@ -37,17 +39,44 @@ def get_hyperledger_fabric_answer(question):
 
 
 # TODO: Get all chats for a user in a paginated format
+async def conversation_stream(offset: int = 0, limit: int = 30, order: str = "updated") -> AsyncGenerator[ResponseConversation, None]:
+    items = list(responses.items())[offset:offset + limit]
+    for idx, (question, answer) in enumerate(items):
+        yield ResponseConversation(
+            id=str(uuid.uuid4()),
+            message=ResponseMessage(
+                content=answer,
+                type=1,
+                id=str(uuid.uuid4()),
+            )
+        )
+        await asyncio.sleep(0.1)  # Simulate processing time
+
 @router.post("/conversations")
 def get_conversations(
     offset: int = 0, limit: int = 30, order: str = "updated"
 ) -> ResponseConversation:
-    pass
+    return StreamingResponse(conversation_stream(offset, limit), media_type="application/json")
 
 
 # TODO: Get a single chat for a user
+async def single_conversation_stream(question: str) -> AsyncGenerator[ResponseConversation, None]:
+    answer = responses.get(question, "Question not found")
+
+    yield ResponseConversation(
+        id=str(uuid.uuid4()),
+        message=ResponseMessage(
+            content=answer,
+            type=1,
+            id=str(uuid.uuid4()),
+        )
+    )
+    await asyncio.sleep(0.1)  # Simulate processing time
+
+
 @router.post("/conversation/{id}")
 def post_conversation(id: str):
-    pass
+    return StreamingResponse(single_conversation_stream(id), media_type="application/json")
 
 
 @router.post("/conversation", response_model=ResponseConversation)
