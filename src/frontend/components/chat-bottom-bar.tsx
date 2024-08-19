@@ -112,7 +112,9 @@ const ChatBottomBar = ({ onSend }: Props) => {
 					size="icon"
 					variant="default"
 					className={`rounded-full flex-shrink-0 transition-opacity duration-200 ${
-						message.content.trim() ? 'opacity-100' : 'opacity-50'
+						message.content.trim()
+							? 'opacity-100'
+							: 'opacity-50'
 					}`}
 					type="button"
 					onClick={handleSubmit}
