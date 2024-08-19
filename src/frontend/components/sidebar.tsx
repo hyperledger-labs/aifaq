@@ -16,6 +16,7 @@ import {
 	SheetTitle,
 	SheetTrigger
 } from '@/components/ui/sheet';
+import SidebarHistory from './sidebarHistory';
 
 type Props = {};
 
@@ -93,6 +94,7 @@ const Sidebar = (props: Props) => {
 											<FilePlus />
 										</button>
 									</div>
+									<SidebarHistory />
 								</SheetHeader>
 							</SheetContent>
 						</Sheet>
@@ -118,6 +120,7 @@ const Sidebar = (props: Props) => {
 							isOpen={sidebarOpen}
 							toggleSidebar={handleViewSidebar}
 						/>
+						<SidebarHistory />
 					</aside>
 				</>
 			)}

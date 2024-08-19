@@ -111,9 +111,12 @@ const ChatBottomBar = ({ onSend }: Props) => {
 				<Button
 					size="icon"
 					variant="default"
-					className="rounded-full flex-shrink-0"
+					className={`rounded-full flex-shrink-0 transition-opacity duration-200 ${
+						message.content.trim() ? 'opacity-100' : 'opacity-50'
+					}`}
 					type="button"
 					onClick={handleSubmit}
+					disabled={!message.content.trim()}
 				>
 					<ArrowUp />
 				</Button>
