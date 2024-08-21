@@ -6,7 +6,7 @@ Please adhere to our [Code of Conduct](https://wiki.hyperledger.org/pages/viewpa
 
 ## Getting Started
 
-### Development Server
+### Frontend 
 First, run the development server:
 
 1.Clone the repository:
@@ -28,6 +28,9 @@ yarn dev
 4.Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+### Backend
+Run the AIFAQ API through [lighning.ai](https://lightning.ai/studios) by following this [short guide](https://docs.google.com/document/d/1NM3EOmKGdaSS476pWRGnGdJMZpL9DMO4_nZlu6s3Myw/edit)
 
 ## How to Contribute
 ### Fork the repository
