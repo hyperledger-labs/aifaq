@@ -90,11 +90,6 @@ git push origin feature-branch
 
 5.Be responsive to feedback and be prepared to make necessary changes.
 
-6.Make sure to sign off DCO 
-```bash
-git commit -s
-git rebase HEAD~1 --signoff
-git push --force-with-lease origin dev
 ```
 
 
