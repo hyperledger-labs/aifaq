@@ -32,51 +32,51 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 ## How to Contribute
 ### Fork the repository
 
-1.Navigate to the [repository on GitHub](https://github.com/hyperledger-labs/aifaq).
+- Navigate to the [repository on GitHub](https://github.com/hyperledger-labs/aifaq).
 
-2.Click the "Fork" button in the top right corner
+- Click the "Fork" button in the top right corner
 
 ### Create a New Branch
-1.Clone your forked repository:
+- Clone your forked repository:
 
 ```bash
 git clone https://github.com/your-username/aifaq.git
 cd aifaq/frontend
 ```
-2.Create a new branch for your feature or bug fix:
+- Create a new branch for your feature or bug fix:
 
 ```bash
 git checkout -b feature-branch
 ```
 ### Make Your Changes
 
-1.Make the necessary changes in your local repository.
+- Make the necessary changes in your local repository.
 
-2.Ensure your code adheres to our Code Style guidelines.
+- Ensure your code adheres to our Code Style guidelines.
 
 ### Commit Your Changes
-1.Stage your changes:
+- Stage your changes:
 
 ```bash
 git add .
 ```
-2.Commit your changes with a descriptive message:
+- Commit your changes with a descriptive message:
 
 ```bash
 git commit -m 'Add some feature'
 ```
 ### Push to the Branch
-1.Push your changes to your forked repository:
+- Push your changes to your forked repository:
 
 ```bash
 git push origin feature-branch
 ```
 ### Open a Pull Request
-1.Navigate to your forked repository on GitHub.
+- Navigate to your forked repository on GitHub.
 
-2.Click the "New pull request" button.
+- Click the "New pull request" button.
 
-3.Provide a detailed description of your changes and submit the pull request.
+- Provide a detailed description of your changes and submit the pull request.
 
 ### Pull Request Guidelines
 
@@ -89,6 +89,9 @@ git push origin feature-branch
 4.Ensure your code passes all tests and adheres to the project's coding standards.
 
 5.Be responsive to feedback and be prepared to make necessary changes.
+
+6.We value all contributions, but please be aware that low-effort PRs, such as those lacking thorough testing, proper documentation, or a clear and meaningful purpose, may not be accepted. Please ensure your PR is well-considered and adds value to the project.
+
 
 ```
 
