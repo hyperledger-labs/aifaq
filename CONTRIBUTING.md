@@ -30,7 +30,118 @@ yarn dev
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ### Backend
-Run the AIFAQ API through [lighning.ai](https://lightning.ai/studios) by following this [short guide](https://docs.google.com/document/d/1NM3EOmKGdaSS476pWRGnGdJMZpL9DMO4_nZlu6s3Myw/edit)
+
+This software needs GPU for the execution, if you do not have a local GPU you could use a Cloud GPU.Run the AIFAQ API through [lighning.ai](https://lightning.ai/studios) after signup/login, create new Studio (project):
+
+![New Studio Button](/images/new_studio.png)
+
+select the left solution:
+
+![Select Studio Code](/images/studio_code.png)
+
+click on the **Start** button, and rename the new Studio:
+
+![Rename Studio](/images/rename_studio.png)
+
+Then, and copy-paste the github api repo code:
+
+![Copy Paste Code](/images/copy_paste_code.png)
+
+and create two folders:
+
+1. chromadb (it will contains vector database files)
+2. rtdocs (it will contains the ReadTheDocs documentation)
+
+That version works with Hyperledger fabric documents (Wiki and ReadTheDocs).
+
+## Usage
+
+### Download ReadTheDocs documentation
+
+Open a new terminal:
+
+![Open Terminal](/images/open_terminal.png)
+
+and download the documentation executing the command below:
+
+```console
+wget -r -A.html -P rtdocs https://hyperledger-fabric.readthedocs.io/en/release-2.5/
+
+```
+
+actually, after a minute we can interrupt (CTRL + C) because it starts to download previous versions:
+
+![Wget Command](/images/wget_rtdocs.png)
+
+Now, we can move into rtdocs folder and move the **release-2.5** content to **rtdocs**. We need to compress the content of the folder, moving there and use that command:
+
+![Compress files](/images/compress_files.png)
+
+and move the readthedocs.tar.gz to the parent directory (../):
+
+```console
+- mv readthedocs.tar.gz ..
+- cd ..
+```
+
+repeating the two commands until we are into rtdocs folder:
+
+![Move Command](/images/move_command.png)
+
+now remove hyperledger… folder and the content:
+
+![Compress files](/images/remove_command.png)
+
+uncompress the file here and remove compress file:
+
+```console
+- tar -xzvf rtdocs.tar.gz
+- rm rtdocs.tar.gz
+```
+
+### Install requirements
+
+Move to the parent folder and execute the command below:
+
+```console
+pip install -r requirements.txt
+```
+
+### Activate GPU
+
+After the requirements installation we can switch to GPU before to execute the ingestion script:
+
+![Activate GPU](/images/activate_gpu.png)
+
+then select the L4 solution:
+
+![Select L4](/images/select_L4.png)
+
+and confirm (it takes some minutes).
+
+### Ingest step
+
+Run the ingest.py script:
+
+![Run Ingest](/images/run_ingest.png)
+
+it will create content in chromadb folder.
+
+### Run API
+
+Now, we can run the API and test it. So, run api.py script:
+
+![Run API](/images/run_api.png)
+
+and test it:
+
+```console
+curl --header "Content-Type: application/json" --request POST --data '{"text": "How to install Hyperledger fabric?"}' http://127.0.0.1:8080/query
+```
+
+below the result:
+
+![Show results](/images/curl_results.png)
 
 ## How to Contribute
 ### Fork the repository
