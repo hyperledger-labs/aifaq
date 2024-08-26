@@ -67,8 +67,20 @@ async def conversation_stream(offset: int = 0, limit: int = 30, order: str = "up
 @router.post("/conversations")
 def get_conversations(
     offset: int = 0, limit: int = 30, order: str = "updated"
-) -> ResponseConversation:
-    return StreamingResponse(conversation_stream(offset, limit), media_type="application/json")
+) -> List[ResponseConversation]:
+    normalized_responses = {normalize_question(k): v for k, v in responses.items()}
+    items = list(normalized_responses.items())[offset:offset + limit]
+    conversations = [
+        ResponseConversation(
+            id=str(uuid.uuid4()),
+            message=ResponseMessage(
+                content=answer,
+                type=1,
+                id=str(uuid.uuid4()),
+            )
+        ) for _, answer in items
+    ]
+    return conversations
 
 
 async def single_conversation_stream(question: str) -> AsyncGenerator[ResponseConversation, None]:
