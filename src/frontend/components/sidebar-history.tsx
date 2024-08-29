@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 // Import the mock data
-import { historyData as mockHistoryData } from './historyData';
+import { historyData as mockHistoryData } from './history-data';
 
 type Props = {};
 type Checked =

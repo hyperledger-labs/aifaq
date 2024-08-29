@@ -16,7 +16,7 @@ import {
 	SheetTitle,
 	SheetTrigger
 } from '@/components/ui/sheet';
-import SidebarHistory from './sidebarHistory';
+import SidebarHistory from './sidebar-history';
 
 type Props = {};
 
