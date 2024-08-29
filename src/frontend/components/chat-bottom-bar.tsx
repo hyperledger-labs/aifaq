@@ -26,11 +26,24 @@ const ChatBottomBar = ({ onSend }: Props) => {
 			id: '-1'
 		}
 	);
+	const [buttonClass, setButtonClass] = useState(
+		'rounded-full flex-shrink-0 transition-opacity duration-200 opacity-50'
+	);
 	const { isMobile } = useWindowSize();
 
 	useEffect(() => {
 		setIsMounted(true);
 	}, [isMounted]);
+
+	useEffect(() => {
+		setButtonClass(
+			`rounded-full flex-shrink-0 transition-opacity duration-200 ${
+				message.content.trim()
+					? 'opacity-100'
+					: 'opacity-50'
+			}`
+		);
+	}, [message.content]);
 
 	if (!isMounted) {
 		return null;
@@ -111,11 +124,7 @@ const ChatBottomBar = ({ onSend }: Props) => {
 				<Button
 					size="icon"
 					variant="default"
-					className={`rounded-full flex-shrink-0 transition-opacity duration-200 ${
-						message.content.trim()
-							? 'opacity-100'
-							: 'opacity-50'
-					}`}
+					className={buttonClass}
 					type="button"
 					onClick={handleSubmit}
 					disabled={!message.content.trim()}
