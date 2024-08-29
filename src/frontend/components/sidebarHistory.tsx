@@ -57,9 +57,9 @@ const SidebarHistory = (props: Props) => {
 					key={item.id}
 					className="flex justify-between mt-1 p-3 border-none rounded-lg font-semibold bg-slate-800 hover:bg-slate-800 cursor-pointer"
 				>
-					<div className="my-auto overflow-hidden">
+					<span className="my-auto truncate overflow-hidden whitespace-nowrap">
 						{truncateTitle(item.title)}
-					</div>
+					</span>
 
 					<button>
 						<DropdownMenu>
@@ -84,7 +84,7 @@ const SidebarHistory = (props: Props) => {
 									<Pin className="mr-2" /> Pin
 								</DropdownMenuCheckboxItem>
 								<DropdownMenuCheckboxItem>
-									<Pencil className="mr-2" />
+									<Pencil className="mr-2" />{' '}
 									Rename
 								</DropdownMenuCheckboxItem>
 								<DropdownMenuCheckboxItem>
