@@ -3,7 +3,7 @@ import React, {
 	useEffect,
 	useState
 } from 'react';
-import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
+import { DropdownMenuCheckboxItemProps, DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -83,14 +83,27 @@ const SidebarHistory = (props: Props) => {
 								>
 									<Pin className="mr-2" /> Pin
 								</DropdownMenuCheckboxItem>
-								<DropdownMenuCheckboxItem>
+								{/* <DropdownMenuCheckboxItem>
 									<Pencil className="mr-2" />{' '}
 									Rename
-								</DropdownMenuCheckboxItem>
-								<DropdownMenuCheckboxItem>
+								</DropdownMenuCheckboxItem> */}
+								<button className='p-[7px] flex flex-rowtext-left w-full hover:bg-hover-blue border-none hover:border-none '>
+									<Pencil className="ml-6" />
+									<span className='ml-3'>
+									Rename
+									</span>
+								</button>
+
+								<button className='p-[7px] flex flex-rowtext-left w-full hover:bg-hover-blue border-none hover:border-none '>
+								<Trash2 className="ml-6" />
+									<span className='ml-3'>
+									Delete
+									</span>
+								</button>
+								{/* <DropdownMenuCheckboxItem>
 									<Trash2 className="mr-2" />{' '}
 									Delete
-								</DropdownMenuCheckboxItem>
+								</DropdownMenuCheckboxItem> */}
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</button>

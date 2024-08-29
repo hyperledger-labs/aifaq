@@ -24,6 +24,7 @@ const config = {
 		extend: {
 			colors: {
 				border: 'hsl(var(--border))',
+				'hover-blue': '#f1f5f9',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
