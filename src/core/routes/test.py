@@ -34,83 +34,53 @@ responses = {
 }
 
 
-def get_hyperledger_fabric_answer(question):
-    return responses.get(question, "Question not found in the database.")
-
-
 def normalize_question(question: str) -> str:
     # Convert to lowercase and strip punctuation
     question = question.rstrip()
     return re.sub(r'[^\w\s]', '', question.lower())
 
 
-async def conversation_stream(offset: int = 0, limit: int = 30, order: str = "updated") -> AsyncGenerator[ResponseConversation, None]:
-    # Normalize the keys in the responses dictionary
-    normalized_responses = {normalize_question(k): v for k, v in responses.items()}
-    
-    # Retrieve items based on offset and limit
-    items = list(normalized_responses.items())[offset:offset + limit]
-    
-    for idx, (_, answer) in enumerate(items):
-        conversation = ResponseConversation(
+def create_conversation_response(content: str) -> ResponseConversation:
+    return ResponseConversation(
+        id=str(uuid.uuid4()),
+        message=ResponseMessage(
+            content=content,
+            type=1,
             id=str(uuid.uuid4()),
-            message=ResponseMessage(
-                content=answer,
-                type=1,
-                id=str(uuid.uuid4()),
-            )
         )
-        yield f"data: {conversation.json()}\n\n"
-        await asyncio.sleep(0.1)  # Simulate processing time
+    )
 
 
-@router.post("/conversations")
+@router.get("/conversations", response_model=List[ResponseConversation])
 def get_conversations(
     offset: int = 0, limit: int = 30, order: str = "updated"
 ) -> List[ResponseConversation]:
     normalized_responses = {normalize_question(k): v for k, v in responses.items()}
     items = list(normalized_responses.items())[offset:offset + limit]
-    conversations = [
-        ResponseConversation(
-            id=str(uuid.uuid4()),
-            message=ResponseMessage(
-                content=answer,
-                type=1,
-                id=str(uuid.uuid4()),
-            )
-        ) for _, answer in items
-    ]
-    return conversations
+
+    return [create_conversation_response(answer) for _, answer in items]
 
 
-async def single_conversation_stream(question: str) -> AsyncGenerator[ResponseConversation, None]:
+@router.get("/conversation/{id}", response_model=ResponseConversation)
+def get_single_conversation(id: str) -> ResponseConversation:
+    question = normalize_question(id)
+    answer = responses.get(question, "Question not found")
+
+    return create_conversation_response(answer)
+
+
+async def single_conversation_stream(question: str) -> AsyncGenerator[str, None]:
     question = normalize_question(question)
     answer = responses.get(question, "Question not found")
 
-    conversation = ResponseConversation(
-        id=str(uuid.uuid4()),
-        message=ResponseMessage(
-            content=answer,
-            type=1,
-            id=str(uuid.uuid4()),
-        )
-    )
+    conversation = create_conversation_response(answer)
     yield f"data: {conversation.json()}\n\n"
-    await asyncio.sleep(0.1)  # Simulate processing time
+    await asyncio.sleep(0.1)
 
 
-@router.post("/conversation/{id}")
-def post_conversation(id: str):
-    return StreamingResponse(single_conversation_stream(id), media_type="application/json")
-
-
-@router.post("/conversation", response_model=ResponseConversation)
-def post_conversation(item: RequestConversation) -> ResponseConversation:
-    return ResponseConversation(
-        id=item.id,
-        message=ResponseMessage(
-            content=get_hyperledger_fabric_answer(item.content),
-            type=1,
-            id=str(uuid.uuid4()),
-        ),
+@router.post("/conversation")
+async def post_conversation(item: RequestConversation) -> StreamingResponse:
+    return StreamingResponse(
+        single_conversation_stream(item.content),
+        media_type="text/event-stream"
     )
