@@ -1,7 +1,8 @@
 from typing import List, AsyncGenerator
 from fastapi import APIRouter
 from pydantic import BaseModel
-import uuid, asyncio
+import uuid
+import asyncio
 from fastapi.responses import StreamingResponse
 import re
 
@@ -35,7 +36,6 @@ responses = {
 
 
 def normalize_question(question: str) -> str:
-    # Convert to lowercase and strip punctuation
     question = question.rstrip()
     return re.sub(r'[^\w\s]', '', question.lower())
 
