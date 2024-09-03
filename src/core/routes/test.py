@@ -37,7 +37,7 @@ responses = {
 
 def normalize_question(question: str) -> str:
     question = question.rstrip()
-    return re.sub(r'[^\w\s]', '', question.lower())
+    return re.sub(r"[^\w\s]", "", question.lower())
 
 
 def create_conversation_response(content: str) -> ResponseConversation:
@@ -47,7 +47,7 @@ def create_conversation_response(content: str) -> ResponseConversation:
             content=content,
             type=1,
             id=str(uuid.uuid4()),
-        )
+        ),
     )
 
 
@@ -56,7 +56,7 @@ def get_conversations(
     offset: int = 0, limit: int = 30, order: str = "updated"
 ) -> List[ResponseConversation]:
     normalized_responses = {normalize_question(k): v for k, v in responses.items()}
-    items = list(normalized_responses.items())[offset:offset + limit]
+    items = list(normalized_responses.items())[offset : offset + limit]
 
     return [create_conversation_response(answer) for _, answer in items]
 
@@ -81,6 +81,5 @@ async def single_conversation_stream(question: str) -> AsyncGenerator[str, None]
 @router.post("/conversation")
 async def post_conversation(item: RequestConversation) -> StreamingResponse:
     return StreamingResponse(
-        single_conversation_stream(item.content),
-        media_type="text/event-stream"
+        single_conversation_stream(item.content), media_type="text/event-stream"
     )
