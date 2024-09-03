@@ -1,26 +1,26 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from sse_starlette.sse import EventSourceResponse
 from pydantic import BaseModel
-from conversation import get_conversation
-
-conversational_rag_chain = get_conversation()
-
-
-# define the Query class that contains the question
+from conversation import initialize_models, generate_response
+model, tokenizer, vectordb = initialize_models()
 class Query(BaseModel):
     text: str
 
 
-# Initialization of the router :
 router = APIRouter()
 
-
-# reply to POST requests: '{"text": "How to install Hyperledger fabric?"}'
 @router.post("/query")
-def answer(q: Query):
+async def stream_answer(q: Query, request: Request):
     question = q.text
-    ai_msg_1 = conversational_rag_chain.invoke(
-        {"input": question},
-        config={"configurable": {"session_id": "1"}},
-    )["answer"]
+    session_id = "1" 
+    
+    async def event_generator():
+        try:
+            for token in generate_response(session_id, model, tokenizer, question, vectordb):
+                if await request.is_disconnected():
+                    break
+                yield {"data": token}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
-    return {"msg": ai_msg_1}
+    return EventSourceResponse(event_generator())
