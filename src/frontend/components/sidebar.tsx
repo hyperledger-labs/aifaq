@@ -108,7 +108,7 @@ const Sidebar = (props: Props) => {
 						} top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-500 ease-in z-40`}
 						style={{
 							transitionDelay: '0s',
-							transitionDuration: '500ms',
+							transitionDuration: '100ms',
 							transitionProperty: 'transform',
 							transitionTimingFunction:
 								'ease-in-out'
