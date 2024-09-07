@@ -101,9 +101,11 @@ const Sidebar = (props: Props) => {
 			) : (
 				<>
 					<aside
-						className={`${sidebarOpen
-							? 'relative' : 'fixed left-[-16rem]'
-							} top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-500 ease-in z-40`}
+						className={`${
+							sidebarOpen
+								? 'relative'
+								: 'fixed left-[-16rem]'
+						} top-0 h-full bg-primary text-white py-1 px-2 w-64 transition-transform duration-500 ease-in z-40`}
 					>
 						<MenuOptions
 							isOpen={sidebarOpen}
