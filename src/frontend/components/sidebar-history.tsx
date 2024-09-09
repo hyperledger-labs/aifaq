@@ -47,8 +47,6 @@ const SidebarHistory = (props: Props) => {
 		}));
 	};
 
-	
-
 	return (
 		<div className="mt-10">
 			{historyData.map((item) => (
