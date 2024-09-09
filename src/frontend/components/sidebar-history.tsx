@@ -47,11 +47,7 @@ const SidebarHistory = (props: Props) => {
 		}));
 	};
 
-	const truncateTitle = (title: string) => {
-		return title.length > 17
-			? title.slice(0, 17) + '...'
-			: title;
-	};
+	
 
 	return (
 		<div className="mt-10">
@@ -61,7 +57,7 @@ const SidebarHistory = (props: Props) => {
 					className="flex justify-between mt-1 p-3 border-none rounded-lg font-semibold bg-slate-800 hover:bg-slate-800 cursor-pointer"
 				>
 					<span className="my-auto truncate overflow-hidden whitespace-nowrap">
-						{truncateTitle(item.title)}
+						{item.title}
 					</span>
 
 					<button>

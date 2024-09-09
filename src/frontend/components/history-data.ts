@@ -1,7 +1,7 @@
 export const historyData = [
 	{
 		id: 1,
-		title: 'What is hyperledge...'
+		title: 'What is hyperledger fabric'
 	},
 	{
 		id: 2,
