@@ -26,6 +26,7 @@ class RequestConversation(BaseModel):
 
 conversation = {}
 
+
 def generate_unique_id():
     return str(uuid.uuid4())
 
@@ -46,11 +47,12 @@ def get_hyperledger_fabric_answer(question):
 @router.get("/response-keys", response_model=List[Dict[str, str]])
 def get_response_keys() -> List[Dict[str, str]]:
     # Create a list of dictionaries with 'id' and 'name' keys
-    res = [
-        {"id": str(index + 1), "name": key}
-        for index, key in enumerate(responses.keys())
-    ]
+    res = []
+    for index, key in enumerate(responses.keys()):
+        res.append({"id": str(index + 1), "name": key})
+
     return res
+
 
 # TODO: Get all chats for a user in a paginated format
 @router.post("/conversations")
@@ -58,10 +60,6 @@ def get_conversations(
     offset: int = 0, limit: int = 30, order: str = "updated"
 ) -> ResponseConversation:
     pass
-
-
-
-
 
 
 # TODO: Get a single chat for a user
@@ -75,8 +73,8 @@ def post_conversation(id: str):
 
 @router.post("/conversation", response_model=ResponseConversation)
 def post_conversation(item: RequestConversation) -> ResponseConversation:
-    conversation_id = generate_unique_id()  #it will contain the id 
-   
+    conversation_id = generate_unique_id()  # it will contain the id
+
     new_conversation = ResponseConversation(
         id=item.id,
         message=ResponseMessage(
@@ -84,7 +82,6 @@ def post_conversation(item: RequestConversation) -> ResponseConversation:
             type=1,
             id=str(uuid.uuid4()),
         ),
-
     )
     conversation[conversation_id] = new_conversation
     return new_conversation
