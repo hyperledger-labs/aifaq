@@ -35,7 +35,7 @@ responses = {
 async def get_response_keys() -> List[Dict[str, str]]:
 
     # Create a list of dictionaries with 'id' and 'name' keys
-    res = [
+    res =[
     {"id": str(index + 1), "name": key}
     for index, key in enumerate(responses.keys())
 ]
