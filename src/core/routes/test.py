@@ -39,13 +39,13 @@ def get_hyperledger_fabric_answer(question):
 
 
 @router.get("/response-keys", response_model=List[Dict[str, str]])
-async def get_response_keys() -> List[Dict[str, str]]:
+def get_response_keys() -> List[Dict[str, str]]:
     # Create a list of dictionaries with 'id' and 'name' keys
     res = [
     {"id": str(index + 1), "name": key}
     for index, key in enumerate(responses.keys())
 ]
-return res
+    return res
 
 
 
