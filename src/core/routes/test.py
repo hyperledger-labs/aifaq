@@ -31,6 +31,13 @@ responses = {
     "How to ensure data privacy in Hyperledger Fabric?": "To ensure data privacy in Hyperledger Fabric:\n1. Use private data collections to restrict access to sensitive data.\n2. Implement access control policies and endorsement policies.\n3. Utilize encryption for data at rest and in transit.\n4. Regularly review and update security configurations and practices.",
 }
 
+
+
+def get_hyperledger_fabric_answer(question):
+    return responses.get(question, "Question not found in the database.")
+
+
+
 @router.get("/response-keys", response_model=List[Dict[str, str]])
 async def get_response_keys() -> List[Dict[str, str]]:
     # Create a list of dictionaries with 'id' and 'name' keys
@@ -38,11 +45,9 @@ async def get_response_keys() -> List[Dict[str, str]]:
     {"id": str(index + 1), "name": key}
     for index, key in enumerate(responses.keys())
 ]
-    return res
+return res
 
 
-def get_hyperledger_fabric_answer(question):
-    return responses.get(question, "Question not found in the database.")
 
 
 # TODO: Get all chats for a user in a paginated format
