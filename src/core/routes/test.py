@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import uuid
@@ -34,6 +34,18 @@ responses = {
 
 def get_hyperledger_fabric_answer(question):
     return responses.get(question, "Question not found in the database.")
+
+
+@router.get("/response-keys", response_model=List[Dict[str, str]])
+def get_response_keys() -> List[Dict[str, str]]:
+    """
+    Returns a list of dictionaries containing 'id' and 'name' for each key in the responses dictionary.
+    """
+    res = [
+        {"id": str(index + 1), "name": key}
+        for index, key in enumerate(responses.keys())
+    ]
+    return res
 
 
 # TODO: Get all chats for a user in a paginated format
