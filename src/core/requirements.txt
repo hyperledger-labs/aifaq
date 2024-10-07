@@ -8,3 +8,5 @@ accelerate
 uvicorn
 black
 sse-starlette
+langchain
+uuid
