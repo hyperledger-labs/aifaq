@@ -54,7 +54,7 @@ def generate_response(session_id, model, tokenizer, query, vectordb):
     Provide a very concise answer in no more than three short sentences."""
 
     full_prompt = f"{qa_system_prompt}\n\nContext: {context}\n\nQuestion: {contextualized_query}\n\nAnswer:"
-    
+
     inputs = tokenizer(full_prompt, return_tensors="pt", padding=True).to(model.device)
     streamer = TextIteratorStreamer(
         tokenizer, skip_prompt=True, skip_special_tokens=True

@@ -7,18 +7,22 @@ model, tokenizer, vectordb = initialize_models()
 
 router = APIRouter()
 
+
 class ResponseMessage(BaseModel):
     content: str
     type: int
     id: str
 
+
 class RequestQuery(BaseModel):
     id: str
     content: str
 
+
 class ResponseQuery(BaseModel):
     id: str
     message: ResponseMessage
+
 
 @router.post("/query", response_model=ResponseQuery)
 async def answer_query(item: RequestQuery) -> ResponseQuery:
