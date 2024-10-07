@@ -5,7 +5,7 @@ export async function handleSend(
 	message: Message
 ) {
 	return fetch(
-		SERVER_BASE_URL + '/conversation',
+		SERVER_BASE_URL + '/query',
 		{
 			method: 'POST',
 			headers: {
