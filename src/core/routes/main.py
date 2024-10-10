@@ -1,32 +1,40 @@
-from fastapi import APIRouter, HTTPException, Request
-from sse_starlette.sse import EventSourceResponse
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+import uuid
 from conversation import initialize_models, generate_response
 
 model, tokenizer, vectordb = initialize_models()
 
-
-class Query(BaseModel):
-    text: str
-
-
 router = APIRouter()
 
 
-@router.post("/query")
-async def stream_answer(q: Query, request: Request):
-    question = q.text
-    session_id = "1"
+class ResponseMessage(BaseModel):
+    content: str
+    type: int
+    id: str
 
-    async def event_generator():
-        try:
-            for token in generate_response(
-                session_id, model, tokenizer, question, vectordb
-            ):
-                if await request.is_disconnected():
-                    break
-                yield {"data": token}
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
 
-    return EventSourceResponse(event_generator())
+class RequestQuery(BaseModel):
+    id: str
+    content: str
+
+
+class ResponseQuery(BaseModel):
+    id: str
+    message: ResponseMessage
+
+
+@router.post("/query", response_model=ResponseQuery)
+async def answer_query(item: RequestQuery) -> ResponseQuery:
+    try:
+        response = generate_response("1", model, tokenizer, item.content, vectordb)
+        return ResponseQuery(
+            id=item.id,
+            message=ResponseMessage(
+                content=response,
+                type=1,
+                id=str(uuid.uuid4()),
+            ),
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

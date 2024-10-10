@@ -7,6 +7,7 @@ from langchain_community.document_loaders.merge import MergedDataLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from embeddings import embedding_function
+from langchain_community.vectorstores.utils import filter_complex_metadata
 
 config_data = load_yaml_file("config.yaml")
 
@@ -27,10 +28,12 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20
 splits = text_splitter.split_documents(docs)
 
 print(f"Number of chunks created: {len(splits)}")
-
 vectorstore = Chroma.from_documents(
-    documents=splits, embedding=embeddings, persist_directory=persist_directory
+    filter_complex_metadata(splits), embeddings, persist_directory=persist_directory
 )
+# vectorstore = Chroma.from_documents(
+#     documents=splits, embedding=embeddings, persist_directory=persist_directory
+# )
 vectorstore.persist()
 
 print("Vectorstore creation and persistence completed.")
