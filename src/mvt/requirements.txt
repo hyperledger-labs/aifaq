@@ -1,1 +1,8 @@
 playwright
+fastapi
+langchain
+langchain_community
+langchain_openai
+python-dotenv
+chromadb
+langchain_chroma
