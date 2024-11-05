@@ -13,9 +13,19 @@ pip install -r requirements.txt
 
 to install the dependencies
 
-then create a **.env** ([OpenAI optaining the API key](https://learn.griptape.ai/latest/setup/02_openai/#obtaining-the-api-key)) file in the same directory that contains open ai key and add a row like this OPENAI_API_KEY = "chatgpt_key"
+then create a **.env** ([MistralAI optaining the API key](https://console.mistral.ai/api-keys/)) file in the same directory that contains open ai key and add a row like this MISTRALAI_API_KEY = "mistralai_key"
+
+unzip file into rtdocs folder: it contains .html files.
 
 then run:
+
+```console
+python ingest.py
+```
+
+it takes some minutes and create a new folder named faiss_index containing the knowledge base (vector database).
+
+Now, we can start the local API running:
 
 ```console
 python api.py
