@@ -1,75 +1,40 @@
-from fastapi import FastAPI, HTTPException
+from utils import load_yaml_file
+from main import get_ragchain
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from langchain.chat_models import ChatOpenAI
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
-from langchain.vectorstores import Chroma
-from langchain.embeddings import OpenAIEmbeddings
-from langchain_community.document_loaders.recursive_url_loader import RecursiveUrlLoader
-from langchain_community.document_loaders.merge import MergedDataLoader
-from langchain_community.document_loaders import AsyncChromiumLoader
-#from langchain_community.document_transformers import BeautifulSoupTransformer
+import uvicorn
 
-from dotenv import load_dotenv, find_dotenv
+config_data = load_yaml_file("config.yaml")
 
-load_dotenv(find_dotenv())
+rag_chain = get_ragchain()
 
-# load documents from urls
-loader_web = RecursiveUrlLoader(url="https://wiki.hyperledger.org/display/fabric/")
-
-# Load HTML
-loader_html = AsyncChromiumLoader(["https://hyperledger-fabric.readthedocs.io/en/release-2.5/index.html"])
-
-# merge all the document sources
-loader= MergedDataLoader(loaders=[loader_web, loader_html])
-
-embeddings = OpenAIEmbeddings()
-vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
-vectorstore.persist()
-
-template_prompt = (
-    "You are an assistant for question-answering tasks. "
-    "Use the following pieces of retrieved context to answer "
-    "the question. If you don't know the answer, say that you "
-    "don't know. Use three sentences maximum and keep the "
-    "answer concise."
-    "\n\n"
-    "{context}"
-    "\n\n"
-    "Now, using this guidance and adhering to the context, process the text below and give yer best answer:"
-    "text: {question}"
-    )
-
-PROMPT = PromptTemplate(template=template_prompt, input_variables=["context", "question"])
-
-chain_type_kwargs = {"prompt": PROMPT}
-llm = ChatOpenAI()
-
-vectordb = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
-retriever = vectordb.as_retriever()
-
-qa = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=retriever,
-    chain_type_kwargs=chain_type_kwargs,
-)
-
+# define the Query class that contains the question
 class Query(BaseModel):
-    text: str = ""
+    text: str
 
 app = FastAPI()
 
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+# it replies to GET requests, if the service is running
+@app.get("/")
+def hello():
+    return {"msg": "hello"}
+
+# reply to POST requests: '{"text": "How to install Hyperledger fabric?"}'
 @app.post("/query")
-async def query(query: Query):
-    try:
-        result = qa.run(query=query.text)
-        return {"response": result}
-    except Exception as e:
-        raise HTTPException(detail=str(e), status_code=500)
+def answer(q: Query):
+    question = q.text
+    result = rag_chain.invoke({"input": question})
 
+    return {"msg": result}
 
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="127.0.0.1", port=8080)
+uvicorn.run(app,host=config_data["host"],port=config_data["port"])
