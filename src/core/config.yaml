@@ -1,7 +1,0 @@
-model_name: "HuggingFaceH4/zephyr-7b-beta"
-embedding_model_name: "sentence-transformers/all-mpnet-base-v2"
-folder_path: "rtdocs"
-url: "https://wiki.hyperledger.org/display/fabric/"
-persist_directory: "chromadb"
-host: "127.0.0.1"
-port: 8080

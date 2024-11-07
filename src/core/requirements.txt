@@ -1,8 +1,0 @@
-langchain
-langchain-community
-langchain-huggingface
-sentence-transformers
-chromadb
-bitsandbytes
-accelerate
-uvicorn
