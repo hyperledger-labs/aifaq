@@ -9,3 +9,5 @@ langchain-community
 langchain-mistralai
 beautifulsoup4
 transformers
+fastapi
+uvicorn
