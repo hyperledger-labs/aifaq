@@ -5,6 +5,9 @@ The scope of this Hyperledger Labs project is to support the users (users, devel
 ## MVT branch
 
 This branch contains a lightweight version.
+
+### Backend MVT installation
+
 Execute:
 
 ```console
@@ -30,3 +33,22 @@ Now, we can start the local API running:
 ```console
 python api.py
 ```
+
+### Frontend MVT installation
+
+In **client** folder create an **.env** that contains the API url:
+NEXT_PUBLIC_API_URL=127.0.0.1:8080
+
+Then run:
+
+```console
+npm install
+```
+
+and then run:
+
+```console
+npm run del
+```
+
+Now, open the web browser to http://localhost:3000 and type the question.
