@@ -1,4 +1,6 @@
-export type Message = {
+export interface Message {
+    role: "user" | "assistant";
     content: string;
-    role: "user" | "assistant" | "system";
-};
+  }
+  
+  export type CodeBlockTheme = 'dark' | 'light' | 'dracula' | 'github' | 'monokai' | 'nord';
