@@ -29,7 +29,7 @@ loader_web = RecursiveUrlLoader(url=config_data["wiki_url"])
 loader_rtdocs = ReadTheDocsLoader(path="./rtdocs", encoding="utf-8", patterns=("*.html"))
 
 # merge all the document sources
-loader= MergedDataLoader(loaders=[loader_rtdocs])
+loader= MergedDataLoader(loaders=[loader_rtdocs, loader_web])
 
 # Load data
 docs = loader.load()

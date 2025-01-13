@@ -26,14 +26,14 @@ app.add_middleware(
 
 # it replies to GET requests, if the service is running
 @app.get("/")
-def hello():
+async def hello():
     return {"msg": "hello"}
 
 # reply to POST requests: '{"text": "How to install Hyperledger fabric?"}'
 @app.post("/query")
-def answer(q: Query):
+async def answer(q: Query):
     question = q.text
-    result = rag_chain.invoke({"input": question})
+    result = await rag_chain.ainvoke({"input": question})
 
     return {"msg": result}
 
