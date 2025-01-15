@@ -68,7 +68,7 @@ const Sidebar = (props: Props) => {
 				<>
 					<button
 						onClick={handleViewSidebar}
-						className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-300 ease-in-out"
+						className="fixed top-0 left-0 mt-1 ml-1 px-1 py-2 text-black rounded z-50 transition-all duration-30 ease-in-out"
 					>
 						<Menu />
 					</button>
