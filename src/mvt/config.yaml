@@ -1,0 +1,6 @@
+model_name: "mistral-large-latest"
+embedding_model: "mistral-embed"
+wiki_url: "https://wiki.hyperledger.org/display/fabric/"
+persist_directory: "faiss_index"
+host: "127.0.0.1"
+port: 8080

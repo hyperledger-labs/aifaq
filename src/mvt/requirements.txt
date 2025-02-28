@@ -1,0 +1,13 @@
+torch
+mistralai
+faiss-cpu
+requests
+python-dotenv
+
+langchain
+langchain-community
+langchain-mistralai
+beautifulsoup4
+transformers
+fastapi
+uvicorn
