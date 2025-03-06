@@ -1,0 +1,11 @@
+model_name: "mistral-large-latest"
+embedding_model: "mistral-embed"
+dataset_path: "./dataset"
+web_urls: "web_urls"
+yt_video_links: "yt_video_links"
+text_files: "text_files"
+pdf_files: "pdf_files"
+rtdocs_files: "rtdocs_files"
+persist_directory: "faiss_index"
+host: "127.0.0.1"
+port: 8080
