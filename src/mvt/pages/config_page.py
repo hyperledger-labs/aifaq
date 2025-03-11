@@ -91,11 +91,9 @@ uploaded_rtdocs_files = st.file_uploader(
 )
 
 with st.form("sources_form"):
-   if len(yt_content) != 0:
-      yt_video_links = st.text_area("Youtube video links", value=yt_content)
-   if len(wb_content) != 0:
-      web_links = st.text_area("Web urls", value=wb_content)
-   submit = st.form_submit_button('Save')
+    yt_video_links = st.text_area("Youtube video links", value=yt_content)
+    web_links = st.text_area("Web urls", value=wb_content)
+    submit = st.form_submit_button('Save')
 
 # save button click
 if submit:
