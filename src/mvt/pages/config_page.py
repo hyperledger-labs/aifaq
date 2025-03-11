@@ -1,5 +1,5 @@
 import os
-from os.path import join
+from os.path import join, isfile
 from utils import load_yaml_file
 import streamlit as st
 from menu import menu_with_redirect
@@ -33,18 +33,24 @@ yt_pth = join(dataset_dir, config_data["yt_video_links"])
 # yt video file
 ytpath = os.path.join(yt_pth, "yt_video_links.txt")
 
-file = open(ytpath, "r")
-yt_content = file.read()
-file.close()
+yt_content = ""
+# check if the yt links file exists
+if isfile(ytpath):
+    file = open(ytpath, "r")
+    yt_content = file.read()
+    file.close()
 
 # web urls folder
 web_pth = join(dataset_dir, config_data["web_urls"])
 # web urls file
 wbpath = os.path.join(web_pth, "web_urls.txt")
 
-file = open(wbpath, "r")
-wb_content = file.read()
-file.close()
+wb_content = ""
+# check if the web links file exists
+if isfile(ytpath):
+    file = open(wbpath, "r")
+    wb_content = file.read()
+    file.close()
 
 st.header("Please, add your document sources using this form")
 
@@ -85,8 +91,10 @@ uploaded_rtdocs_files = st.file_uploader(
 )
 
 with st.form("sources_form"):
-   yt_video_links = st.text_area("Youtube video links", value=yt_content)
-   web_links = st.text_area("Web urls", value=wb_content)
+   if len(yt_content) != 0:
+      yt_video_links = st.text_area("Youtube video links", value=yt_content)
+   if len(wb_content) != 0:
+      web_links = st.text_area("Web urls", value=wb_content)
    submit = st.form_submit_button('Save')
 
 # save button click

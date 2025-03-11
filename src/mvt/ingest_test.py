@@ -1,10 +1,9 @@
 import os
 from os.path import isfile, join
 from os import listdir
-import logging
 from utils import load_yaml_file, bs4_extractor
 from dotenv import load_dotenv, find_dotenv
-from transformers import AutoTokenizer
+#from transformers import AutoTokenizer
 from langchain_community.vectorstores import FAISS
 from langchain_mistralai.embeddings import MistralAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -16,6 +15,7 @@ from langchain_community.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import FileSystemBlobLoader
 from langchain_community.document_loaders.generic import GenericLoader
 from langchain_community.document_loaders.parsers import PyPDFParser
+from langchain_community.document_loaders import ReadTheDocsLoader
 
 # Read config data
 config_data = load_yaml_file("config.yaml")
@@ -77,6 +77,10 @@ pdf_list = GenericLoader(
     blob_parser=PyPDFParser(),
 )
 
+# read folder that contains readthedocs files
+folder_pth = join(dataset_dir, config_data["rtdocs_files"])
+rtdocs_list = ReadTheDocsLoader(folder_pth, encoding="utf-8")
+
 # read folder that contains text files
 folder_pth = join(dataset_dir, config_data["text_files"])
 
@@ -94,6 +98,8 @@ for item in yt_list:
     loaders.append(item)
 
 loaders.append(pdf_list)
+
+loaders.append(rtdocs_list)
 
 loaders.append(txt_list)
 
