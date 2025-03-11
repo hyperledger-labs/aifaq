@@ -9,3 +9,4 @@ rtdocs_files: "rtdocs_files"
 persist_directory: "faiss_index"
 host: "127.0.0.1"
 port: 8080
+prompt: "You are an assistant for question-answering tasks that are related to Hyperledger Fabric blockchain. Use the following pieces of retrieved context to answer the question. If you don't know the answer, say that you don't know."

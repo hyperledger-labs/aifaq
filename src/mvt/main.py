@@ -20,7 +20,7 @@ def get_ragchain():
 
     # Define the embedding model
     embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=api_key)
-
+    
     # Load local vector db
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 
@@ -30,13 +30,12 @@ def get_ragchain():
     # Define LLM
     model = ChatMistralAI(mistral_api_key=api_key, model=config_data["model_name"])
 
+    # read prompt string from config file
+    prompt_str = config_data["prompt"]
+
     # Answer question
     qa_system_prompt = (
-    "You are an assistant for question-answering tasks "
-    "that are related to Founder Institute (FI) startup founders. "
-    "Use the following pieces of retrieved context to answer "
-    "the question. If you don't know the answer, say that you "
-    "don't know. "
+    prompt_str +
     "\n\n"
     "{context}"
     )
