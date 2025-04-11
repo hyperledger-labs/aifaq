@@ -7,6 +7,7 @@ def authenticated_menu():
     st.sidebar.page_link("pages/chatbot.py", label="AIFAQ ChatBot")
     if st.session_state.roles in ["admin"]:
         st.sidebar.page_link("pages/config_page.py", label="Config Page")
+        st.sidebar.page_link("pages/ConfigPage.py", label="new config page")
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
 
 
