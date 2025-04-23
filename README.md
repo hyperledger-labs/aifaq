@@ -5,3 +5,17 @@ The scope of this Hyperledger Labs project is to support the users (users, devel
 ## MVT branch
 
 This branch uses streamlit as UI tool.
+
+## Installation
+
+Install dependencies:
+
+```console
+pip install -r requirements.txt
+```
+
+## Test
+
+```console
+streamlit run app.py
+```
