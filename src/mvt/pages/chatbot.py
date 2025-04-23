@@ -2,48 +2,69 @@ from utils import load_yaml_file
 from main import get_ragchain
 import streamlit as st
 from menu import menu_with_redirect
+from chat_history import init_db, save_message, get_messages  # <-- new import
 
+# Initialize DB
+init_db()
 
-# Redirect to app.py if not logged in, otherwise show the navigation menu
+# Redirect to app.py if not logged in
 menu_with_redirect()
 
 st.markdown("# AIFAQ")
 
-config_path = "config.yaml"
-
+config_path = "./config.yaml"
 logo_path = "https://github.com/gcapuzzi/aifaq_streamlit/blob/main/logo.png?raw=true"
-
 config_data = load_yaml_file(config_path)
 
-rag_chain = get_ragchain()
+# filter public document in case of guest user
+filter = None
+if st.session_state.user_type in ['guest']:
+    filter = {"access": {"$eq": "public"}}
 
-prompt_to_user="How may I help you?"
 
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": prompt_to_user}]
+rag_chain = get_ragchain(filter)
+username = st.session_state.username
 
+# -------------------------------
+# Load user chat history from DB
+# -------------------------------
+if "user_messages" not in st.session_state:
+    st.session_state.user_messages = {}
+
+if username not in st.session_state.user_messages:
+    messages = get_messages(username)
+    if not messages:
+        messages = [{"role": "assistant", "content": "How may I help you?"}]
+        save_message(username, "assistant", "How may I help you?")
+    st.session_state.user_messages[username] = messages
+
+user_chat = st.session_state.user_messages[username]
+
+# -------------------------------
 # Display chat messages
-for message in st.session_state.messages:
-    if message["role"] == "assistant":
-        with st.chat_message(message["role"], avatar=logo_path):
-            st.write(message["content"])
-    else:
-        with st.chat_message(message["role"], avatar=None):
-            st.write(message["content"])
+# -------------------------------
+for message in user_chat:
+    with st.chat_message(message["role"], avatar=logo_path if message["role"] == "assistant" else None):
+        st.write(message["content"])
 
-# User-provided prompt
+# -------------------------------
+# Handle user input
+# -------------------------------
 if prompt := st.chat_input():
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    msg = {"role": "user", "content": prompt}
+    user_chat.append(msg)
+    save_message(username, "user", prompt)
+
     with st.chat_message("user"):
         st.write(prompt)
 
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message(name='assistant', avatar=logo_path):
+    with st.chat_message("assistant", avatar=logo_path):
         with st.spinner("Thinking..."):
-            response = rag_chain.invoke({"input": prompt}) 
+            response = rag_chain.invoke({"input": prompt})
             # save response in a text file
             print(response, file=open('responses.txt', 'a', encoding='utf-8'))
             st.markdown(response["answer"])
-    message = {"role": "assistant", "content": response["answer"]}
-    st.session_state.messages.append(message)
+
+        reply_msg = {"role": "assistant", "content": response["answer"]}
+        user_chat.append(reply_msg)
+        save_message(username, "assistant", response["answer"])

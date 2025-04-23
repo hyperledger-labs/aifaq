@@ -1,47 +1,47 @@
-import yaml
-from yaml.loader import SafeLoader
 import streamlit as st
-import streamlit_authenticator as stauth
 from menu import menu
+from database import create_connection, create_table, get_user, insert_user
+from homepage import gethomepage
 
-# Load the config
-with open('./credentials.yml') as file:
-    config = yaml.load(file, Loader=SafeLoader)
+# Get markdown homepage
+st.markdown(body=gethomepage(), unsafe_allow_html=True)
 
-# Pre-hashing all plain text passwords once
-stauth.Hasher.hash_passwords(config['credentials'])
-
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days']
-)
-
-try:
-    auth = authenticator.login('main')
-except Exception as e:
-    st.error(e)
-
-if st.session_state["authentication_status"] == False:
-    st.error('Username/password is incorrect')
-    # Stop the rendering if the user isn't connected
+# Check if user is authenticated
+if not st.experimental_user.is_logged_in:
+    if st.button("Log in or Sign up"):
+        st.login("auth0")
     st.stop()
-elif st.session_state["authentication_status"] == None:
-    st.warning('Please enter your username and password')
-    # Stop the rendering if the user isn't connected
-    st.stop()
-elif st.session_state["authentication_status"]: # All the authentication info is stored in the session_state
-    # User is connected    
-    authenticator.logout('Logout', 'main') 
 
-# Initialize st.session_state.role to None
-if "roles" not in st.session_state:
-    st.session_state.roles = None
+# Logout button
+if st.sidebar.button("Log out"):
+    st.logout()
+    st.session_state['user_type'] = None
+    st.session_state['username'] = None
+    st.stop()  
 
-st.write("AIFAQ is an AI chatbot powered by https://github.com/hyperledger-labs/aifaq")
+# Initialize session state
+if "user_type" not in st.session_state:
+    st.session_state.user_type = None
+if "username" not in st.session_state:
+    st.session_state.username = None
 
-st.write(f"You are logged in as {st.session_state['username']}")
-st.write(f"Your role is {st.session_state.roles}")
+# Only access user info if available
+if hasattr(st.experimental_user, "email"):
+    conn = create_connection()
+    if conn is not None:
+        create_table(conn)
 
-menu() # Render the dynamic menu!
+        # Check if user exists
+        user_data = get_user(conn, st.experimental_user.email)
+        if user_data is not None:
+            st.session_state['user_type'] = user_data[3]
+            st.session_state['username'] = user_data[1]
+        else:
+            user_type = 'guest'
+            username = st.experimental_user.email
+            st.session_state['user_type'] = user_type
+            st.session_state['username'] = username
+            insert_user(conn, username, st.experimental_user.email, user_type)
+
+# Show menu
+menu()

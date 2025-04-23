@@ -12,7 +12,9 @@ fastapi
 uvicorn
 streamlit
 streamlit-authenticator
-youtube-transcript-api
+youtube-transcript-api==0.6.3
 pypdf
 chardet
 sentence-transformers
+lxml
+Authlib

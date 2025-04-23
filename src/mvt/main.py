@@ -8,7 +8,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_mistralai.embeddings import MistralAIEmbeddings
 
-def get_ragchain():
+def get_ragchain(filter):
   
 
     # Read config data
@@ -25,7 +25,7 @@ def get_ragchain():
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 
     # Define a retriever interface
-    retriever = docsearch.as_retriever()
+    retriever = docsearch.as_retriever(search_type="mmr", search_kwargs={"k": 5, "filter": filter})
 
     # Define LLM
     model = ChatMistralAI(mistral_api_key=api_key, model=config_data["model_name"])
@@ -43,7 +43,7 @@ def get_ragchain():
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
-            ("human", "{input}"),
+            ("user", "{input}"),
         ]
     )
     question_answer_chain = create_stuff_documents_chain(model, qa_prompt)
