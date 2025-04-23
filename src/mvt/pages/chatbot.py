@@ -13,7 +13,7 @@ menu_with_redirect()
 st.markdown("# AIFAQ")
 
 config_path = "./config.yaml"
-logo_path = "https://github.com/gcapuzzi/aifaq_streamlit/blob/main/logo.png?raw=true"
+logo_path = "https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true"
 config_data = load_yaml_file(config_path)
 
 # filter public document in case of guest user

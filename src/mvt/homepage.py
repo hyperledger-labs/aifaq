@@ -3,7 +3,7 @@
 def gethomepage():
     markdown_string = """
 <div style="text-align: center;">
-  <img src="https://github.com/gcapuzzi/aifaq_streamlit/blob/main/logo.png?raw=true" alt="AIFAQ logo" style="height: 110px">
+  <img src="https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true" alt="AIFAQ logo" style="height: 110px">
   <h1>AI Lab Project powered by <em>Linux Foundation Decentralized Trust</em></h1>
 </div>
 
