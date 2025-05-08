@@ -14,6 +14,33 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+## Configuration
+
+### Authentication Setup
+This application uses Auth0 for authentication. You need to configure your Auth0 credentials:
+
+1. Update file at `src/mvt/.streamlit/secrets.toml` with your Auth0 credentials:
+```
+[auth.auth0]
+client_id = "your_client_id"
+client_secret = "your_client_secret"
+domain = "your-domain.auth0.com"
+redirect_uri = "http://localhost:8501/callback"
+```
+
+You can find these credentials in your Auth0 dashboard at auth0.com after creating an application.
+
+### API Keys
+1. Rename the `.env.example` file in the `mvt` folder to `.env` and update it with your own credentials:
+```
+MISTRALAI_API_KEY =your_mistral_ai_api_key
+```
+
+2. (Optional) If you want to use Hugging Face API, add this to your `.env` file:
+```
+HF_TOKEN =your_huggingface_api_key
+```
+
 ## Test
 
 ```console
