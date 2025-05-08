@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating a new translation &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Style guide for contributors" href="style_guide.html" />
+    <link rel="prev" title="Contributing documentation" href="docs_guide.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/international_languages.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#ways-to-contribute">Ways to contribute</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="CONTRIBUTING.html#contributing-documentation">Contributing documentation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="advice_for_writers.html">Connect with other writers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs_guide.html">Contributing documentation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Creating a new translation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-new-workgroup">Create a new workgroup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-new-translation">Create a new translation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#first-topics">First topics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#translation-tools">Translation tools</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#suggested-next-topics">Suggested next topics</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="style_guide.html">Style guide for contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#project-governance">Project Governance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#contribution-guide">Contribution guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#legal-stuff">Legal stuff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#related-topics">Related Topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+      <li class="breadcrumb-item active">Creating a new translation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/international_languages.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="creating-a-new-translation">
+<h1>Creating a new translation<a class="headerlink" href="#creating-a-new-translation" title="Link to this heading">¶</a></h1>
+<p><strong>Audience</strong>: Writers who would like to create a new Fabric translation.</p>
+<p>If the Hyperledger Fabric documentation is not available in your chosen language
+then why not start a new language translation? It’s relatively easy to get
+started, and creating a new language translation can be a very satisfying
+activity for you and other Fabric users.</p>
+<p>In this topic, we’re going to cover:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#introduction">An introduction to international language support</a></p></li>
+<li><p><a class="reference external" href="#create-a-new-workgroup">How to create a new language workgroup</a></p></li>
+<li><p><a class="reference external" href="#create-a-new-translation">How to create a new language translation</a></p></li>
+</ul>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>Hyperledger Fabric documentation is being translated into many different
+languages. For example:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n/tree/main/docs/locale/zh_CN">Chinese</a></p></li>
+<li><p><a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n/tree/main/docs/locale/ml_IN">Malayalam</a></p></li>
+<li><p><a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n/tree/main/docs/locale/pt_BR">Brazilian Portuguese</a></p></li>
+<li><p><a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n/tree/main/docs/locale/ja_JP">Japanese</a></p></li>
+</ul>
+<p>If your chosen language is not available, then the first thing to do is to
+create a new language workgroup.</p>
+</section>
+<section id="create-a-new-workgroup">
+<h2>Create a new workgroup<a class="headerlink" href="#create-a-new-workgroup" title="Link to this heading">¶</a></h2>
+<p>It’s much easier to translate, maintain, and manage a language repository if you
+collaborate with other translators. Start this process by adding a new workgroup
+to the <a class="reference external" href="https://wiki.hyperledger.org/display/I18N/International+groups">list of international
+workgroups</a>,
+using one of the existing workgroup pages as an exemplar.</p>
+<p>Document how your workgroup will collaborate; meetings, chat and mailing lists
+can all be very effective. Making these mechanisms clear on your workgroup page
+can help build a community of translators.</p>
+<p>Then use <a class="reference external" href="./advice_for_writers.html#discord">Discord</a> to let
+other people know you’ve started a translation, and invite them to join the
+workgroup.</p>
+</section>
+<section id="create-a-new-translation">
+<h2>Create a new translation<a class="headerlink" href="#create-a-new-translation" title="Link to this heading">¶</a></h2>
+<p>Follow these instructions to create your own language repository. Our sample
+instructions will show you how to create a new language translation for Spanish
+as spoken in Mexico:</p>
+<ol class="arabic">
+<li><p>Fork the <a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n"><code class="docutils literal notranslate"><span class="pre">fabric-docs-i18n</span></code>
+repository</a> to your GitHub
+account.</p></li>
+<li><p>Clone your repository fork to your local machine:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:YOURGITHUBID/fabric-docs-i18n.git
+</pre></div>
+</div>
+</li>
+<li><p>Select the Fabric version you are going to use as a baseline. We recommend
+that you start with Fabric 2.2 as this is an LTS release. You can add other
+releases later.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>fabric-docs-i18n
+git<span class="w"> </span>fetch<span class="w"> </span>origin
+git<span class="w"> </span>checkout<span class="w"> </span>release-2.2
+</pre></div>
+</div>
+</li>
+<li><p>Create a local feature branch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>newtranslation
+</pre></div>
+</div>
+</li>
+<li><p>Identify the appropriate <a class="reference external" href="http://www.localeplanet.com/icu/">two or four letter language
+code</a>.  Mexican Spanish has the language
+code <code class="docutils literal notranslate"><span class="pre">es_MX</span></code>.</p></li>
+<li><p>Update the fabric
+<a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n/blob/main/CODEOWNERS"><code class="docutils literal notranslate"><span class="pre">CODEOWNERS</span></code></a> file
+in the root directory. Add the following line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/docs/locale/ex_EX/<span class="w"> </span>@hyperledger/fabric-core-doc-maintainers<span class="w"> </span>@hyperledger/fabric-es_MX-doc-maintainers
+</pre></div>
+</div>
+</li>
+<li><p>Create a new language folder under <code class="docutils literal notranslate"><span class="pre">docs/locale/</span></code> for your language.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/locale
+mkdir<span class="w"> </span>es_MX
+</pre></div>
+</div>
+</li>
+<li><p>Copy the language files from another language folder, for example</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>-R<span class="w"> </span>pt_BR/<span class="w"> </span>es_MX/
+</pre></div>
+</div>
+<p>Alternatively, you could copy the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> folder from the <code class="docutils literal notranslate"><span class="pre">fabric</span></code>
+repository.</p>
+</li>
+<li><p>Customize the <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file for your new language using <a class="reference external" href="https://github.com/hyperledger/fabric-docs-i18n/tree/main/docs/locale/pt_BR/README.md">this
+example</a>.</p></li>
+<li><p>Commit your changes locally:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">add</span> <span class="o">.</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;First commit for Mexican Spanish&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Push your <code class="docutils literal notranslate"><span class="pre">newtranslation</span></code> local feature branch to the <code class="docutils literal notranslate"><span class="pre">release-2.2</span></code> branch
+of your forked <code class="docutils literal notranslate"><span class="pre">fabric-docs-i18n</span></code> repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>release-2.2:newtranslation
+
+
+Total<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">(</span>delta<span class="w"> </span><span class="m">0</span><span class="o">)</span>,<span class="w"> </span>reused<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">(</span>delta<span class="w"> </span><span class="m">0</span><span class="o">)</span>
+remote:
+remote:<span class="w"> </span>Create<span class="w"> </span>a<span class="w"> </span>pull<span class="w"> </span>request<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s1">&#39;newtranslation&#39;</span><span class="w"> </span>on<span class="w"> </span>GitHub<span class="w"> </span>by<span class="w"> </span>visiting:
+remote:<span class="w">      </span>https://github.com/YOURGITHUBID/fabric-docs-i18n/pull/new/newtranslation
+remote:
+To<span class="w"> </span>github.com:ODOWDAIBM/fabric-docs-i18n.git
+*<span class="w"> </span><span class="o">[</span>new<span class="w"> </span>branch<span class="o">]</span><span class="w">      </span>release-2.2<span class="w"> </span>-&gt;<span class="w"> </span>newtranslation
+</pre></div>
+</div>
+</li>
+<li><p>Connect your repository fork to ReadTheDocs using these
+<a class="reference external" href="./docs_guide.html#building-on-github">instructions</a>. Verify that your
+documentation builds correctly.</p></li>
+<li><p>Create a pull request (PR) for <code class="docutils literal notranslate"><span class="pre">newtranslation</span></code> on GitHub by visiting:</p>
+<p><a class="reference external" href="https://github.com/YOURGITHUBID/fabric-docs-i18n/pull/new/newtranslation"><code class="docutils literal notranslate"><span class="pre">https://github.com/YOURGITHUBID/fabric-docs-i18n/pull/new/newtranslation</span></code></a></p>
+<p>Your PR needs to be approved by one of the <a class="reference external" href="https://github.com/orgs/hyperledger/teams/fabric-core-doc-maintainers">documentation
+maintainers</a>.
+They will be automatically informed of your PR by email, and you can contact
+them via Discord chat.</p>
+</li>
+<li><p>On the <a class="reference external" href="https://discord.com/invite/hyperledger">Discord</a> fabric-documentation channel
+request the creation of the new group of maintainers for your language,
+<code class="docutils literal notranslate"><span class="pre">&#64;hyperledger/fabric-es_MX-doc-maintainers</span></code>. Provide your GitHubID for
+addition to this group.</p>
+<p>Once you’ve been added to this list, you can add others translators from your
+workgroup.</p>
+</li>
+</ol>
+<p>Congratulations! A community of translators can now translate your newly-created
+language in the <code class="docutils literal notranslate"><span class="pre">fabric-docs-i18n</span></code> repository.</p>
+</section>
+<section id="first-topics">
+<h2>First topics<a class="headerlink" href="#first-topics" title="Link to this heading">¶</a></h2>
+<p>Before your new language can be published to the documentation website, you must
+translate the following topics.  These topics help users and translators of your
+new language get started.</p>
+<ul>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/">Fabric front page</a></p>
+<p>This is your advert! Thanks to you, users can now see that the documentation
+is available in their language. It might not be complete yet, but its clear
+you and your team are trying to achieve. Translating this page will help you
+recruit other translators.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/whatis.html">Introduction</a></p>
+<p>This short topic gives a high level overview of Fabric, and because it’s
+probably one of the first topics a new user will look at, it’s important that
+it’s translated.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/CONTRIBUTING.html">Contributions Welcome!</a></p>
+<p>This topic is vital – it helps contributors understand <strong>what</strong>, <strong>why</strong> and
+<strong>how</strong> of contributing to Fabric. You need to translate this topic so that
+others can help you collaborate in your translation.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/glossary.html">Glossary</a></p>
+<p>Translating this topic provides the essential reference material that helps
+other language translators make progress; in short, it allows your workgroup
+to scale.</p>
+</li>
+</ul>
+<p>Once this set of topics have been translated, and you’ve created a language
+workgroup, your translation can be published on the documentation website. For
+example, the Chinese language docs are available
+<a class="reference external" href="https://hyperledger-fabric.readthedocs.io/zh_CN/latest/">here</a>.</p>
+<p>You can now request, via the <a class="reference external" href="https://discord.com/invite/hyperledger">Discord</a> fabric-documentation channel,
+that your translation is included on the documentation website.</p>
+</section>
+<section id="translation-tools">
+<h2>Translation tools<a class="headerlink" href="#translation-tools" title="Link to this heading">¶</a></h2>
+<p>When translating topics from US English to your international language, it’s
+often helpful to use an online tool to generate a first pass of the translation,
+which you then correct in a second pass review.</p>
+<p>Language workgroups have found the following tools helpful:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.onlinedoctranslator.com/"><code class="docutils literal notranslate"><span class="pre">DocTranslator</span></code></a></p></li>
+<li><p><a class="reference external" href="https://mt-auto-minhon-mlt.ucri.jgn-x.jp/"><code class="docutils literal notranslate"><span class="pre">TexTra</span></code></a></p></li>
+</ul>
+</section>
+<section id="suggested-next-topics">
+<h2>Suggested next topics<a class="headerlink" href="#suggested-next-topics" title="Link to this heading">¶</a></h2>
+<p>Once you have published the mandatory initial set of topics on the documentation
+website, you are encouraged to translate these topics, in order. If you choose
+to adopt another order, that’s fine; you still will find it helpful to agree an
+order of translation in your workgroup.</p>
+<ul>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/key_concepts.html">Key concepts</a></p>
+<p>For solution architects, application architects, systems architects, developers,
+academics and students alike, this topic provides a comprehensive conceptual
+understanding of Fabric.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html">Getting started</a></p>
+<p>For developers who want to get hands-on with Fabric, this topic provides key
+instructions to help install, build a sample network and get hands-on with
+Fabric.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/developapps/developing_applications.html">Developing applications</a></p>
+<p>This topic helps developers write smart contracts and applications; these
+are the core elements of any solution that uses Fabric.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/tutorials.html">Tutorials</a></p>
+<p>A set of hands-on tutorials to help developers and administrators try out
+specific Fabric features and capabilities.</p>
+</li>
+<li><p><a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/whatsnew.html">What’s new in Hyperledger Fabric
+v2.x</a></p>
+<p>This topic covers the latest features in Hyperledger Fabric.</p>
+</li>
+</ul>
+<p>Finally, we wish you good luck, and thank you for your contribution to
+Hyperledger Fabric.</p>
+<!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ -->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="style_guide.html" class="btn btn-neutral float-right" title="Style guide for contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="docs_guide.html" class="btn btn-neutral" title="Contributing documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

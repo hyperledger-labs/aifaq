@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running chaincode in development mode &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Videos" href="videos.html" />
+    <link rel="prev" title="Writing Your First Chaincode" href="chaincode4ade.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/peer-chaincode-devmode.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="test_network.html">Using the Fabric test network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="write_first_app.html">Running a Fabric Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_basic.html">Running External Chaincode Builders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_data_tutorial.html">Using Private Data in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_remove_org.html">Removing an Org from a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chaincode4ade.html">Writing Your First Chaincode</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running chaincode in development mode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#set-up-environment">Set up environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-the-orderer">Start the orderer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-the-peer-in-devmode">Start the peer in DevMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-channel-and-join-peer">Create channel and join peer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-the-chaincode">Build the chaincode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-the-chaincode">Start the chaincode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#approve-and-commit-the-chaincode-definition">Approve and commit the chaincode definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Running chaincode in development mode</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/peer-chaincode-devmode.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-chaincode-in-development-mode">
+<h1>Running chaincode in development mode<a class="headerlink" href="#running-chaincode-in-development-mode" title="Link to this heading">¶</a></h1>
+<p><strong>Audience:</strong> Smart contract developers that want to iteratively develop and test their chaincode packages without the overhead of the smart contract lifecycle process for every update.</p>
+<p>During smart contract development, a developer needs a way to quickly and iteratively test a chaincode package without having to run the chaincode lifecycle commands for every modification. This tutorial uses the Fabric binaries and starts the peer in development mode (“DevMode”) and then connects the chaincode to the peer. It allows you to start a chaincode without ever installing the chaincode on the peer and after the chaincode is initially committed to a channel, you can bypass the peer lifecycle chaincode commands.  This allows for rapid deployment, debugging, and update without the overhead of reissuing the peer lifecycle chaincode commands every time you make an update.</p>
+<p><strong>Note:</strong> In order to use the DevMode flag on a peer, TLS communications must be disabled on all the nodes in the network. And because TLS communications are strongly recommended for production networks, you should never run a production peer in DevMode. The network used in this tutorial should not be used as a template for any form of a production network. See <a class="reference external" href="deployment_guide_overview.html">Deploying a production network</a> for instructions on how to deploy a production network. You can also refer to the <a class="reference external" href="test_network.html">Fabric test network</a> to learn more about how to deploy and update a smart contract package on a channel using the Fabric chaincode lifecycle process.</p>
+<p>Throughout this tutorial, all commands are performed from the <code class="docutils literal notranslate"><span class="pre">fabric/</span></code> folder. It uses all the default settings for the peer and orderer and overrides the configurations using environment variables from the command line as needed. No edits are required to the default peer <code class="docutils literal notranslate"><span class="pre">core.yaml</span></code> or orderer <code class="docutils literal notranslate"><span class="pre">orderer.yaml</span></code> files.</p>
+<section id="set-up-environment">
+<h2>Set up environment<a class="headerlink" href="#set-up-environment" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Clone the Fabric repository from <a class="reference external" href="https://github.com/hyperledger/fabric">GitHub</a>. Select the release branch according to your needs.</p></li>
+<li><p>Run the following commands to build the binaries for orderer, peer, and configtxgen:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">orderer</span> <span class="n">peer</span> <span class="n">configtxgen</span>
+</pre></div>
+</div>
+<p>When successful you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Building</span> <span class="n">build</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">orderer</span>
+<span class="n">GOBIN</span><span class="o">=/</span><span class="n">testDevMode</span><span class="o">/</span><span class="n">fabric</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="nb">bin</span> <span class="n">go</span> <span class="n">install</span> <span class="o">-</span><span class="n">tags</span> <span class="s2">&quot;&quot;</span> <span class="o">-</span><span class="n">ldflags</span> <span class="s2">&quot;-X github.com/hyperledger/fabric/common/metadata.Version=2.3.0 -X github.com/hyperledger/fabric/common/metadata.CommitSHA=298695ae2 -X github.com/hyperledger/fabric/common/metadata.BaseDockerLabel=org.hyperledger.fabric -X github.com/hyperledger/fabric/common/metadata.DockerNamespace=hyperledger&quot;</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hyperledger</span><span class="o">/</span><span class="n">fabric</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">orderer</span>
+<span class="n">Building</span> <span class="n">build</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">peer</span>
+<span class="n">GOBIN</span><span class="o">=/</span><span class="n">testDevMode</span><span class="o">/</span><span class="n">fabric</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="nb">bin</span> <span class="n">go</span> <span class="n">install</span> <span class="o">-</span><span class="n">tags</span> <span class="s2">&quot;&quot;</span> <span class="o">-</span><span class="n">ldflags</span> <span class="s2">&quot;-X github.com/hyperledger/fabric/common/metadata.Version=2.3.0 -X github.com/hyperledger/fabric/common/metadata.CommitSHA=298695ae2 -X github.com/hyperledger/fabric/common/metadata.BaseDockerLabel=org.hyperledger.fabric -X github.com/hyperledger/fabric/common/metadata.DockerNamespace=hyperledger&quot;</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hyperledger</span><span class="o">/</span><span class="n">fabric</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">peer</span>
+<span class="n">Building</span> <span class="n">build</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">configtxgen</span>
+<span class="n">GOBIN</span><span class="o">=/</span><span class="n">testDevMode</span><span class="o">/</span><span class="n">fabric</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="nb">bin</span> <span class="n">go</span> <span class="n">install</span> <span class="o">-</span><span class="n">tags</span> <span class="s2">&quot;&quot;</span> <span class="o">-</span><span class="n">ldflags</span> <span class="s2">&quot;-X github.com/hyperledger/fabric/common/metadata.Version=2.3.0 -X github.com/hyperledger/fabric/common/metadata.CommitSHA=298695ae2 -X github.com/hyperledger/fabric/common/metadata.BaseDockerLabel=org.hyperledger.fabric -X github.com/hyperledger/fabric/common/metadata.DockerNamespace=hyperledger&quot;</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hyperledger</span><span class="o">/</span><span class="n">fabric</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">configtxgen</span>
+</pre></div>
+</div>
+</li>
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable to include orderer and peer binaries:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PATH=$(pwd)/build/bin:$PATH
+</pre></div>
+</div>
+</li>
+<li><p>Set the <code class="docutils literal notranslate"><span class="pre">FABRIC_CFG_PATH</span></code> environment variable to point to the <code class="docutils literal notranslate"><span class="pre">sampleconfig</span></code> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export FABRIC_CFG_PATH=$(pwd)/sampleconfig
+</pre></div>
+</div>
+</li>
+<li><p>Create the <code class="docutils literal notranslate"><span class="pre">hyperledger</span></code> subdirectory in the <code class="docutils literal notranslate"><span class="pre">/var</span></code> directory. This is the default location Fabric uses to store blocks as defined in the orderer <code class="docutils literal notranslate"><span class="pre">orderer.yaml</span></code> and peer <code class="docutils literal notranslate"><span class="pre">core.yaml</span></code> files. To create the <code class="docutils literal notranslate"><span class="pre">hyperledger</span></code> subdirectory, execute these commands, replacing the question marks with your username:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkdir /var/hyperledger
+sudo chown ????? /var/hyperledger
+</pre></div>
+</div>
+</li>
+<li><p>Generate the genesis block for the ordering service. Run the following command to generate the genesis block and store it in <code class="docutils literal notranslate"><span class="pre">$(pwd)/sampleconfig/genesisblock</span></code> so that it can be used by the orderer in the next step when the orderer is started.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>configtxgen -profile SampleDevModeSolo -channelID syschannel -outputBlock genesisblock -configPath $FABRIC_CFG_PATH -outputBlock &quot;$(pwd)/sampleconfig/genesisblock&quot;
+</pre></div>
+</div>
+<p>When successful you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mf">37.295</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">common</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">configtxgen</span><span class="p">]</span> <span class="n">doOutputBlock</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">004</span> <span class="n">Generating</span> <span class="n">genesis</span> <span class="n">block</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mf">37.296</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">common</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">configtxgen</span><span class="p">]</span> <span class="n">doOutputBlock</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">005</span> <span class="n">Writing</span> <span class="n">genesis</span> <span class="n">block</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="start-the-orderer">
+<h2>Start the orderer<a class="headerlink" href="#start-the-orderer" title="Link to this heading">¶</a></h2>
+<p>Run the following command to start the orderer with the <code class="docutils literal notranslate"><span class="pre">SampleDevModeSolo</span></code> profile and start the ordering service:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ORDERER_GENERAL_GENESISPROFILE</span><span class="o">=</span><span class="n">SampleDevModeSolo</span> <span class="n">orderer</span>
+</pre></div>
+</div>
+<p>When it is successful you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mf">20.258</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">orderer</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">server</span><span class="p">]</span> <span class="n">Main</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">00</span><span class="n">b</span> <span class="n">Starting</span> <span class="n">orderer</span><span class="p">:</span>
+ <span class="n">Version</span><span class="p">:</span> <span class="mf">2.3.0</span>
+ <span class="n">Commit</span> <span class="n">SHA</span><span class="p">:</span> <span class="mi">298695</span><span class="n">ae2</span>
+ <span class="n">Go</span> <span class="n">version</span><span class="p">:</span> <span class="n">go1</span><span class="mf">.15</span>
+ <span class="n">OS</span><span class="o">/</span><span class="n">Arch</span><span class="p">:</span> <span class="n">darwin</span><span class="o">/</span><span class="n">amd64</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mf">20.258</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">orderer</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">server</span><span class="p">]</span> <span class="n">Main</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">00</span><span class="n">c</span> <span class="n">Beginning</span> <span class="n">to</span> <span class="n">serve</span> <span class="n">requests</span>
+</pre></div>
+</div>
+</section>
+<section id="start-the-peer-in-devmode">
+<h2>Start the peer in DevMode<a class="headerlink" href="#start-the-peer-in-devmode" title="Link to this heading">¶</a></h2>
+<p>Open another terminal window and set the required environment variables to override the peer configuration and start the peer node.</p>
+<p><strong>Note:</strong> If you intend to keep the orderer and peer in the same environment (not in separate containers), only then set the <code class="docutils literal notranslate"><span class="pre">CORE_OPERATIONS_LISTENADDRESS</span></code> environment variable (port can be anything except 9443).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CORE_OPERATIONS_LISTENADDRESS</span><span class="o">=</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">9444</span>
+</pre></div>
+</div>
+<p>Starting the peer with the <code class="docutils literal notranslate"><span class="pre">--peer-chaincodedev=true</span></code> flag puts the peer into DevMode.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PATH=$(pwd)/build/bin:$PATH
+export FABRIC_CFG_PATH=$(pwd)/sampleconfig
+FABRIC_LOGGING_SPEC=chaincode=debug CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052 peer node start --peer-chaincodedev=true
+</pre></div>
+</div>
+<p><strong>Reminder:</strong> When running in <code class="docutils literal notranslate"><span class="pre">DevMode</span></code>, TLS cannot be enabled.</p>
+<p>When it is successful you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mf">45.324</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">nodeCmd</span><span class="p">]</span> <span class="n">serve</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">00</span><span class="n">e</span> <span class="n">Running</span> <span class="ow">in</span> <span class="n">chaincode</span> <span class="n">development</span> <span class="n">mode</span>
+<span class="o">...</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mf">45.326</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">nodeCmd</span><span class="p">]</span> <span class="n">serve</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">01</span><span class="n">a</span> <span class="n">Started</span> <span class="n">peer</span> <span class="k">with</span> <span class="n">ID</span><span class="o">=</span><span class="p">[</span><span class="n">jdoe</span><span class="p">],</span> <span class="n">network</span> <span class="n">ID</span><span class="o">=</span><span class="p">[</span><span class="n">dev</span><span class="p">],</span> <span class="n">address</span><span class="o">=</span><span class="p">[</span><span class="mf">192.168.1.134</span><span class="p">:</span><span class="mi">7051</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="create-channel-and-join-peer">
+<h2>Create channel and join peer<a class="headerlink" href="#create-channel-and-join-peer" title="Link to this heading">¶</a></h2>
+<p>Open another terminal window and run the following commands to generate the channel creation transaction using the <code class="docutils literal notranslate"><span class="pre">configtxgen</span></code> tool. This command creates the channel <code class="docutils literal notranslate"><span class="pre">ch1</span></code> with the <code class="docutils literal notranslate"><span class="pre">SampleSingleMSPChannel</span></code> profile:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PATH=$(pwd)/build/bin:$PATH
+export FABRIC_CFG_PATH=$(pwd)/sampleconfig
+configtxgen -channelID ch1 -outputCreateChannelTx ch1.tx -profile SampleSingleMSPChannel -configPath $FABRIC_CFG_PATH
+peer channel create -o 127.0.0.1:7050 -c ch1 -f ch1.tx
+</pre></div>
+</div>
+<p>When it is successful you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">42</span><span class="p">:</span><span class="mf">56.931</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">cli</span><span class="o">.</span><span class="n">common</span><span class="p">]</span> <span class="n">readBlock</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">002</span> <span class="n">Received</span> <span class="n">block</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Now join the peer to the channel by running the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peer</span> <span class="n">channel</span> <span class="n">join</span> <span class="o">-</span><span class="n">b</span> <span class="n">ch1</span><span class="o">.</span><span class="n">block</span>
+</pre></div>
+</div>
+<p>When it is successful, you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mf">34.976</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">channelCmd</span><span class="p">]</span> <span class="n">executeJoin</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">002</span> <span class="n">Successfully</span> <span class="n">submitted</span> <span class="n">proposal</span> <span class="n">to</span> <span class="n">join</span> <span class="n">channel</span>
+</pre></div>
+</div>
+<p>The peer has now joined channel <code class="docutils literal notranslate"><span class="pre">ch1</span></code>.</p>
+</section>
+<section id="build-the-chaincode">
+<h2>Build the chaincode<a class="headerlink" href="#build-the-chaincode" title="Link to this heading">¶</a></h2>
+<p>We use the <strong>simple</strong> chaincode from the <code class="docutils literal notranslate"><span class="pre">fabric/integration/chaincode</span></code> directory to demonstrate how to run a chaincode package in DevMode. In the same terminal window as the previous step, run the following command to build the chaincode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">go</span> <span class="n">build</span> <span class="o">-</span><span class="n">o</span> <span class="n">simpleChaincode</span> <span class="o">./</span><span class="n">integration</span><span class="o">/</span><span class="n">chaincode</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span><span class="n">cmd</span>
+</pre></div>
+</div>
+</section>
+<section id="start-the-chaincode">
+<h2>Start the chaincode<a class="headerlink" href="#start-the-chaincode" title="Link to this heading">¶</a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">DevMode</span></code> is enabled on the peer, the <code class="docutils literal notranslate"><span class="pre">CORE_CHAINCODE_ID_NAME</span></code> environment variable must be set to <code class="docutils literal notranslate"><span class="pre">&lt;CHAINCODE_NAME&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;CHAINCODE_VERSION&gt;</span></code> otherwise, the peer is unable to find the chaincode.  For this example, we set it to <code class="docutils literal notranslate"><span class="pre">mycc:1.0</span></code>. Run the following command to start the chaincode and connect it to the peer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CORE_CHAINCODE_LOGLEVEL</span><span class="o">=</span><span class="n">debug</span> <span class="n">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="n">false</span> <span class="n">CORE_CHAINCODE_ID_NAME</span><span class="o">=</span><span class="n">mycc</span><span class="p">:</span><span class="mf">1.0</span> <span class="o">./</span><span class="n">simpleChaincode</span> <span class="o">-</span><span class="n">peer</span><span class="o">.</span><span class="n">address</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7052</span>
+</pre></div>
+</div>
+<p>Because we set debug logging on the peer when we started it, you can confirm that the chaincode registration is successful. In your peer logs, you should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mf">43.413</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">chaincode</span><span class="p">]</span> <span class="n">sendReady</span> <span class="o">-&gt;</span> <span class="n">DEBU</span> <span class="mi">045</span> <span class="n">Changed</span> <span class="n">to</span> <span class="n">state</span> <span class="n">ready</span> <span class="k">for</span> <span class="n">chaincode</span> <span class="n">mycc</span><span class="p">:</span><span class="mf">1.0</span>
+</pre></div>
+</div>
+</section>
+<section id="approve-and-commit-the-chaincode-definition">
+<h2>Approve and commit the chaincode definition<a class="headerlink" href="#approve-and-commit-the-chaincode-definition" title="Link to this heading">¶</a></h2>
+<p>Now you need to run the following Fabric chaincode lifecycle commands to approve and commit the chaincode definition to the channel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peer</span> <span class="n">lifecycle</span> <span class="n">chaincode</span> <span class="n">approveformyorg</span>  <span class="o">-</span><span class="n">o</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7050</span> <span class="o">--</span><span class="n">channelID</span> <span class="n">ch1</span> <span class="o">--</span><span class="n">name</span> <span class="n">mycc</span> <span class="o">--</span><span class="n">version</span> <span class="mf">1.0</span> <span class="o">--</span><span class="n">sequence</span> <span class="mi">1</span> <span class="o">--</span><span class="n">init</span><span class="o">-</span><span class="n">required</span> <span class="o">--</span><span class="n">signature</span><span class="o">-</span><span class="n">policy</span> <span class="s2">&quot;OR (&#39;SampleOrg.member&#39;)&quot;</span> <span class="o">--</span><span class="n">package</span><span class="o">-</span><span class="nb">id</span> <span class="n">mycc</span><span class="p">:</span><span class="mf">1.0</span>
+<span class="n">peer</span> <span class="n">lifecycle</span> <span class="n">chaincode</span> <span class="n">checkcommitreadiness</span> <span class="o">-</span><span class="n">o</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7050</span> <span class="o">--</span><span class="n">channelID</span> <span class="n">ch1</span> <span class="o">--</span><span class="n">name</span> <span class="n">mycc</span> <span class="o">--</span><span class="n">version</span> <span class="mf">1.0</span> <span class="o">--</span><span class="n">sequence</span> <span class="mi">1</span> <span class="o">--</span><span class="n">init</span><span class="o">-</span><span class="n">required</span> <span class="o">--</span><span class="n">signature</span><span class="o">-</span><span class="n">policy</span> <span class="s2">&quot;OR (&#39;SampleOrg.member&#39;)&quot;</span>
+<span class="n">peer</span> <span class="n">lifecycle</span> <span class="n">chaincode</span> <span class="n">commit</span> <span class="o">-</span><span class="n">o</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7050</span> <span class="o">--</span><span class="n">channelID</span> <span class="n">ch1</span> <span class="o">--</span><span class="n">name</span> <span class="n">mycc</span> <span class="o">--</span><span class="n">version</span> <span class="mf">1.0</span> <span class="o">--</span><span class="n">sequence</span> <span class="mi">1</span> <span class="o">--</span><span class="n">init</span><span class="o">-</span><span class="n">required</span> <span class="o">--</span><span class="n">signature</span><span class="o">-</span><span class="n">policy</span> <span class="s2">&quot;OR (&#39;SampleOrg.member&#39;)&quot;</span> <span class="o">--</span><span class="n">peerAddresses</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7051</span>
+</pre></div>
+</div>
+<p>You should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mf">30.820</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">chaincodeCmd</span><span class="p">]</span> <span class="n">ClientWait</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">txid</span> <span class="p">[</span><span class="n">f22b3c25dfea7fe0b28af9ee818056db81e29a9421c83fe00eb22fa41d1d1e21</span><span class="p">]</span> <span class="n">committed</span> <span class="k">with</span> <span class="n">status</span> <span class="p">(</span><span class="n">VALID</span><span class="p">)</span> <span class="n">at</span>
+<span class="n">Chaincode</span> <span class="n">definition</span> <span class="k">for</span> <span class="n">chaincode</span> <span class="s1">&#39;mycc&#39;</span><span class="p">,</span> <span class="n">version</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="n">sequence</span> <span class="s1">&#39;1&#39;</span> <span class="n">on</span> <span class="n">channel</span> <span class="s1">&#39;ch1&#39;</span> <span class="n">approval</span> <span class="n">status</span> <span class="n">by</span> <span class="n">org</span><span class="p">:</span>
+<span class="n">SampleOrg</span><span class="p">:</span> <span class="n">true</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">17</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mf">43.295</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">chaincodeCmd</span><span class="p">]</span> <span class="n">ClientWait</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">txid</span> <span class="p">[</span><span class="n">fb803e8b0b4eae6b3a9ed35668f223753e1a34ffd2a7042f9e5bb516a383eb32</span><span class="p">]</span> <span class="n">committed</span> <span class="k">with</span> <span class="n">status</span> <span class="p">(</span><span class="n">VALID</span><span class="p">)</span> <span class="n">at</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7051</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>You can issue CLI commands to invoke and query the chaincode as needed to verify your smart contract logic. For this example, we issue three commands. The first one initializes the smart contract, the second command moves <code class="docutils literal notranslate"><span class="pre">10</span></code> from asset <code class="docutils literal notranslate"><span class="pre">a</span></code> to asset <code class="docutils literal notranslate"><span class="pre">b</span></code>. And the final command queries the value of <code class="docutils literal notranslate"><span class="pre">a</span></code> to verify it was successfully changed from <code class="docutils literal notranslate"><span class="pre">100</span></code> to <code class="docutils literal notranslate"><span class="pre">90</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CORE_PEER_ADDRESS</span><span class="o">=</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7051</span> <span class="n">peer</span> <span class="n">chaincode</span> <span class="n">invoke</span> <span class="o">-</span><span class="n">o</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7050</span> <span class="o">-</span><span class="n">C</span> <span class="n">ch1</span> <span class="o">-</span><span class="n">n</span> <span class="n">mycc</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;Args&quot;:[&quot;init&quot;,&quot;a&quot;,&quot;100&quot;,&quot;b&quot;,&quot;200&quot;]}&#39;</span> <span class="o">--</span><span class="n">isInit</span>
+<span class="n">CORE_PEER_ADDRESS</span><span class="o">=</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7051</span> <span class="n">peer</span> <span class="n">chaincode</span> <span class="n">invoke</span> <span class="o">-</span><span class="n">o</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7050</span> <span class="o">-</span><span class="n">C</span> <span class="n">ch1</span> <span class="o">-</span><span class="n">n</span> <span class="n">mycc</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;Args&quot;:[&quot;invoke&quot;,&quot;a&quot;,&quot;b&quot;,&quot;10&quot;]}&#39;</span>
+<span class="n">CORE_PEER_ADDRESS</span><span class="o">=</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7051</span> <span class="n">peer</span> <span class="n">chaincode</span> <span class="n">invoke</span> <span class="o">-</span><span class="n">o</span> <span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">7050</span> <span class="o">-</span><span class="n">C</span> <span class="n">ch1</span> <span class="o">-</span><span class="n">n</span> <span class="n">mycc</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;Args&quot;:[&quot;query&quot;,&quot;a&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>You should see results similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">18</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mf">00.034</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">chaincodeCmd</span><span class="p">]</span> <span class="n">chaincodeInvokeOrQuery</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">Chaincode</span> <span class="n">invoke</span> <span class="n">successful</span><span class="o">.</span> <span class="n">result</span><span class="p">:</span> <span class="n">status</span><span class="p">:</span><span class="mi">200</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">18</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mf">29.704</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">chaincodeCmd</span><span class="p">]</span> <span class="n">chaincodeInvokeOrQuery</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">Chaincode</span> <span class="n">invoke</span> <span class="n">successful</span><span class="o">.</span> <span class="n">result</span><span class="p">:</span> <span class="n">status</span><span class="p">:</span><span class="mi">200</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span> <span class="mi">18</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mf">42.101</span> <span class="n">EDT</span> <span class="p">[</span><span class="n">chaincodeCmd</span><span class="p">]</span> <span class="n">chaincodeInvokeOrQuery</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">Chaincode</span> <span class="n">invoke</span> <span class="n">successful</span><span class="o">.</span> <span class="n">result</span><span class="p">:</span> <span class="n">status</span><span class="p">:</span><span class="mi">200</span> <span class="n">payload</span><span class="p">:</span><span class="s2">&quot;90&quot;</span>
+</pre></div>
+</div>
+<p>The benefit of running the peer in DevMode is that you can now iteratively make updates to your smart contract, save your changes, <a class="reference external" href="#build-the-chaincode">build</a> the chaincode, and then <a class="reference external" href="#start-the-chaincode">start</a> it again using the steps above. You do not need to run the peer lifecycle commands to update the chaincode every time you make a change.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="videos.html" class="btn btn-neutral float-right" title="Videos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="chaincode4ade.html" class="btn btn-neutral" title="Writing Your First Chaincode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

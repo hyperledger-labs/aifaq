@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Style guide for contributors &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up the development environment" href="dev-setup/devenv.html" />
+    <link rel="prev" title="Creating a new translation" href="international_languages.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/style_guide.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#ways-to-contribute">Ways to contribute</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="CONTRIBUTING.html#contributing-documentation">Contributing documentation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="advice_for_writers.html">Connect with other writers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs_guide.html">Contributing documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="international_languages.html">Creating a new translation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Style guide for contributors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inclusive-language">Inclusive language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#word-choices">Word choices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#formatting-and-punctuation">Formatting and punctuation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#project-governance">Project Governance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#contribution-guide">Contribution guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#legal-stuff">Legal stuff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#related-topics">Related Topics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+      <li class="breadcrumb-item active">Style guide for contributors</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/style_guide.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="style-guide-for-contributors">
+<h1>Style guide for contributors<a class="headerlink" href="#style-guide-for-contributors" title="Link to this heading">¶</a></h1>
+<p><strong>Audience</strong>: documentation writers and editors</p>
+<p>While this style guide will also refer to best practices using ReStructured Text (also known as RST), in general we advise writing documentation in Markdown, as it’s a more universally accepted documentation standard. Both formats are usable, however, and if you decide to write a topic in RST (or are editing an RST topic), be sure to refer to this style guide.</p>
+<p><strong>When in doubt, use the docs themselves for guidance on how to format things.</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://hyperledger-fabric.readthedocs.io/en/latest/channel_update_tutorial.html">For RST formatting</a>.</p></li>
+<li><p><a class="reference external" href="http://hyperledger-fabric.readthedocs.io/en/latest/peers/peers.html">For Markdown formatting</a>.</p></li>
+</ul>
+<p>If you just want to look at how things are formatted, you can navigate to the Fabric repo to look at the raw file by clicking on <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">on</span> <span class="pre">Github</span></code> link in the upper right hand corner of the page. Then click the <code class="docutils literal notranslate"><span class="pre">Raw</span></code> tab. This will show you the formatting of the doc. <strong>Do not attempt to edit the file on Github.</strong> If you want to make a change, clone the repo and follow the instructions in <a class="reference external" href="./CONTRIBUTING.html">Contributing</a> for creating pull requests.</p>
+<section id="inclusive-language">
+<h2>Inclusive language<a class="headerlink" href="#inclusive-language" title="Link to this heading">¶</a></h2>
+<p>Please adhere to the inclusive language guidelines that the project has adopted as you make documentation updates.</p>
+<ul class="simple">
+<li><p>Consider that users who will read the docs are from different backgrounds and
+cultures and that they have different preferences.</p></li>
+<li><p>Avoid potential offensive terms and, for instance, prefer “allow list and
+deny list” to “white list and black list”.</p></li>
+<li><p>We believe that we all have a role to play to improve our world, and even if
+writing inclusive documentation might not look like a huge improvement, it’s a
+first step in the right direction.</p></li>
+<li><p>We suggest to refer to
+<a class="reference external" href="https://docs.microsoft.com/en-us/style-guide/bias-free-communication">Microsoft bias free writing guidelines</a>
+and
+<a class="reference external" href="https://developers.google.com/style/inclusive-documentation">Google inclusive doc writing guide</a>
+as starting points.</p></li>
+</ul>
+</section>
+<section id="word-choices">
+<h2>Word choices<a class="headerlink" href="#word-choices" title="Link to this heading">¶</a></h2>
+<p><strong>Tutorials should have a list of steps at the top.</strong></p>
+<p>A list of steps (with links to the corresponding sections) at the beginning of a tutorial helps users find particular steps they’re interested in. For an example, check out <a class="reference external" href="./private_data_tutorial.html">Using Private Data in Fabric</a>.</p>
+<p><strong>“Fabric”, “Hyperledger Fabric” or “HLF”?</strong></p>
+<p>The first usage should be “Hyperledger Fabric” and afterwards only “Fabric”. Don’t use “HLF” or “Hyperledger” by itself.</p>
+<p><strong>Chaincode vs. Chaincodes?</strong></p>
+<p>One chaincode is a “chaincode”. If you’re talking about several chaincodes, use “chaincodes”.</p>
+<p><strong>Smart contracts?</strong></p>
+<p>Colloquially, smart contracts are considered equivalent to chaincode, though at a technical level, it is more correct to say that a “smart contract” is the business logic inside of a chaincode, which encompasses the larger packaging and implementation.</p>
+<p><strong>JSON vs .json?</strong></p>
+<p>Use “JSON”. The same applies for any file format (for example, YAML).</p>
+<p><strong>curl vs cURL.</strong></p>
+<p>The tool is called “cURL”. The commands themselves are “curl” commands.</p>
+<p><strong>Fabric CA.</strong></p>
+<p>Do not call it “fabric-CA”, “fabricCA”, or FabricCA. It is the Fabric CA. The Fabric CA client binary can, however, be referred to as the <code class="docutils literal notranslate"><span class="pre">fabric-ca-client</span></code>.</p>
+<p><strong>Raft and RAFT.</strong></p>
+<p>“Raft” is not an acronym. Do not call it a “RAFT ordering service”.</p>
+<p><strong>Referring to the reader.</strong></p>
+<p>It’s perfectly fine to use the “you” or “we”. Avoid using “I”.</p>
+<p><strong>Ampersands (&amp;).</strong></p>
+<p>Not a substitute for the word “and”. Avoid them unless you have a reason to use it (such as in a code snippet that includes it).</p>
+<p><strong>Acronyms.</strong></p>
+<p>The first usage of an acronym should be spelled out, unless it’s an acronym that’s in such wide usage this is unneeded. For example, “Software Development Kit (SDK)” on first usage. Then use “SDK” afterward.</p>
+<p><strong>Try to avoid using the same words too often.</strong></p>
+<p>If you can avoid using a word twice in one sentence, please do so. Not using it more than twice in a single paragraph is better. Of course sometimes it might not be possible to avoid this –– a doc about the state database being used is likely to be replete with uses of the word “database” or “ledger”. But excessive usage of any particular word has a tendency to have a numbing effect on the reader.</p>
+<p><strong>How should files be named?</strong></p>
+<p>By using underscores between words. Also, tutorials should be named as such. For example, <code class="docutils literal notranslate"><span class="pre">identity_use_case_tutorial.md</span></code>. While not all files use this standard, new files should adhere to it.</p>
+</section>
+<section id="formatting-and-punctuation">
+<h2>Formatting and punctuation<a class="headerlink" href="#formatting-and-punctuation" title="Link to this heading">¶</a></h2>
+<p><strong>Line lengths.</strong></p>
+<p>If you look at the raw versions of the documentation, you will see that many topics conform to a line length of roughly 70 characters. This restriction is no longer necessary, so you are free to make lines as long as you want.</p>
+<p><strong>When to bold?</strong></p>
+<p>Not too often. The best use of them is either as a summary or as a way of drawing attention to concepts you want to talk about. “A blockchain network contains a ledger, at least one chaincode, and peers”, especially if you’re going to be talking about those things in that paragraph. Avoid using them simply to emphasize a single word, as in something like “Blockchain networks <strong>must</strong> use proper security protocols”.</p>
+<p><strong>When to surround something in back tics <code class="docutils literal notranslate"><span class="pre">nnn</span></code>?</strong></p>
+<p>This is useful to draw attention to words that either don’t make sense in plain English or when referencing parts of the code (especially if you’ve put code snippets in your doc). So for example, when talking about the fabric-samples directory, surround <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> with back tics. Same with a code function like <code class="docutils literal notranslate"><span class="pre">hf.Revoker</span></code>. It might also make sense to put back tics around words that do make sense in plain English that are part of the code if you’re referencing them in a code context. For example, when referencing an <code class="docutils literal notranslate"><span class="pre">attribute</span></code> as part of an Access Control List.</p>
+<p><strong>Is it ever appropriate to use a dash?</strong></p>
+<p>Dashes can be incredibly useful but they’re not necessarily as technically appropriate as using separate declarative sentences. Let’s consider this example sentence:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">leaves</span> <span class="n">us</span> <span class="k">with</span> <span class="n">a</span> <span class="n">trimmed</span> <span class="n">down</span> <span class="n">JSON</span> <span class="nb">object</span> <span class="o">---</span> <span class="n">config</span><span class="o">.</span><span class="n">json</span><span class="p">,</span> <span class="n">located</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">fabric</span><span class="o">-</span><span class="n">samples</span> <span class="n">folder</span> <span class="n">inside</span> <span class="n">first</span><span class="o">-</span><span class="n">network</span> <span class="o">---</span> <span class="n">which</span> <span class="n">will</span> <span class="n">serve</span> <span class="k">as</span> <span class="n">the</span> <span class="n">baseline</span> <span class="k">for</span> <span class="n">our</span> <span class="n">config</span> <span class="n">update</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>There are a number of ways to present this same information, but in this case the dashes break up the information while keeping it as part of the same thought. If you use a dash, make sure to use the “em” dash, which is three times longer than a hyphen. These dashes should have a space before and after them.</p>
+<p><strong>When to use hyphens?</strong></p>
+<p>Hyphens are mostly commonly used as part of a “compound adjective”. For example, “jet-powered car”. Note that the compound adjective must immediately precede the noun being modified. In other words, “jet powered” does not by itself need a hyphen. When in doubt, use Google, as compound adjectives are tricky and are a popular discussion on grammar discussion boards.</p>
+<p><strong>How many spaces after a period?</strong></p>
+<p>One.</p>
+<p><strong>How should numbers be rendered?</strong></p>
+<p>Number zero through nine are spelled out. One, two, three, four, etc. Numbers after 10 are rendered as numbers.</p>
+<p>Exceptions to this would be usages from code. In that case, use whatever’s in the code. And also examples like Org1. Don’t write it as OrgOne.</p>
+<p><strong>Capitalization rules for doc titles.</strong></p>
+<p>The standard rules for capitalization in sentences should be followed. In other words, unless a word is the first word in the title or a proper noun, do not capitalize its first letter. For example, “Understanding Identities in Fabric” should be “Understanding identities in Fabric”. While not every doc follows this standard yet, it is the standard we’re moving to and should be followed for new topics.</p>
+<p>Headings inside of topics should follow the same standard.</p>
+<p><strong>Use the Oxford comma?</strong></p>
+<p>Yes, it’s better.</p>
+<p>The classic example is, “I’d like to thank my parents, Ayn Rand and God”, as compared to: “I’d like to thank my parents, Ayn Rand, and God.”</p>
+<p><strong>Captions.</strong></p>
+<p>These should be in italics, and it’s the only real valid use for italics in our docs.</p>
+<p><strong>Commands.</strong></p>
+<p>In general, put each command in its own snippet. It reads better, especially when commands are long. An exception to this rule is when suggesting the export of a number of environment variables.</p>
+<p><strong>Code snippets.</strong></p>
+<p>In Markdown, if you want to post sample code, use three back tics to set off the snippet. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Code</span> <span class="n">goes</span> <span class="n">here</span><span class="o">.</span>
+
+<span class="n">Even</span> <span class="n">more</span> <span class="n">code</span> <span class="n">goes</span> <span class="n">here</span><span class="o">.</span>
+
+<span class="n">And</span> <span class="n">still</span> <span class="n">more</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>In RST, you will need to set off the code snippet using formatting similar to this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">code</span><span class="p">::</span> <span class="n">bash</span>
+
+   <span class="n">Code</span> <span class="n">goes</span> <span class="n">here</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>You can substitute <code class="docutils literal notranslate"><span class="pre">bash</span></code> for a language like Java or Go, where appropriate.</p>
+<p><strong>Enumerated lists in markdown.</strong></p>
+<p>Note that in Markdown, enumerated lists will not work if you separate the numbers with a space. Markdown sees this as the start of a new list, not a continuation of the old one (every number will be <code class="docutils literal notranslate"><span class="pre">1.</span></code>). If you need an enumerated list, you will have to use RST. Bulleted lists are a good substitute in Markdown, and are the recommended alternative.</p>
+<p><strong>Linking.</strong></p>
+<p>When linking to another doc, use relative links, not direct links. When naming a link, do not just call it “link”. Use a more creative and descriptive name. For accessibility reasons, the link name should also make it clear that it is a link.</p>
+<p><strong>All docs have to end with a license statement.</strong></p>
+<p>In RST, it’s this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">Licensed</span> <span class="n">under</span> <span class="n">Creative</span> <span class="n">Commons</span> <span class="n">Attribution</span> <span class="mf">4.0</span> <span class="n">International</span> <span class="n">License</span>
+   <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">creativecommons</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">by</span><span class="o">/</span><span class="mf">4.0</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>In markdown:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ --&gt;
+</pre></div>
+</div>
+<p><strong>How many spaces for indentation?</strong></p>
+<p>This will depend on the use case. Frequently it’s necessary, especially in RST, to indent two spaces, especially in a code block. In a <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">note::</span></code> box in RST, you have to indent to the space after the colon after note, like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">note</span><span class="p">::</span> <span class="n">Some</span> <span class="n">words</span> <span class="ow">and</span> <span class="n">stuff</span> <span class="n">etc</span> <span class="n">etc</span> <span class="n">etc</span> <span class="p">(</span><span class="n">line</span> <span class="n">continues</span> <span class="n">until</span> <span class="n">the</span> <span class="mi">70</span> <span class="n">character</span> <span class="n">limit</span> <span class="n">line</span><span class="p">)</span>
+          <span class="n">the</span> <span class="n">line</span> <span class="n">directly</span> <span class="n">below</span> <span class="n">has</span> <span class="n">to</span> <span class="n">start</span> <span class="n">at</span> <span class="n">the</span> <span class="n">same</span> <span class="n">space</span> <span class="k">as</span> <span class="n">the</span> <span class="n">one</span> <span class="n">above</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><strong>When to use which type of heading.</strong></p>
+<p>In RST, use this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Chapter</span> <span class="mi">1</span> <span class="n">Title</span>
+<span class="o">===============</span>
+
+<span class="n">Section</span> <span class="mf">1.1</span> <span class="n">Title</span>
+<span class="o">-----------------</span>
+
+<span class="n">Subsection</span> <span class="mf">1.1.1</span> <span class="n">Title</span>
+<span class="o">~~~~~~~~~~~~~~~~~~~~~~</span>
+
+<span class="n">Section</span> <span class="mf">1.2</span> <span class="n">Title</span>
+<span class="o">-----------------</span>
+</pre></div>
+</div>
+<p>Note that the length of what’s under the title has to be the same as the length of the title itself. This isn’t a problem in Atom, which gives each character the same width by default (this is called “monospacing”, if you’re ever on Jeopardy! and need that information.</p>
+<p>In markdown, it’s somewhat simpler. You go:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The Name of the Doc (this will get pulled for the TOC).</span>
+
+<span class="c1">## First subsection</span>
+
+<span class="c1">## Second subsection</span>
+</pre></div>
+</div>
+<p>Both file formats don’t like when these things are done out of order. For example, you might want a <code class="docutils literal notranslate"><span class="pre">####</span></code> to be the first thing after your <code class="docutils literal notranslate"><span class="pre">#</span></code> Title. Markdown won’t allow it. Similarly, RST will default to whatever order you give to the title formats (as they appear in the first sections of your doc).</p>
+<p><strong>Relative links should be used whenever possible.</strong></p>
+<p>For RST, the preferred syntax is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  :doc:`anchor text &lt;relativepath&gt;`
+</pre></div>
+</div>
+<p>Do not put the .rst suffix at the end of the filepath.</p>
+<p>For Markdown, the preferred syntax is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="p">[</span><span class="n">anchor</span> <span class="n">text</span><span class="p">](</span><span class="o">&lt;</span><span class="n">relativepath</span><span class="o">&gt;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For other files, such as text or YAML files, use a direct link to the file in
+github for example:</p>
+<p><a class="reference external" href="https://github.com/hyperledger/fabric/blob/main/docs/README.md">https://github.com/hyperledger/fabric/blob/main/docs/README.md</a></p>
+<p>Relative links are unfortunately not working on github when browsing through a
+RST file.</p>
+<!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ -->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dev-setup/devenv.html" class="btn btn-neutral float-right" title="Setting up the development environment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="international_languages.html" class="btn btn-neutral" title="Creating a new translation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

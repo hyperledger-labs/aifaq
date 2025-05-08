@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access Control Lists (ACL) &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MSP Implementation with Identity Mixer" href="idemix.html" />
+    <link rel="prev" title="Pluggable transaction endorsement and validation" href="pluggable_endorsement_and_validation.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/access_control.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ops_guide.html">Operations Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="msp.html">Membership Service Providers (MSP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="certs_management.html">Certificates Management Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer_ledger_snapshot.html">Taking ledger snapshots and using them to join channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hsm.html">Using a Hardware Security Module (HSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configtx.html">Channel Configuration (configtx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="endorsement-policies.html">Endorsement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_endorsement_and_validation.html">Pluggable transaction endorsement and validation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Access Control Lists (ACL)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-an-access-control-list">What is an Access Control List?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#policies">Policies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#where-is-access-control-specified">Where is access control specified?</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-acls-are-formatted-in-configtx-yaml">How ACLs are formatted in <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#updating-acl-defaults-in-configtx-yaml">Updating ACL defaults in <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updating-acl-defaults-in-the-channel-config">Updating ACL defaults in the channel config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#satisfying-an-acl-that-requires-access-to-multiple-resources">Satisfying an ACL that requires access to multiple resources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="idemix.html">MSP Implementation with Identity Mixer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_service.html">The Operations Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics_reference.html">Metrics Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_launcher.html">External Builders and Launchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_service.html">Running Chaincode as an External Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error-handling.html">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging-control.html">Logging Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enable_tls.html">Securing Communication With Transport Layer Security (TLS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raft_configuration.html">Configuring and operating a Raft ordering service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bft_configuration.html">Configuring and operating a BFT ordering service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raft_bft_migration.html">Migrating from Raft to BFT</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="ops_guide.html">Operations Guides</a></li>
+      <li class="breadcrumb-item active">Access Control Lists (ACL)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/access_control.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="access-control-lists-acl">
+<h1>Access Control Lists (ACL)<a class="headerlink" href="#access-control-lists-acl" title="Link to this heading">¶</a></h1>
+<section id="what-is-an-access-control-list">
+<h2>What is an Access Control List?<a class="headerlink" href="#what-is-an-access-control-list" title="Link to this heading">¶</a></h2>
+<p><em>Note: This topic deals with access control and policies on a channel
+administration level. To learn about access control within a chaincode, check out
+our <a class="reference external" href="./chaincode4ade.html#chaincode-access-control">chaincode for developers tutorial</a>.</em></p>
+<p>Fabric uses access control lists (ACLs) to manage access to resources by associating
+a <a class="reference external" href="policies/policies.html">Policy</a> with a resource. Fabric contains a number of default ACLs. In this
+document, we’ll talk about how they’re formatted and how the defaults can be overridden.</p>
+<p>But before we can do that, it’s necessary to understand a little about resources
+and policies.</p>
+<section id="resources">
+<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h3>
+<p>Users interact with Fabric by targeting a <a class="reference external" href="./chaincode4ade.html">user chaincode</a>,
+or an <a class="reference external" href="./peer_event_services.html">events stream source</a>, or system chaincode that
+are called in the background. As such, these endpoints are considered “resources”
+on which access control should be exercised.</p>
+<p>Application developers need to be aware of these resources and the default
+policies associated with them. The complete list of these resources are found in
+<code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code>. You can look at a <a class="reference external" href="http://github.com/hyperledger/fabric/blob/release-2.0/sampleconfig/configtx.yaml">sample <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code> file here</a>.</p>
+<p>The resources named in <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code> is an exhaustive list of all internal resources
+currently defined by Fabric. The loose convention adopted there is <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;/&lt;resource&gt;</span></code>.
+So <code class="docutils literal notranslate"><span class="pre">cscc/GetConfigBlock</span></code> is the resource for the <code class="docutils literal notranslate"><span class="pre">GetConfigBlock</span></code> call in the <code class="docutils literal notranslate"><span class="pre">CSCC</span></code>
+component.</p>
+</section>
+<section id="policies">
+<h3>Policies<a class="headerlink" href="#policies" title="Link to this heading">¶</a></h3>
+<p>Policies are fundamental to the way Fabric works because they allow the identity
+(or set of identities) associated with a request to be checked against the policy
+associated with the resource needed to fulfill the request. Endorsement policies
+are used to determine whether a transaction has been appropriately endorsed. The
+policies defined in the channel configuration are referenced as modification policies
+as well as for access control, and are defined in the channel configuration itself.</p>
+<p>Policies can be structured in one of two ways: as <code class="docutils literal notranslate"><span class="pre">Signature</span></code> policies or as an
+<code class="docutils literal notranslate"><span class="pre">ImplicitMeta</span></code> policy.</p>
+<section id="signature-policies">
+<h4><code class="docutils literal notranslate"><span class="pre">Signature</span></code> policies<a class="headerlink" href="#signature-policies" title="Link to this heading">¶</a></h4>
+<p>These policies identify specific users who must sign in order for a policy
+to be satisfied. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Policies</span><span class="p">:</span>
+  <span class="n">MyPolicy</span><span class="p">:</span>
+    <span class="n">Type</span><span class="p">:</span> <span class="n">Signature</span>
+    <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;OR(&#39;Org1.peer&#39;, &#39;Org2.peer&#39;)&quot;</span>
+
+</pre></div>
+</div>
+<p>This policy construct can be interpreted as: <em>the policy named <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code> can
+only be satisfied by the signature of an identity with role of “a peer from
+Org1” or “a peer from Org2”</em>.</p>
+<p>Signature policies support arbitrary combinations of <code class="docutils literal notranslate"><span class="pre">AND</span></code>, <code class="docutils literal notranslate"><span class="pre">OR</span></code>, and <code class="docutils literal notranslate"><span class="pre">NOutOf</span></code>,
+allowing the construction of extremely powerful rules like: “An admin of org A
+and two other admins, or 11 of 20 org admins”.</p>
+</section>
+<section id="implicitmeta-policies">
+<h4><code class="docutils literal notranslate"><span class="pre">ImplicitMeta</span></code> policies<a class="headerlink" href="#implicitmeta-policies" title="Link to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">ImplicitMeta</span></code> policies aggregate the result of policies deeper in the
+configuration hierarchy that are ultimately defined by <code class="docutils literal notranslate"><span class="pre">Signature</span></code> policies. They
+support default rules like “A majority of the organization admins”. These policies
+use a different but still very simple syntax as compared to <code class="docutils literal notranslate"><span class="pre">Signature</span></code> policies:
+<code class="docutils literal notranslate"><span class="pre">&lt;ALL|ANY|MAJORITY&gt;</span> <span class="pre">&lt;sub_policy&gt;</span></code>.</p>
+<p>For example: <code class="docutils literal notranslate"><span class="pre">ANY</span></code> <code class="docutils literal notranslate"><span class="pre">Readers</span></code> or <code class="docutils literal notranslate"><span class="pre">MAJORITY</span></code> <code class="docutils literal notranslate"><span class="pre">Admins</span></code>.</p>
+<p><em>Note that in the default policy configuration <code class="docutils literal notranslate"><span class="pre">Admins</span></code> have an operational role.
+Policies that specify that only Admins — or some subset of Admins — have access
+to a resource will tend to be for sensitive or operational aspects of the network
+(such as instantiating chaincode on a channel). <code class="docutils literal notranslate"><span class="pre">Writers</span></code> will tend to be able to
+propose ledger updates, such as a transaction, but will not typically have
+administrative permissions. <code class="docutils literal notranslate"><span class="pre">Readers</span></code> have a passive role. They can access
+information but do not have the permission to propose ledger updates nor do can
+they perform administrative tasks. These default policies can be added to,
+edited, or supplemented, for example by the new <code class="docutils literal notranslate"><span class="pre">peer</span></code> and <code class="docutils literal notranslate"><span class="pre">client</span></code> roles (if you
+have <code class="docutils literal notranslate"><span class="pre">NodeOU</span></code> support).</em></p>
+<p>Here’s an example of an <code class="docutils literal notranslate"><span class="pre">ImplicitMeta</span></code> policy structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Policies</span><span class="p">:</span>
+  <span class="n">AnotherPolicy</span><span class="p">:</span>
+    <span class="n">Type</span><span class="p">:</span> <span class="n">ImplicitMeta</span>
+    <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;MAJORITY Admins&quot;</span>
+</pre></div>
+</div>
+<p>Here, the policy <code class="docutils literal notranslate"><span class="pre">AnotherPolicy</span></code> can be satisfied by the <code class="docutils literal notranslate"><span class="pre">MAJORITY</span></code> of <code class="docutils literal notranslate"><span class="pre">Admins</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">Admins</span></code> is eventually being specified by lower level <code class="docutils literal notranslate"><span class="pre">Signature</span></code> policy.</p>
+</section>
+</section>
+<section id="where-is-access-control-specified">
+<h3>Where is access control specified?<a class="headerlink" href="#where-is-access-control-specified" title="Link to this heading">¶</a></h3>
+<p>Access control defaults exist inside <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code>, the file that <code class="docutils literal notranslate"><span class="pre">configtxgen</span></code>
+uses to build channel configurations.</p>
+<p>Access control can be updated in one of two ways, either by editing <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code>
+itself, which will be used when creating new channel configurations, or by updating
+access control in the channel configuration of an existing channel.</p>
+</section>
+</section>
+<section id="how-acls-are-formatted-in-configtx-yaml">
+<h2>How ACLs are formatted in <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code><a class="headerlink" href="#how-acls-are-formatted-in-configtx-yaml" title="Link to this heading">¶</a></h2>
+<p>ACLs are formatted as a key-value pair consisting of a resource function name
+followed by a string. To see what this looks like, reference this <a class="reference external" href="https://github.com/hyperledger/fabric/blob/release-2.0/sampleconfig/configtx.yaml">sample configtx.yaml file</a>.</p>
+<p>Two excerpts from this sample:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ACL policy for invoking chaincodes on peer</span>
+<span class="n">peer</span><span class="o">/</span><span class="n">Propose</span><span class="p">:</span> <span class="o">/</span><span class="n">Channel</span><span class="o">/</span><span class="n">Application</span><span class="o">/</span><span class="n">Writers</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ACL policy for sending block events</span>
+<span class="n">event</span><span class="o">/</span><span class="n">Block</span><span class="p">:</span> <span class="o">/</span><span class="n">Channel</span><span class="o">/</span><span class="n">Application</span><span class="o">/</span><span class="n">Readers</span>
+</pre></div>
+</div>
+<p>These ACLs define that access to <code class="docutils literal notranslate"><span class="pre">peer/Propose</span></code> and <code class="docutils literal notranslate"><span class="pre">event/Block</span></code> resources
+is restricted to identities satisfying the policy defined at the canonical path
+<code class="docutils literal notranslate"><span class="pre">/Channel/Application/Writers</span></code> and <code class="docutils literal notranslate"><span class="pre">/Channel/Application/Readers</span></code>, respectively.</p>
+<section id="updating-acl-defaults-in-configtx-yaml">
+<h3>Updating ACL defaults in <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code><a class="headerlink" href="#updating-acl-defaults-in-configtx-yaml" title="Link to this heading">¶</a></h3>
+<p>In cases where it will be necessary to override ACL defaults when bootstrapping
+a network, or to change the ACLs before a channel has been bootstrapped, the
+best practice will be to update <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code>.</p>
+<p>Let’s say you want to modify the <code class="docutils literal notranslate"><span class="pre">peer/Propose</span></code> ACL default — which specifies
+the policy for invoking chaincodes on a peer – from <code class="docutils literal notranslate"><span class="pre">/Channel/Application/Writers</span></code>
+to a policy called <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code>.</p>
+<p>This is done by adding a policy called <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code> (it could be called anything,
+but for this example we’ll call it <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code>). The policy is defined in the
+<code class="docutils literal notranslate"><span class="pre">Application.Policies</span></code> section inside <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code> and specifies a rule to be
+checked to grant or deny access to a user. For this example, we’ll be creating a
+<code class="docutils literal notranslate"><span class="pre">Signature</span></code> policy identifying <code class="docutils literal notranslate"><span class="pre">SampleOrg.admin</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Policies</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ApplicationDefaultPolicies</span>
+    <span class="n">Readers</span><span class="p">:</span>
+        <span class="n">Type</span><span class="p">:</span> <span class="n">ImplicitMeta</span>
+        <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;ANY Readers&quot;</span>
+    <span class="n">Writers</span><span class="p">:</span>
+        <span class="n">Type</span><span class="p">:</span> <span class="n">ImplicitMeta</span>
+        <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;ANY Writers&quot;</span>
+    <span class="n">Admins</span><span class="p">:</span>
+        <span class="n">Type</span><span class="p">:</span> <span class="n">ImplicitMeta</span>
+        <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;MAJORITY Admins&quot;</span>
+    <span class="n">MyPolicy</span><span class="p">:</span>
+        <span class="n">Type</span><span class="p">:</span> <span class="n">Signature</span>
+        <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;OR(&#39;SampleOrg.admin&#39;)&quot;</span>
+</pre></div>
+</div>
+<p>Then, edit the <code class="docutils literal notranslate"><span class="pre">Application:</span> <span class="pre">ACLs</span></code> section inside <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code> to change
+<code class="docutils literal notranslate"><span class="pre">peer/Propose</span></code> from this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">peer/Propose:</span> <span class="pre">/Channel/Application/Writers</span></code></p>
+<p>To this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">peer/Propose:</span> <span class="pre">/Channel/Application/MyPolicy</span></code></p>
+<p>Once these fields have been changed in <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code>, the <code class="docutils literal notranslate"><span class="pre">configtxgen</span></code> tool
+will use the policies and ACLs defined when creating a genesis block for channel creation using the channel participation API. When submitted to the orderer by one of the admins, the orderer is joined to the new channel with the defined ACLs and policies.</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code> has been bootstrapped into the channel configuration, it can also
+be referenced to override other ACL defaults. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SampleSingleMSPChannel</span><span class="p">:</span>
+    <span class="n">Consortium</span><span class="p">:</span> <span class="n">SampleConsortium</span>
+    <span class="n">Application</span><span class="p">:</span>
+        <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">ApplicationDefaults</span>
+        <span class="n">ACLs</span><span class="p">:</span>
+            <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">ACLsDefault</span>
+            <span class="n">event</span><span class="o">/</span><span class="n">Block</span><span class="p">:</span> <span class="o">/</span><span class="n">Channel</span><span class="o">/</span><span class="n">Application</span><span class="o">/</span><span class="n">MyPolicy</span>
+</pre></div>
+</div>
+<p>This would restrict the ability to subscribe to block events to <code class="docutils literal notranslate"><span class="pre">SampleOrg.admin</span></code>.</p>
+<p>If channels have already been created that want to use this ACL, they’ll have
+to update their channel configurations one at a time using the following flow:</p>
+</section>
+<section id="updating-acl-defaults-in-the-channel-config">
+<h3>Updating ACL defaults in the channel config<a class="headerlink" href="#updating-acl-defaults-in-the-channel-config" title="Link to this heading">¶</a></h3>
+<p>If channels have already been created that want to use <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code> to restrict
+access to <code class="docutils literal notranslate"><span class="pre">peer/Propose</span></code> — or if they want to create ACLs they don’t want
+other channels to know about — they’ll have to update their channel
+configurations one at a time through config update transactions.</p>
+<p><em>Note: Channel configuration transactions are an involved process we won’t
+delve into here. If you want to read more about them check out our document on
+<a class="reference external" href="./config_update.html">channel configuration updates</a> and our <a class="reference external" href="./channel_update_tutorial.html">“Adding an Org to a Channel” tutorial</a>.</em></p>
+<p>After pulling, translating, and stripping the configuration block of its metadata,
+you would edit the configuration by adding <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code> under <code class="docutils literal notranslate"><span class="pre">Application:</span> <span class="pre">policies</span></code>,
+where the <code class="docutils literal notranslate"><span class="pre">Admins</span></code>, <code class="docutils literal notranslate"><span class="pre">Writers</span></code>, and <code class="docutils literal notranslate"><span class="pre">Readers</span></code> policies already live.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;MyPolicy&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mod_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;Admins&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;identities&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;principal&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;msp_identifier&quot;</span><span class="p">:</span> <span class="s2">&quot;SampleOrg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;ADMIN&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;principal_classification&quot;</span><span class="p">:</span> <span class="s2">&quot;ROLE&quot;</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;rule&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;n_out_of&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s2">&quot;rules&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;signed_by&quot;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>Note in particular the <code class="docutils literal notranslate"><span class="pre">msp_identifer</span></code> and <code class="docutils literal notranslate"><span class="pre">role</span></code> here.</p>
+<p>Then, in the ACLs section of the config, change the <code class="docutils literal notranslate"><span class="pre">peer/Propose</span></code> ACL from
+this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;peer/Propose&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;policy_ref&quot;</span><span class="p">:</span> <span class="s2">&quot;/Channel/Application/Writers&quot;</span>
+</pre></div>
+</div>
+<p>To this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;peer/Propose&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;policy_ref&quot;</span><span class="p">:</span> <span class="s2">&quot;/Channel/Application/MyPolicy&quot;</span>
+</pre></div>
+</div>
+<p>Note: If you do not have ACLs defined in your channel configuration, you will
+have to add the entire ACL structure.</p>
+<p>Once the configuration has been updated, it will need to be submitted by the
+usual channel update process.</p>
+</section>
+<section id="satisfying-an-acl-that-requires-access-to-multiple-resources">
+<h3>Satisfying an ACL that requires access to multiple resources<a class="headerlink" href="#satisfying-an-acl-that-requires-access-to-multiple-resources" title="Link to this heading">¶</a></h3>
+<p>If a member makes a request that calls multiple system chaincodes, all of the ACLs
+for those system chaincodes must be satisfied.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">peer/Propose</span></code> refers to any proposal request on a channel. If the
+particular proposal requires access to two system chaincodes that requires an
+identity satisfying <code class="docutils literal notranslate"><span class="pre">Writers</span></code> and one system chaincode that requires an identity
+satisfying <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code>, then the member submitting the proposal must have an identity
+that evaluates to “true” for both <code class="docutils literal notranslate"><span class="pre">Writers</span></code> and <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code>.</p>
+<p>In the default configuration, <code class="docutils literal notranslate"><span class="pre">Writers</span></code> is a signature policy whose <code class="docutils literal notranslate"><span class="pre">rule</span></code> is
+<code class="docutils literal notranslate"><span class="pre">SampleOrg.member</span></code>. In other words, “any member of my organization”. <code class="docutils literal notranslate"><span class="pre">MyPolicy</span></code>,
+listed above, has a rule of <code class="docutils literal notranslate"><span class="pre">SampleOrg.admin</span></code>, or “any admin of my organization”.
+To satisfy these ACLs, the member would have to be both an administrator and a
+member of <code class="docutils literal notranslate"><span class="pre">SampleOrg</span></code>. By default, all administrators are members (though not all
+administrators are members), but it is possible to overwrite these policies to
+whatever you want them to be. As a result, it’s important to keep track of these
+policies to ensure that the ACLs for peer proposals are not impossible to satisfy
+(unless that is the intention).</p>
+<!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ -->
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="idemix.html" class="btn btn-neutral float-right" title="MSP Implementation with Identity Mixer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pluggable_endorsement_and_validation.html" class="btn btn-neutral" title="Pluggable transaction endorsement and validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

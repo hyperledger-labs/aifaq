@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running External Chaincode Builders &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using Private Data in Fabric" href="private_data_tutorial.html" />
+    <link rel="prev" title="Tutorials" href="tutorials.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/cc_basic.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="test_network.html">Using the Fabric test network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="write_first_app.html">Running a Fabric Application</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running External Chaincode Builders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fabric-v2-4-1-improvements">Fabric v2.4.1 Improvements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#end-to-end-with-the-test-network">End-to-end with the test-network</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-configure-each-language">How to configure each language</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#java">Java</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-js">Node.js</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging-the-chaincode">Debugging the Chaincode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#building-the-docker-image">Building the Docker image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starting-the-docker-container">Starting the Docker container</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#debugging-prerequisites">Debugging Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-with-multiple-peers">Running with multiple peers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="private_data_tutorial.html">Using Private Data in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_remove_org.html">Removing an Org from a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chaincode4ade.html">Writing Your First Chaincode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer-chaincode-devmode.html">Running chaincode in development mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Running External Chaincode Builders</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cc_basic.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-external-chaincode-builders">
+<h1>Running External Chaincode Builders<a class="headerlink" href="#running-external-chaincode-builders" title="Link to this heading">¶</a></h1>
+<p>Fabric v2.4.1 external chaincode builders provide a practical approach to running smart contracts by enabling the peer to run external (to itself) commands to manage chaincode. By comparison, the earlier <a class="reference external" href="deploy_chaincode.html">deploying a smart contract to a channel</a> method required the peer to orchestrate the complete lifecycle of the chaincode. This required the peer to have access to the Docker Daemon to create images and to start containers. Java, Node.js and Go chaincode frameworks were explicitly known to the peer, including how they should be built and started.</p>
+<p>As a result, the traditional chaincode deployment method made it challenging to deploy chaincode into Kubernetes (K8s), or other environments where access to the Docker Daemon is restricted, and to run chaincode in any form of debug mode. Additionally, the code was usually rebuilt by the peer, requiring an external internet connection and introducing some uncertainty about which dependencies had been installed.</p>
+<p>The chaincode as a service method does require an administrator to orchestrate the chaincode build and deployment phase. Although this creates an additional step, it provides administrators with control over the process. The peer still requires a ‘chaincode package’ to be installed, but with no code - only information about where the chaincode is hosted is installed (such as hostname, port, and TLS configuration).</p>
+<section id="fabric-v2-4-1-improvements">
+<h2>Fabric v2.4.1 Improvements<a class="headerlink" href="#fabric-v2-4-1-improvements" title="Link to this heading">¶</a></h2>
+<p>The test network uses the latest Fabric release (v2.4.1), which facilitates using chaincode as a service:</p>
+<ul class="simple">
+<li><p>The Docker image for the peer contains a preconfigured builder for chaincode-as-a-service, named ‘ccaasbuilder’. This removes the prior requirement to build your own external builder and repackage and configure the peer.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ccaasbuilder</span></code> applications are included in the binary tgz archive download for use in other circumstances. The <code class="docutils literal notranslate"><span class="pre">sampleconfig/core.yaml</span></code> is updated to refer to ‘ccaasbuilder’.</p></li>
+<li><p>The Fabric v2.4.1 Java chaincode removes the requirement to write a custom bootstrap main class (as implemented in the Node.js chaincode and planned for the go chaincode).</p></li>
+</ul>
+<p><strong>NOTE:</strong> This core functionality is also available in earlier releases, but with the requirements of writing the external chaincode code builder binaries and configuring the core.yaml correctly.</p>
+</section>
+<section id="end-to-end-with-the-test-network">
+<h2>End-to-end with the test-network<a class="headerlink" href="#end-to-end-with-the-test-network" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">test-network</span></code> and some of the chaincodes have been updated to support running chaincode-as-a-service. The commands below require the latest fabric-samples, along with the latest Fabric Docker images.</p>
+<p>Begin by opening two terminal windows, one for starting the Fabric test-network, and another for monitoring the Docker containers. In the ‘monitoring’ window, run the following bash scripts to watch activity from the Docker containers on the <code class="docutils literal notranslate"><span class="pre">fabric_test</span></code> network; this will monitor all Docker containers that are added to the <code class="docutils literal notranslate"><span class="pre">fabric-test</span></code> network.</p>
+<p>The test-network is typically created by running the <code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">up</span></code> command, so delay running the bash scripts until the network is created. (Note the network can be created in advance using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span> <span class="pre">create</span> <span class="pre">fabric-test</span></code>.)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># from the fabric-samples repo</span>
+./test-network/monitordocker.sh
+</pre></div>
+</div>
+<p>In the ‘Fabric Network’ window, start the test network:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>test-network
+./network.sh<span class="w"> </span>up<span class="w"> </span>createChannel
+</pre></div>
+</div>
+<p>Variants of the next command, such as to use CouchDB or CAs, can be used without affecting the chaincode-as-a-service feature. The three keys steps are as follows, in no required order:</p>
+<ol class="arabic simple">
+<li><p>Build a Docker image of the chaincode package, which contains information for determining where the chaincode containers (hosting one or more contracts) are running. Both <code class="docutils literal notranslate"><span class="pre">/asset-transfer-basic/chaincode-typescript</span></code> and <code class="docutils literal notranslate"><span class="pre">/asset-transfer-basic/chaincode-java</span></code> have been updated with Docker files.</p></li>
+<li><p>Install, approve, and commit a chaincode definition; these commands are run regardless of whether external chaincode builders are used. The chaincode package contains connection information (hostname, port, TLS certificates) only, with no code.</p></li>
+<li><p>Start the Docker container(s) containing the contract.</p></li>
+</ol>
+<p>The containers must be running before the first transaction is committed by the peer. This could be on the <code class="docutils literal notranslate"><span class="pre">commit</span></code> if the <code class="docutils literal notranslate"><span class="pre">initRequired</span></code> flag is set.</p>
+<p>This sequence can be run as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCCAAS<span class="w">  </span>-ccn<span class="w"> </span>basicts<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-basic/chaincode-typescript
+</pre></div>
+</div>
+<p>This is similar to the <code class="docutils literal notranslate"><span class="pre">deployCC</span></code> command in that it specifies the name and path. Because each container is on the <code class="docutils literal notranslate"><span class="pre">fabric-test</span></code> network, changing the port can avoid collisions with other chaincode containers. If you run multiple services, the ports will need to change.</p>
+<p>If successful to this point, the smart contract (chaincode) should be starting in the monitoring window. There should be two containers running, one for <code class="docutils literal notranslate"><span class="pre">org1</span></code> and one for <code class="docutils literal notranslate"><span class="pre">org2</span></code>. The container names contain the organization, peer, and chaincode name.</p>
+<p>As a test, run the ‘Contract Metadata’ function as shown below. (For details on testing as different organizations, see <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/test_network.html#interacting-with-the-network">Interacting with the network</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Environment variables for Org1</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org1MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:7051
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../config
+
+<span class="c1"># invoke the function</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>basicts<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;Args&quot;:[&quot;org.hyperledger.fabric:GetMetadata&quot;]}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">jq</span></code> can be omitted if <code class="docutils literal notranslate"><span class="pre">jq</span></code> is not installed. However, the metadata shows details of the deployed contract in JSON, so <code class="docutils literal notranslate"><span class="pre">jq</span></code> provides legibility. To confirm that the smart contract is working, repeat the prior commands for <code class="docutils literal notranslate"><span class="pre">org2</span></code>.</p>
+<p>To run the Java example, change the <code class="docutils literal notranslate"><span class="pre">deployCCAAS</span></code> command as follows, which will create two new containers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCCAAS<span class="w">  </span>-ccn<span class="w"> </span>basicj<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-basic/chaincode-java
+</pre></div>
+</div>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h3>
+<p>If a passed JSON structure is not well-formatted, the peer log will include the following error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">::</span><span class="n">Error</span><span class="p">:</span> <span class="n">Failed</span> <span class="n">to</span> <span class="n">unmarshal</span> <span class="n">json</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">unmarshal</span> <span class="n">string</span> <span class="n">into</span> <span class="n">Go</span> <span class="n">value</span> <span class="n">of</span> <span class="nb">type</span> <span class="nb">map</span><span class="p">[</span><span class="n">string</span><span class="p">]</span><span class="n">interface</span> <span class="p">{}</span> <span class="n">command</span><span class="o">=</span><span class="n">build</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="how-to-configure-each-language">
+<h2>How to configure each language<a class="headerlink" href="#how-to-configure-each-language" title="Link to this heading">¶</a></h2>
+<p>Each language can function in the ‘-as-a-service’ mode. The following approaches are based on the latest libraries at the time of publication. When starting the image, any TLS options or additional logging options for the respective chaincode libraries can be specified.</p>
+<section id="java">
+<h3>Java<a class="headerlink" href="#java" title="Link to this heading">¶</a></h3>
+<p>With the Fabric v2.4.1 Java chaincode libraries, there are no code changes or build changes to implement. The ‘-as-a-service’ mode will be used if the environment variable <code class="docutils literal notranslate"><span class="pre">CHAINCODE_SERVER_ADDRESS</span></code> is set.</p>
+<p>The following sample Docker run command shows the two required variables, <code class="docutils literal notranslate"><span class="pre">CHAINCODE_SERVER_ADDRESS</span></code> and <code class="docutils literal notranslate"><span class="pre">CORE_CHAINCODE_ID_NAME</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>peer0org1_assettx_ccaas<span class="w">  </span><span class="se">\</span>
+<span class="w">                  </span>--network<span class="w"> </span>fabric_test<span class="w"> </span><span class="se">\</span>
+<span class="w">                  </span>-e<span class="w"> </span><span class="nv">CHAINCODE_SERVER_ADDRESS</span><span class="o">=</span><span class="m">0</span>.0.0.0:9999<span class="w"> </span><span class="se">\</span>
+<span class="w">                  </span>-e<span class="w"> </span><span class="nv">CORE_CHAINCODE_ID_NAME</span><span class="o">=</span>&lt;use<span class="w"> </span>package<span class="w"> </span>id<span class="w"> </span>here&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">                   </span>assettx_ccaas_image:latest
+</pre></div>
+</div>
+</section>
+<section id="node-js">
+<h3>Node.js<a class="headerlink" href="#node-js" title="Link to this heading">¶</a></h3>
+<p>For Node.js (JavaScript or TypeScript) chaincode, <code class="docutils literal notranslate"><span class="pre">package.json</span></code> typically has <code class="docutils literal notranslate"><span class="pre">fabric-chaincode-node</span> <span class="pre">start</span></code> as the main start command. To run in the ‘-as-a-service’ mode change this start command to <code class="docutils literal notranslate"><span class="pre">fabric-chaincode-node</span> <span class="pre">server</span> <span class="pre">--chaincode-address=$CHAINCODE_SERVER_ADDRESS</span> <span class="pre">--chaincode-id=$CHAINCODE_ID</span></code>.</p>
+</section>
+</section>
+<section id="debugging-the-chaincode">
+<h2>Debugging the Chaincode<a class="headerlink" href="#debugging-the-chaincode" title="Link to this heading">¶</a></h2>
+<p>Running in ‘-as-a-service’ mode provides options, similar to Fabric ‘dev’ mode for debugging code. The restrictions of ‘dev’ mode do not apply to ‘-as-a-service’.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">-ccaasdocker</span> <span class="pre">false</span></code> option can be provided with the <code class="docutils literal notranslate"><span class="pre">deployCCAAS</span></code> command to <em>not</em> build the Docker image or start a Docker container. The option outputs the commands that would have run.</p>
+<p>Command output is similar to the following example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCCAAS<span class="w">  </span>-ccn<span class="w"> </span>basicj<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-basic/chaincode-java<span class="w"> </span>-ccaasdocker<span class="w"> </span><span class="nb">false</span>
+<span class="c1">#....</span>
+Not<span class="w"> </span>building<span class="w"> </span>docker<span class="w"> </span>image<span class="p">;</span><span class="w"> </span>this<span class="w"> </span>the<span class="w"> </span><span class="nb">command</span><span class="w"> </span>we<span class="w"> </span>would<span class="w"> </span>have<span class="w"> </span>run
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>../asset-transfer-basic/chaincode-java/Dockerfile<span class="w"> </span>-t<span class="w"> </span>basicj_ccaas_image:latest<span class="w"> </span>--build-arg<span class="w"> </span><span class="nv">CC_SERVER_PORT</span><span class="o">=</span><span class="m">9999</span><span class="w"> </span>../asset-transfer-basic/chaincode-java
+<span class="c1">#....</span>
+Not<span class="w"> </span>starting<span class="w"> </span>docker<span class="w"> </span>containers<span class="p">;</span><span class="w"> </span>these<span class="w"> </span>are<span class="w"> </span>the<span class="w"> </span>commands<span class="w"> </span>we<span class="w"> </span>would<span class="w"> </span>have<span class="w"> </span>run
+<span class="w">    </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>peer0org1_basicj_ccaas<span class="w">                    </span>--network<span class="w"> </span>fabric_test<span class="w">                   </span>-e<span class="w"> </span><span class="nv">CHAINCODE_SERVER_ADDRESS</span><span class="o">=</span><span class="m">0</span>.0.0.0:9999<span class="w">                   </span>-e<span class="w"> </span><span class="nv">CHAINCODE_ID</span><span class="o">=</span>basicj_1.0:59dcd73a14e2db8eab7f7683343ce27ac242b93b4e8075605a460d63a0438405<span class="w"> </span>-e<span class="w"> </span><span class="nv">CORE_CHAINCODE_ID_NAME</span><span class="o">=</span>basicj_1.0:59dcd73a14e2db8eab7f7683343ce27ac242b93b4e8075605a460d63a0438405<span class="w">                     </span>basicj_ccaas_image:latest
+</pre></div>
+</div>
+<p><strong>Note</strong>: The previous commands may require adjustments depending on the directory location or debugging requirements.</p>
+<section id="building-the-docker-image">
+<h3>Building the Docker image<a class="headerlink" href="#building-the-docker-image" title="Link to this heading">¶</a></h3>
+<p>The first requirement for debugging chaincode is building the Docker image. As long as the peer can connect to the <code class="docutils literal notranslate"><span class="pre">hostname:port</span></code> specified in <code class="docutils literal notranslate"><span class="pre">connection.json</span></code> the actual packaging of the chaincode is not important to the peer. The Docker files specified below can be relocated.</p>
+<p>Manually build the Docker image for <code class="docutils literal notranslate"><span class="pre">asset-transfer-basic/chaincode-java</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>../asset-transfer-basic/chaincode-java/Dockerfile<span class="w"> </span>-t<span class="w"> </span>basicj_ccaas_image:latest<span class="w"> </span>--build-arg<span class="w"> </span><span class="nv">CC_SERVER_PORT</span><span class="o">=</span><span class="m">9999</span><span class="w"> </span>../asset-transfer-basic/chaincode-java
+</pre></div>
+</div>
+</section>
+<section id="starting-the-docker-container">
+<h3>Starting the Docker container<a class="headerlink" href="#starting-the-docker-container" title="Link to this heading">¶</a></h3>
+<p>Next, the Docker container must be started. In Node.js, for example, the container could be started as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>-p<span class="w"> </span><span class="m">9229</span>:9229<span class="w"> </span>--name<span class="w"> </span>peer0org2_basic_ccaas<span class="w"> </span>--network<span class="w"> </span>fabric_test<span class="w"> </span>-e<span class="w"> </span><span class="nv">DEBUG</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">CHAINCODE_SERVER_ADDRESS</span><span class="o">=</span><span class="m">0</span>.0.0.0:9999<span class="w"> </span>-e<span class="w"> </span><span class="nv">CHAINCODE_ID</span><span class="o">=</span>basic_1.0:7c7dff5cdc43c77ccea028c422b3348c3c1fb5a26ace0077cf3cc627bd355ef0<span class="w"> </span>-e<span class="w"> </span><span class="nv">CORE_CHAINCODE_ID_NAME</span><span class="o">=</span>basic_1.0:7c7dff5cdc43c77ccea028c422b3348c3c1fb5a26ace0077cf3cc627bd355ef0<span class="w"> </span>basic_ccaas_image:latest
+</pre></div>
+</div>
+<p>In Java, for example, the Docker container could be started as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>--name<span class="w"> </span>peer0org1_basicj_ccaas<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>--network<span class="w"> </span>fabric_test<span class="w"> </span>-e<span class="w"> </span><span class="nv">DEBUG</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">CHAINCODE_SERVER_ADDRESS</span><span class="o">=</span><span class="m">0</span>.0.0.0:9999<span class="w"> </span>-e<span class="w"> </span><span class="nv">CHAINCODE_ID</span><span class="o">=</span>basicj_1.0:b014a03d8eb1898535e25b4dfeeb3f8244c9f07d91a06aec03e2d19174c45e4f<span class="w"> </span>-e<span class="w"> </span><span class="nv">CORE_CHAINCODE_ID_NAME</span><span class="o">=</span>basicj_1.0:b014a03d8e
+b1898535e25b4dfeeb3f8244c9f07d91a06aec03e2d19174c45e4f<span class="w">  </span>basicj_ccaas_image:latest
+</pre></div>
+</div>
+</section>
+<section id="debugging-prerequisites">
+<h3>Debugging Prerequisites<a class="headerlink" href="#debugging-prerequisites" title="Link to this heading">¶</a></h3>
+<p>The following prerequisites apply to debugging all languages:</p>
+<ul class="simple">
+<li><p>The container name must match the name in the peer’s <code class="docutils literal notranslate"><span class="pre">connection.json</span></code>.</p></li>
+<li><p>The peer is connecting to the chaincode container via the Docker network. Therefore, port 9999 does not need to be forwarded to the host.</p></li>
+<li><p>Single stepping in a debugger is likely to trigger the default Fabric transaction timeout value of 30 seconds. Increase the time that the chaincode has to complete transactions, to 300 seconds, by adding  <code class="docutils literal notranslate"><span class="pre">CORE_CHAINCODE_EXECUTETIMEOUT=300s</span></code> to the environment options for each peer in the <code class="docutils literal notranslate"><span class="pre">test-network/docker/docker-composer-test-net.yml</span></code> file.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command in the previous section, the test-network <code class="docutils literal notranslate"><span class="pre">-d</span></code> default option has been replaced with <code class="docutils literal notranslate"><span class="pre">-it</span></code>. This change runs the Docker container in the foreground and not in detached mode.</p></li>
+</ul>
+<p>The following prerequisites apply to debugging Node.js:</p>
+<ul class="simple">
+<li><p>Port 9229 is forwarded. However, this is the debug port used by Node.js.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">DEBUG=true</span></code> will trigger the node runtime to be started in debug mode. This is encoded in the <code class="docutils literal notranslate"><span class="pre">docker/docker-entrypoint.sh</span></code> script, which <strong>for security purposes, should be considered for removal from production images</strong>.</p></li>
+<li><p>If you are using TypeScript, ensure that the TypeScript has been compiled with <code class="docutils literal notranslate"><span class="pre">sourcemaps</span></code>; otherwise, a debugger will have difficulty matching up the source code.</p></li>
+</ul>
+<p>The following prerequisites apply to debugging Java:</p>
+<ul class="simple">
+<li><p>Port 8000 is forwarded, which is the debug port for the JVM.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">DEBUG=true</span></code> will trigger the node runtime to be started in debug mode. This is an example encoded in the <code class="docutils literal notranslate"><span class="pre">docker/docker-entrypoint.sh</span></code> script, which <strong>for security purposes, should be considered for removal from production images</strong>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">java</span></code> command option to start the debugger is <code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8000</span> <span class="pre">-jar</span> <span class="pre">/chaincode.jar</span></code>.  Note <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code>, as the debug port, must be bound to all network adapters so the debugger can be attached from outside the container.</p></li>
+</ul>
+</section>
+</section>
+<section id="running-with-multiple-peers">
+<h2>Running with multiple peers<a class="headerlink" href="#running-with-multiple-peers" title="Link to this heading">¶</a></h2>
+<p>In the earlier method, each peer that the chaincode is approved on will have a container running the chaincode. The ‘-as-a-service’ approach requires achieving the same architecture.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">connection.json</span></code> contains the address of the running chaincode container, so it can be updated to ensure that each peer connects to a different container. However, as with the <code class="docutils literal notranslate"><span class="pre">connection.json</span></code> in the chaincode package, Fabric mandates that the package ID be consistent across all peers in an organization. To achieve this, the external builder supports a template capability. The context from this template is taken from the environment variable <code class="docutils literal notranslate"><span class="pre">CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG</span></code> set on each peer.</p>
+<p>Define the address to be a template in <code class="docutils literal notranslate"><span class="pre">connection.json</span></code> as follows:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;address&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{{.peername}}_assettransfer_ccaas:9999&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;dial_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10s&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;tls_required&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the peer’s environment configuration, set the following variable for org1’s peer1:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG</span><span class="o">=</span><span class="s2">&quot;{\&quot;peername\&quot;:\&quot;org1peer1\&quot;}&quot;</span>
+</pre></div>
+</div>
+<p>The external builder will then resolve this address to be <code class="docutils literal notranslate"><span class="pre">org1peer1_assettransfer_ccaas:9999</span></code> for the peer to use.</p>
+<p>Each peer can have its own separate configuration, and therefore a unique address. The JSON string that is set can have any structure, as long as the templates (in golang template syntax) match.</p>
+<p>Any value in <code class="docutils literal notranslate"><span class="pre">connection.json</span></code> can be templated, but only the values and not the keys.</p>
+<!---
+Licensed under Creative Commons Attribution 4.0 International License https://creativecommons.org/licenses/by/4.0/
+-->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="private_data_tutorial.html" class="btn btn-neutral float-right" title="Using Private Data in Fabric" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tutorials.html" class="btn btn-neutral" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

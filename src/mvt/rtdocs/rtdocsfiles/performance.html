@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance considerations &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Frequently Asked Questions" href="Fabric-FAQ.html" />
+    <link rel="prev" title="Gossip data dissemination protocol" href="gossip.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/performance.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="architecture.html">Architecture Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference external" href="http://hyperledger-fabric-ca.readthedocs.io/en/latest">Hyperledger Fabric CA's User Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="txflow.html">Transaction Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gateway.html">Fabric Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="discovery-overview.html">Service Discovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="capability_requirements.html">Defining capability requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channels.html">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_as_state_database.html">CouchDB as the State Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer_event_services.html">Peer channel-based event services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private-data-arch.html">Private Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readwrite.html">Read-Write set semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gossip.html">Gossip data dissemination protocol</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Performance considerations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hardware-considerations">Hardware considerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#persistent-storage">Persistent storage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#network-connectivity">Network connectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cpu-and-memory">CPU and memory</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#peer-considerations">Peer considerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#number-of-peers">Number of peers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#number-of-channels-per-peer">Number of channels per peer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#total-query-limit">Total query limit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#concurrency-limits">Concurrency limits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#couchdb-cache-setting">CouchDB cache setting</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#orderer-considerations">Orderer considerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#number-of-orderers">Number of orderers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sendbuffersize">SendBufferSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#block-cutting-parameters-in-channel-configuration">Block cutting parameters in channel configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#application-considerations">Application considerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#avoid-couchdb-for-high-throughput-applications">Avoid CouchDB for high-throughput applications</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#general-chaincode-query-considerations">General chaincode query considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-the-peer-gateway-service">Use the Peer Gateway Service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#payload-size">Payload size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#chaincode-language">Chaincode language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-chaincode">Node chaincode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#go-chaincode">Go chaincode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#chaincode-processes-and-channels">Chaincode processes and channels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#endorsement-policies">Endorsement policies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#private-data-collections-pdcs-vs-world-state">Private Data Collections (PDCs) vs World State</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#single-or-multiple-channel-architecture">Single or multiple channel architecture</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#couchdb-considerations">CouchDB considerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#couchdb-cache">CouchDB cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#indexes">Indexes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bulk-update">Bulk update</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#hsm">HSM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-performance-considerations">Other performance considerations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="architecture.html">Architecture Reference</a></li>
+      <li class="breadcrumb-item active">Performance considerations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/performance.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="performance-considerations">
+<h1>Performance considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h1>
+<p>Various Hyperledger Fabric component, configuration, and workflow decisions contribute to the overall performance of your network. Managing these variables, such as the number of channels, chaincode implementations, and transaction policies, can be complex with multiple participating organizations contributing their own hardware and networking infrastructures to the environment.</p>
+<p>This topic walks you through the considerations that can help you optimize performance for your Hyperledger Fabric network.</p>
+<section id="hardware-considerations">
+<h2>Hardware considerations<a class="headerlink" href="#hardware-considerations" title="Link to this heading">¶</a></h2>
+<p>Each participating organization can provide hardware for hosting peer and ordering service nodes. Ordering service nodes can be provided by a single organization or by multiple organizations. Because any organization can impact the performance of the entire network (depending on factors such as transaction endorsement policies), each participating organization must provide adequate resources for network services and applications which they deploy.</p>
+<section id="persistent-storage">
+<h3>Persistent storage<a class="headerlink" href="#persistent-storage" title="Link to this heading">¶</a></h3>
+<p>Because a Hyperledger Fabric network performs a high volume of disk I/O, you must use the fastest disk storage that is practicable. If you are using network-attached storage, ensure that you choose the fastest IOPs available.</p>
+</section>
+<section id="network-connectivity">
+<h3>Network connectivity<a class="headerlink" href="#network-connectivity" title="Link to this heading">¶</a></h3>
+<p>A Hyperledger Fabric network is highly-distributed across multiple nodes and is typically hosted on multiple clusters, in different cloud environments, and even across legal and geographic boundaries. Therefore, high-speed network connectivity between nodes is vital, and a minimum of 1 Gbps should be deployed between all nodes and organizations.</p>
+</section>
+<section id="cpu-and-memory">
+<h3>CPU and memory<a class="headerlink" href="#cpu-and-memory" title="Link to this heading">¶</a></h3>
+<p>The final hardware consideration is the amount of CPU and Memory to allocate to peer and ordering service nodes, and for any CouchDB state databases used for peer nodes. These allocations affect network performance and even node stability, so you must continuously monitor CPU, Memory, Disk Space, and Disk and Network I/O to ensure that you are well within the limits of your allocated resources. Do not wait to approach maximum utilization before increasing node resources - a threshold of  70%-80% usage is a general guideline for maximum workload.</p>
+<p>Network performance generally scales with CPU allocated to peer nodes, so providing each peer (and CouchDB if used) with the maximum CPU capacity is recommended. For orderer nodes, a general guideline is 1 CPU with 2 GB of Memory.</p>
+<p>As the amount of state data grows, database storage performance can slow down, especially when using CouchDB as the state database. Therefore, you should plan to add more compute resources to your environment over time, while continuously monitoring your network components and adjusting to any thresholds being exceeded.</p>
+</section>
+</section>
+<section id="peer-considerations">
+<h2>Peer considerations<a class="headerlink" href="#peer-considerations" title="Link to this heading">¶</a></h2>
+<p>Peer considerations for overall network performance include the number of active channels and node configuration properties. The default peer and orderer configurations, from the peer <strong>core.yaml</strong> and orderer <strong>orderer.yaml</strong> files, are referenced below.</p>
+<section id="number-of-peers">
+<h3>Number of peers<a class="headerlink" href="#number-of-peers" title="Link to this heading">¶</a></h3>
+<p>The more peers that each organization deploys the better the network should perform, because transaction endorsement requests can be load-balanced across each  organization’s peers. However, gateway peers select peers for transaction endorsement based on their current block height, so distribution amongst peers eligible for endorsement is not easily predicted. Work done by a single gateway peer can be predictably reduced by selecting a gateway peer from among multiple gateway peers to submit or evaluate a transaction based on a defined policy such as round robin. This selection of a gateway peer could be done via a load balancer, coded into the client application, or by the grpc library used for gateway selection. (Note: these scenarios have <strong>NOT</strong> been formally benchmarked for any performance gains.)</p>
+</section>
+<section id="number-of-channels-per-peer">
+<h3>Number of channels per peer<a class="headerlink" href="#number-of-channels-per-peer" title="Link to this heading">¶</a></h3>
+<p>If a peer has ample CPU and is participating in only one channel, it is not possible to drive the peer beyond 65-70% CPU because of how the peer does serialization and locking internally. If a peer is participating in multiple channels, the peer will consume the available resource as it increases parallelism in block processing.</p>
+<p>In general, ensure that there is a CPU core available for each channel that is running at maximum load. As a general guideline, if the load in each channel is not highly-correlated (i.e., channels are not all contending for resources simultaneously), the number of channels can exceed the number of CPU cores.</p>
+</section>
+<section id="total-query-limit">
+<h3>Total query limit<a class="headerlink" href="#total-query-limit" title="Link to this heading">¶</a></h3>
+<p>A peer limits the total number of records a range or JSON (rich) query will return, in order to avoid larger than expected result sets that could slow down a peer. This limit is configured in the peer’s <strong>core.yaml</strong> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ledger</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">state</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Limit on the number of records to return per query</span>
+<span class="w">    </span><span class="nt">totalQueryLimit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+</pre></div>
+</div>
+<p>The Hyperledger Fabric total query limit default is 100000, as set in the sample <strong>core.yaml</strong> file and test docker images. You can increase this default value if necessary, but you should also consider alternative designs that do not require the higher number of query scans.</p>
+</section>
+<section id="concurrency-limits">
+<h3>Concurrency limits<a class="headerlink" href="#concurrency-limits" title="Link to this heading">¶</a></h3>
+<p>Each peer node has limits to ensure it is not overwhelmed by excessive concurrent client requests:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">peer</span><span class="p">:</span>
+<span class="c1"># Limits is used to configure some internal resource limits.</span>
+<span class="w">    </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># Concurrency limits the number of concurrently running requests to a service on each peer.</span>
+<span class="w">        </span><span class="c1"># Currently this option is only applied to endorser service and deliver service.</span>
+<span class="w">        </span><span class="c1"># When the property is missing or the value is 0, the concurrency limit is disabled for the service.</span>
+<span class="w">        </span><span class="nt">concurrency</span><span class="p">:</span>
+<span class="w">            </span><span class="c1"># endorserService limits concurrent requests to endorser service that handles chaincode deployment, query and invocation,</span>
+<span class="w">            </span><span class="c1"># including both user chaincodes and system chaincodes.</span>
+<span class="w">            </span><span class="nt">endorserService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2500</span>
+<span class="w">            </span><span class="c1"># deliverService limits concurrent event listeners registered to deliver service for blocks and transaction events.</span>
+<span class="w">            </span><span class="nt">deliverService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2500</span>
+<span class="w">            </span><span class="c1"># gatewayService limits concurrent requests to gateway service that handles the submission and evaluation of transactions.</span>
+<span class="w">            </span><span class="nt">gatewayService</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+</pre></div>
+</div>
+<p>The Peer Gateway Service, first released in v2.4 of Hyperledger Fabric, introduced the <code class="docutils literal notranslate"><span class="pre">gatewayService</span></code> limit with a default of 500. However, this default can restrict network TPS, so you may need to increase this value to allow more concurrent requests.</p>
+</section>
+<section id="couchdb-cache-setting">
+<h3>CouchDB cache setting<a class="headerlink" href="#couchdb-cache-setting" title="Link to this heading">¶</a></h3>
+<p>If you are using CouchDB and have a large number of keys being read repeatedly (not via queries), you may choose to increase the peer’s CouchDB cache to avoid database lookups:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">state</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">couchDBConfig</span><span class="p">:</span>
+<span class="w">       </span><span class="c1"># CacheSize denotes the maximum mega bytes (MB) to be allocated for the in-memory state</span>
+<span class="w">       </span><span class="c1"># cache. Note that CacheSize needs to be a multiple of 32 MB. If it is not a multiple</span>
+<span class="w">       </span><span class="c1"># of 32 MB, the peer would round the size to the next multiple of 32 MB.</span>
+<span class="w">       </span><span class="c1"># To disable the cache, 0 MB needs to be assigned to the cacheSize.</span>
+<span class="w">       </span><span class="nt">cacheSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="orderer-considerations">
+<h2>Orderer considerations<a class="headerlink" href="#orderer-considerations" title="Link to this heading">¶</a></h2>
+<p>The ordering service uses Raft consensus to cut blocks. Factors such as the number of orderers participating in consensus and block cutting parameters will affect overall network performance, as described below.</p>
+<section id="number-of-orderers">
+<h3>Number of orderers<a class="headerlink" href="#number-of-orderers" title="Link to this heading">¶</a></h3>
+<p>The number of ordering service nodes will impact performance because all orderers contribute to Raft consensus. Using five ordering service nodes will provide two orderer crash fault tolerance (a required majority of three remain available) and is a good starting point. Additional ordering service nodes may reduce network performance. If a single set of ordering service nodes becomes a network bottleneck, you can try deploying a unique set of ordering service nodes for each channel.</p>
+</section>
+<section id="sendbuffersize">
+<h3>SendBufferSize<a class="headerlink" href="#sendbuffersize" title="Link to this heading">¶</a></h3>
+<p>Prior to Hyperledger Fabric v2.5, the default SendBufferSize of each orderer node was set to 10, which causes a bottleneck. In Fabric v2.5, this default was changed to 100, which provides improved throughput. The SendBufferSize parameter is configured in <strong>orderer.yaml</strong>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">General</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Cluster</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># SendBufferSize is the maximum number of messages in the egress buffer.</span>
+<span class="w">        </span><span class="c1"># Consensus messages are dropped if the buffer is full, and transaction</span>
+<span class="w">        </span><span class="c1"># messages are waiting for space to be freed.</span>
+<span class="w">        </span><span class="nt">SendBufferSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</pre></div>
+</div>
+</section>
+<section id="block-cutting-parameters-in-channel-configuration">
+<h3>Block cutting parameters in channel configuration<a class="headerlink" href="#block-cutting-parameters-in-channel-configuration" title="Link to this heading">¶</a></h3>
+<p>Channel configuration settings can also affect performance of the ordering service. Increasing the channel block size and timeout parameters can increase throughput but can also increase latency. As described below, you can configure the ordering service for increased transactions per block and longer block cutting times to test the performance results.</p>
+<p>Three orderer batch size parameters - Max Message Count, Absolute Max Bytes, and Preferred Max Bytes - perform block cutting based on the specified block size and maximum number of transactions. These parameters are set when you create or update a channel configuration. If you use <strong>configtxgen</strong> and <strong>configtx.yaml</strong> as a starting point for creating channels, the following section in <strong>configtx.yaml</strong> applies:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Orderer</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;OrdererDefaults</span>
+<span class="w">    </span><span class="c1"># Batch Timeout: The amount of time to wait before creating a batch.</span>
+<span class="w">    </span><span class="nt">BatchTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2s</span>
+
+<span class="w">    </span><span class="c1"># Batch Size: Controls the number of messages batched into a block.</span>
+<span class="w">    </span><span class="c1"># The orderer views messages opaquely, but typically, messages may</span>
+<span class="w">    </span><span class="c1"># be considered to be Fabric transactions. The &#39;batch&#39; is the group</span>
+<span class="w">    </span><span class="c1"># of messages in the &#39;data&#39; field of the block. Blocks will be a few KB </span>
+<span class="w">    </span><span class="c1"># larger than the batch size, when signatures, hashes, and other metadata</span>
+<span class="w">    </span><span class="c1"># is applied.</span>
+<span class="w">    </span><span class="nt">BatchSize</span><span class="p">:</span>
+
+<span class="w">        </span><span class="c1"># Max Message Count: The maximum number of messages to permit in a</span>
+<span class="w">        </span><span class="c1"># batch. No block will contain more than this number of messages.</span>
+<span class="w">        </span><span class="nt">MaxMessageCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+
+<span class="w">        </span><span class="c1"># Absolute Max Bytes: The absolute maximum number of bytes allowed for</span>
+<span class="w">        </span><span class="c1"># the serialized messages in a batch. The maximum block size is this value</span>
+<span class="w">        </span><span class="c1"># plus the size of the associated metadata (usually a few KB depending</span>
+<span class="w">        </span><span class="c1"># upon the size of the signing identities). Any transaction larger than</span>
+<span class="w">        </span><span class="c1"># this value will be rejected by ordering. It is recommended not to exceed </span>
+<span class="w">        </span><span class="c1"># 49 MB, given the default grpc max message size of 100 MB configured on </span>
+<span class="w">        </span><span class="c1"># orderer and peer nodes (and allowing for message expansion during communication).</span>
+<span class="w">        </span><span class="nt">AbsoluteMaxBytes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10 MB</span>
+
+<span class="w">        </span><span class="c1"># Preferred Max Bytes: The preferred maximum number of bytes allowed</span>
+<span class="w">        </span><span class="c1"># for the serialized messages in a batch. Roughly, this field may be considered</span>
+<span class="w">        </span><span class="c1"># the best effort maximum size of a batch. A batch will fill with messages</span>
+<span class="w">        </span><span class="c1"># until this size is reached (or the max message count, or batch timeout is</span>
+<span class="w">        </span><span class="c1"># exceeded). If adding a new message to the batch would cause the batch to</span>
+<span class="w">        </span><span class="c1"># exceed the preferred max bytes, then the current batch is closed and written</span>
+<span class="w">        </span><span class="c1"># to a block, and a new batch containing the new message is created. If a</span>
+<span class="w">        </span><span class="c1"># message larger than the preferred max bytes is received, then its batch</span>
+<span class="w">        </span><span class="c1"># will contain only that message. Because messages may be larger than</span>
+<span class="w">        </span><span class="c1"># preferred max bytes (up to AbsoluteMaxBytes), some batches may exceed</span>
+<span class="w">        </span><span class="c1"># the preferred max bytes, but will always contain exactly one transaction.</span>
+<span class="w">        </span><span class="nt">PreferredMaxBytes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2 MB</span>
+</pre></div>
+</div>
+<section id="batch-timeout">
+<h4>Batch timeout<a class="headerlink" href="#batch-timeout" title="Link to this heading">¶</a></h4>
+<p>Set the BatchTimeout value to the amount of time, in seconds, to wait after the first transaction arrives before cutting the block. If you set this value too low, you risk preventing the batches from filling to your preferred size. Setting this value too high, however, can cause the orderer to wait for blocks and overall performance and latency to degrade. A general guideline is to set the value of BatchTimeout to be at a minimum the max message count divided by the maximum transactions per second.</p>
+</section>
+<section id="max-message-count">
+<h4>Max message count<a class="headerlink" href="#max-message-count" title="Link to this heading">¶</a></h4>
+<p>Set the Max message count value to the maximum number of transactions to include in a single block.</p>
+</section>
+<section id="absolute-max-bytes">
+<h4>Absolute max bytes<a class="headerlink" href="#absolute-max-bytes" title="Link to this heading">¶</a></h4>
+<p>Set the Absolute max bytes value to the largest block size in bytes for the ordering service to cut. No transaction can be larger than the value of Absolute max bytes. This setting can typically be 2-10 times larger than the Preferred max bytes value. Note: The maximum recommended size is 49 MB, based on the headroom needed for the default grpc size limit of 100 MB.</p>
+</section>
+<section id="preferred-max-bytes">
+<h4>Preferred max bytes<a class="headerlink" href="#preferred-max-bytes" title="Link to this heading">¶</a></h4>
+<p>Set the Preferred max bytes value to your ideal block size in bytes, which must be less than the Absolute max bytes. A minimum transaction size, one that contains no endorsements, is around 1 KB. If you add 1 KB per required endorsement, a typical transaction size is approximately 3-4 KB. Therefore, it is recommended to set the value of Preferred max bytes to be close to the Max message count multiplied by the expected average transaction size. At run time, whenever possible, blocks will not exceed this size. If a transaction arrives that causes the block to exceed the Absolute max bytes size, the block will be cut and the transaction included in a new block. The new block will be cut with the single transaction ONLY, which also cannot exceed the Absolute max bytes.</p>
+</section>
+</section>
+</section>
+<section id="application-considerations">
+<h2>Application considerations<a class="headerlink" href="#application-considerations" title="Link to this heading">¶</a></h2>
+<p>When designing your application architecture, various choices can affect the overall performance of both the application and the network. These application considerations are described below.</p>
+<section id="avoid-couchdb-for-high-throughput-applications">
+<h3>Avoid CouchDB for high-throughput applications<a class="headerlink" href="#avoid-couchdb-for-high-throughput-applications" title="Link to this heading">¶</a></h3>
+<p>CouchDB performance is noticeably slower than embedded LevelDB, sometimes by a factor of 2x slower. The only additional capability that a CouchDB state database provides is JSON (rich) queries, as stated in the <a class="reference external" href="./deploypeer/peerplan.html#state-database">Fabric state database documentation</a>. In addition, to ensure the integrity of the state data you must never allow direct access to CouchDB data (for instance via Fauxton UI).</p>
+<p>CouchDB as a state database has other limitations which reduce overall network performance and require additional hardware resource (and cost). For one, JSON queries are not re-executed at validation time, so Fabric does not offer built-in protection from phantom reads. Such protection is provided, however, by range queries. (Your application must be designed to tolerate phantom reads when using JSON queries, such as when records are added to state between the times of chaincode execution and block validation). You should therefore consider using range queries based on additional keys for high-throughput applications, rather than using CouchDB with JSON queries.</p>
+<p>Alternatively, consider using an off-chain store to support queries, as seen in the <a class="reference external" href="https://github.com/hyperledger/Fabric-samples/tree/main/off_chain_data">Off-chain sample</a>. Using an off-chain store for queries gives you much more control over the data, and query transactions do not affect Hyperledger Fabric peer and network performance. It also enables you to use a fit-for-purpose data store for off-chain storage, such as an SQL database or analytics service more aligned with your query needs.</p>
+<p>CouchDB performance also degrades more than LevelDB does as the amount of state data increases, requiring you to provide adequate resources for CouchDB instances for the life of the application.</p>
+</section>
+<section id="general-chaincode-query-considerations">
+<h3>General chaincode query considerations<a class="headerlink" href="#general-chaincode-query-considerations" title="Link to this heading">¶</a></h3>
+<p>Avoid writing chaincode queries that could be unbounded in the amount of data returned, or bounded but returning an amount of data large enough to cause a transaction to time out. It is against Fabric best practices for transactions to run for a long time, so ensure that your queries are optimized to limit the amount of data returned. If JSON queries are used, ensure they are indexed. See <a class="reference external" href="./couchdb_as_state_database.html#good-practices-for-queries">Good practice for queries</a> for guidance on JSON queries.</p>
+</section>
+<section id="use-the-peer-gateway-service">
+<h3>Use the Peer Gateway Service<a class="headerlink" href="#use-the-peer-gateway-service" title="Link to this heading">¶</a></h3>
+<p>The Peer Gateway Service (new in v2.4) and new Fabric-Gateway client SDKs offer substantial enhancements over the legacy Go, Java, and Node SDKs. The Peer Gateway Service provides much improved throughput, and more capabilities and reduced complexity to client applications. For example, the service automatically (attempts to) collect the endorsements required to satisfy not only the chaincode endorsement policy, but also any state-based endorsement policies included with transaction simulation (which is not possible using the legacy SDKs).</p>
+<p>The Peer Gateway Service also reduces the number of network connections a client needs to maintain to submit a transaction. Using the legacy SDKs, clients may need to connect to multiple peer and orderer nodes across organizations. By contrast, the Peer Gateway Service service enables an application to connect to a single trusted peer, which then collects endorsements from other peer and orderer nodes and submits the transaction on behalf of the client application. Your application can target multiple trusted peers for high concurrency and redundancy, when necessary.</p>
+<p>Changing your application development environment from the legacy SDKs to the new Peer Gateway Service also reduces client CPU and memory resource requirements, with a modest increase in peer resource requirements.</p>
+<p>See the <a class="reference external" href="https://github.com/hyperledger/Fabric-samples/blob/main/full-stack-asset-transfer-guide/docs/ApplicationDev/01-FabricGateway.md">Sample gateway application</a> for more details about the Peer Gateway Service.</p>
+</section>
+<section id="payload-size">
+<h3>Payload size<a class="headerlink" href="#payload-size" title="Link to this heading">¶</a></h3>
+<p>The amount of data that is submitted to a transaction, along with the amount of data written to keys in a transaction will affect the application performance. Note that the payload size includes more than just the data. It includes structures required by Fabric plus client and endorsing peer signatures.</p>
+<p>Suffice to say large payload sizes are an anti-pattern in any blockchain solution. Consider storing large data off-chain and storing a hash of the data on-chain.</p>
+</section>
+<section id="chaincode-language">
+<h3>Chaincode language<a class="headerlink" href="#chaincode-language" title="Link to this heading">¶</a></h3>
+<p>Go chaincode has shown the best performance in Hyperledger Fabric environments, followed by Node chaincode. Java chaincode performance is the least performant of the three, and is not recommended for high-throughput applications.</p>
+</section>
+<section id="node-chaincode">
+<h3>Node chaincode<a class="headerlink" href="#node-chaincode" title="Link to this heading">¶</a></h3>
+<p>Node is an asynchronous runtime implementation that utilizes only a single thread to execute code. Node does run background threads for activities such as garbage collection, but it may not improve performance to allocate more than two vCPUs (generally equivalent to the number of concurrent threads which can be executed) to a Node chaincode (for example on Kubernetes which is limited to available resources). It is worth monitoring performance of Node chaincode to see how much vCPU it uses. Node chaincode is self-limiting and not unbounded, though you could also assign resource restrictions to Node chaincode processes.</p>
+<p>Prior to Node v12, a Node process was limited to 1.5 GB of Memory by default, which to increase for running Node chaincode required passing a parameter to the Node executable. You should not be running chaincode processes on any version earlier than Node v12, and Hyperledger Fabric v2.5 mandates using Node v16, or later. Various parameters can be provided when launching Node chaincode, but few if any scenarios would require overriding the default values for Node v12 and later.</p>
+</section>
+<section id="go-chaincode">
+<h3>Go chaincode<a class="headerlink" href="#go-chaincode" title="Link to this heading">¶</a></h3>
+<p>The Golang runtime implementation is ideal for concurrency. It is capable of using all CPUs available to it, and thus, is only limited by the resources allocated to the chaincode process. No tuning is required.</p>
+</section>
+<section id="chaincode-processes-and-channels">
+<h3>Chaincode processes and channels<a class="headerlink" href="#chaincode-processes-and-channels" title="Link to this heading">¶</a></h3>
+<p>Hyperledger Fabric reuses chaincode processes across channels if the chaincode ID and versions match. For example, if a peer is joined to two channels with the same chaincode ID and version deployed, the peer will only interact with one chaincode process for both channels. This can place more load on the chaincode process than expected, especially for Node chaincode which is self-limiting. In this case, you can either use Go chaincode or deploy Node chaincode to each channel using different IDs or version numbers to ensure a distinct chaincode process per channel.</p>
+</section>
+<section id="endorsement-policies">
+<h3>Endorsement policies<a class="headerlink" href="#endorsement-policies" title="Link to this heading">¶</a></h3>
+<p>For a transaction to be committed as valid, it must contain the signatures required to satisfy the chaincode endorsement policy and any state-based endorsement policies. The Peer Gateway Service (Fabric v2.4 and later) will only send requests to enough peers to satisfy the collection of policies (and will try other peers if the preferred peers are not available). Endorsement policies therefore affect performance because they dictate how many peers (and their signatures) are required for a transaction to be committed as valid.</p>
+</section>
+<section id="private-data-collections-pdcs-vs-world-state">
+<h3>Private Data Collections (PDCs) vs World State<a class="headerlink" href="#private-data-collections-pdcs-vs-world-state" title="Link to this heading">¶</a></h3>
+<p>In general, the decision of whether to use Private Data Collections (PDCs) is an application architecture decision and not a performance decision. However, it should be noted that, for example, using a PDC to store an asset rather than using the world state results in approximately half the TPS.</p>
+</section>
+<section id="single-or-multiple-channel-architecture">
+<h3>Single or multiple channel architecture<a class="headerlink" href="#single-or-multiple-channel-architecture" title="Link to this heading">¶</a></h3>
+<p>When designing your application, consider whether a single channel or multiple channels can be utilized. If data silos are not a problem for a given scenario, the application could use multiple channel architecture to improve performance (because multiple channels enable using more of the peer resource).</p>
+</section>
+</section>
+<section id="couchdb-considerations">
+<h2>CouchDB considerations<a class="headerlink" href="#couchdb-considerations" title="Link to this heading">¶</a></h2>
+<p>As mentioned, CouchDB is not recommended for high-throughput applications, and all limitations should be considered, as described below.</p>
+<section id="resources">
+<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h3>
+<p>Ensure monitoring of resources used by CouchDB instances, because as the size of the state database increases, CouchDB consumes more resources.</p>
+</section>
+<section id="couchdb-cache">
+<h3>CouchDB cache<a class="headerlink" href="#couchdb-cache" title="Link to this heading">¶</a></h3>
+<p>When using an external CouchDB state database, read delays during the endorsement and validation transaction phases have shown to be a performance bottleneck. In Fabric v2.x, the peer cache replaces many of these expensive lookups with fast local cache reads.</p>
+<p>The cache will not improve performance of JSON queries.</p>
+<p>See the <strong>CouchDB Cache setting</strong> details above (in <strong>Peer Considerations</strong>) for information on configuring the cache.</p>
+</section>
+<section id="indexes">
+<h3>Indexes<a class="headerlink" href="#indexes" title="Link to this heading">¶</a></h3>
+<p>Include CouchDB indexes with any chaincode that utilizes CouchDB JSON queries. Test queries to ensure that indexes are utilized, and avoid queries that cannot use indexes. For example, use of the query operators $or, $in, $regex result in full data scans. See details in <a class="reference external" href="./couchdb_as_state_database.html#good-practices-for-queries">Hyperledger Fabric Good Practices For Queries</a>.</p>
+<p>Optimize your queries, because complex queries will take more time even with indexing. Ensure that your queries result in a bounded set of data. Hyperledger Fabric may also limit the total number of results returned.</p>
+<p>You can check the peer and CouchDB logs to see how long queries are taking, and whether any query was unable to use an index from a warning log entry stating the query “should be indexed”.</p>
+<p>If queries are taking a long time, increasing the CPU/Memory available to CouchDB or using faster storage may improve their performance.</p>
+<p>Check CouchDB logs for warnings such as “The number of documents examined is high in proportion to the number of results returned. Consider adding a more specific index to improve this.” These messages indicate that your indexes could be improved because a high number of documents are being scanned.</p>
+</section>
+<section id="bulk-update">
+<h3>Bulk update<a class="headerlink" href="#bulk-update" title="Link to this heading">¶</a></h3>
+<p>Hyperledger Fabric uses bulk update calls to CouchDB to improve CouchDB performance. A bulk update is done at the block level, so including more transactions in a block can improve throughput. However, increasing the time before a block is cut to include more transactions will also have an impact on latency.</p>
+</section>
+</section>
+<section id="hsm">
+<h2>HSM<a class="headerlink" href="#hsm" title="Link to this heading">¶</a></h2>
+<p>Using HSMs in a Fabric network will have an impact on performance. It is not possible to quantify the impact, but variables such as HSM performance and its network connection will impact the overall performance of the network.</p>
+<p>If you have configured Peers, Orderers, and Clients to use an HSM, then anything that requires signing will utilize the HSM, including creation of blocks by orderers, endorsements and block events by peers, and all client requests.</p>
+<p>Note that HSMs are NOT involved in the verification of signatures, which is done by each node.</p>
+</section>
+<section id="other-performance-considerations">
+<h2>Other performance considerations<a class="headerlink" href="#other-performance-considerations" title="Link to this heading">¶</a></h2>
+<p>Sending single transactions periodically has a latency correlating to the block cutting parameters. For example, if you send a transaction of 100 Bytes with a  BatchTimeout of 2 seconds, then the time from transaction submission to commitment will be just over 2 seconds. However, this is not a true benchmark of your Fabric network performance, which should be obtained by submitting multiple transactions simultaneously.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Fabric-FAQ.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gossip.html" class="btn btn-neutral" title="Gossip data dissemination protocol" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

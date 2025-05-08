@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Considerations for getting to v3.x &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Upgrading your components" href="upgrading_your_components.html" />
+    <link rel="prev" title="Upgrading to the latest release" href="upgrade.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/upgrade_to_newest_version.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Considerations for getting to v3.x</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrading-from-a-v2-x-release-to-a-v3-x-release">Upgrading from a v2.x release to a v3.x release</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#before-upgrading-nodes">Before upgrading nodes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#upgrading-nodes">Upgrading nodes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#after-upgrading-nodes">After upgrading nodes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="upgrading_your_components.html">Upgrading your components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="updating_capabilities.html">Updating the capability level of a channel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="upgrade.html">Upgrading to the latest release</a></li>
+      <li class="breadcrumb-item active">Considerations for getting to v3.x</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/upgrade_to_newest_version.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="considerations-for-getting-to-v3-x">
+<h1>Considerations for getting to v3.x<a class="headerlink" href="#considerations-for-getting-to-v3-x" title="Link to this heading">¶</a></h1>
+<p>In this topic we’ll cover recommendations for upgrading from a v2.x release to a v3.x release.</p>
+<section id="upgrading-from-a-v2-x-release-to-a-v3-x-release">
+<h2>Upgrading from a v2.x release to a v3.x release<a class="headerlink" href="#upgrading-from-a-v2-x-release-to-a-v3-x-release" title="Link to this heading">¶</a></h2>
+<section id="before-upgrading-nodes">
+<h3>Before upgrading nodes<a class="headerlink" href="#before-upgrading-nodes" title="Link to this heading">¶</a></h3>
+<p>Fabric v3.x has removed some features that were deprecated in v2.x. Before upgrading components to v3.x ensure that you have shifted off of these removed features:</p>
+<ul class="simple">
+<li><p><strong>Support for ‘Solo’ consensus has been removed in Fabric v3.0.</strong> The ‘Solo’ consensus type was intended for test environments only in prior releases and has never been supported for production environments. For trial environments you can utilize a single node Raft ordering service as demonstrated in the <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/test_network.html">test network tutorial</a>.</p></li>
+<li><p><strong>Support for ‘Kafka’ consensus has been removed in Fabric v3.0.</strong> If you used Kafka consensus in prior releases, you must migrate to Raft consensus prior to upgrading to v3.x. For details about the migration process, see the <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/release-2.5/kafka_raft_migration.html">Migrating from Kafka to Raft documentation</a>.</p></li>
+<li><p><strong>The legacy chaincode lifecycle from v1.x has been removed in Fabric v3.0.</strong> Prior to upgrading peers to v3.x, you must update all channels to utilize the v2.x lifecycle by setting the channel application capability to either V2_0 or V2_5, and redeploying all chaincodes using the v2.x lifecycle. The new chaincode lifecycle provides a more flexible and robust governance model
+for chaincodes. For more details see the <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/release-2.5/enable_cc_lifecycle.html">documentation for enabling the new lifecycle</a>.</p></li>
+</ul>
+</section>
+<section id="upgrading-nodes">
+<h3>Upgrading nodes<a class="headerlink" href="#upgrading-nodes" title="Link to this heading">¶</a></h3>
+<p>Upgrading nodes from a v2.x release to a v3.x release requires no special considerations, simply follow the steps in <a class="reference external" href="./upgrading_your_components.html">Upgrading your components</a>.</p>
+</section>
+<section id="after-upgrading-nodes">
+<h3>After upgrading nodes<a class="headerlink" href="#after-upgrading-nodes" title="Link to this heading">¶</a></h3>
+<section id="capabilities">
+<h4>Capabilities<a class="headerlink" href="#capabilities" title="Link to this heading">¶</a></h4>
+<p>The 3.0 release features one new capability.</p>
+<ul class="simple">
+<li><p><strong>Channel</strong> <code class="docutils literal notranslate"><span class="pre">V3_0</span></code>: this channel capability enables SmartBFT consensus and adds support for Ed25519 cryptographic algorithm in MSP credentials. Both features impact orderer node and peer node behavior.</p></li>
+</ul>
+<p>Make sure to upgrade all orderer binaries and peer binaries before updating the <code class="docutils literal notranslate"><span class="pre">Channel</span></code> capability. Additionally, ensure that <code class="docutils literal notranslate"><span class="pre">OrdererEndpoints</span></code> are set at the organization level before updating to the V3_0 channel capability. See the next section <strong>Define ordering node endpoint per org</strong>.</p>
+<p>For information about how to set new capabilities, check out <a class="reference external" href="./updating_capabilities.html">Updating the capability level of a channel</a>.</p>
+</section>
+<section id="define-ordering-node-endpoint-per-org">
+<h4>Define ordering node endpoint per org<a class="headerlink" href="#define-ordering-node-endpoint-per-org" title="Link to this heading">¶</a></h4>
+<p>Starting with version v1.4.2, it was recommended to define orderer endpoints in all channels at the organization level by adding a new <code class="docutils literal notranslate"><span class="pre">OrdererEndpoints</span></code> stanza within the channel configuration of an organization, replacing the global <code class="docutils literal notranslate"><span class="pre">OrdererAddresses</span></code> section of channel configuration. This update is required prior to enabling the V3_0 channel capability.</p>
+<p>If at least one organization has an ordering service endpoint defined at an organizational level, all orderers and peers will ignore the channel level endpoints when connecting to ordering nodes.</p>
+<p>Utilizing organization level orderer endpoints is required when using service discovery with ordering nodes provided by multiple organizations. This allows clients to provide the correct organization TLS certificates.</p>
+<p>If your channel configuration does not yet include <code class="docutils literal notranslate"><span class="pre">OrdererEndpoints</span></code> per org, you will need to perform a channel configuration update to add them to the config. First, create a JSON file that includes the new configuration stanza.</p>
+<p>In this example, we will create a stanza for a single org called <code class="docutils literal notranslate"><span class="pre">OrdererOrg</span></code>. Note that if you have multiple ordering service organizations, they will all have to be updated to include endpoints. Let’s call our JSON file <code class="docutils literal notranslate"><span class="pre">orglevelEndpoints.json</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;OrdererOrgEndpoint&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;Endpoints&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;mod_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;Admins&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;addresses&quot;</span><span class="p">:</span> <span class="p">[</span>
+                 <span class="s2">&quot;127.0.0.1:30000&quot;</span>
+              <span class="p">]</span>
+          <span class="p">}</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then, export the following environment variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CH_NAME</span></code>: the name of the channel being updated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CORE_PEER_LOCALMSPID</span></code>: the MSP ID of the organization proposing the channel update. This will be the MSP of one of the orderer organizations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CORE_PEER_MSPCONFIGPATH</span></code>: the absolute path to the MSP representing your organization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TLS_ROOT_CA</span></code>: the absolute path to the root CA certificate of the organization proposing the channel update.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ORDERER_CONTAINER</span></code>: the name of an ordering node container. When targeting the ordering service, you can target any particular node in the ordering service. Your requests will be forwarded to the leader automatically.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ORGNAME</span></code>: The name of the organization you are currently updating. For example, <code class="docutils literal notranslate"><span class="pre">OrdererOrg</span></code>.</p></li>
+</ul>
+<p>Once you have set the environment variables, navigate to <a class="reference external" href="./config_update.html#step-1-pull-and-translate-the-config">Step 1: Pull and translate the config</a>.</p>
+<p>Then, add the lifecycle organization policy (as listed in <code class="docutils literal notranslate"><span class="pre">orglevelEndpoints.json</span></code>) to a file called <code class="docutils literal notranslate"><span class="pre">modified_config.json</span></code> using this command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jq</span> <span class="o">-</span><span class="n">s</span> <span class="s2">&quot;.[0] * {</span><span class="se">\&quot;</span><span class="s2">channel_group</span><span class="se">\&quot;</span><span class="s2">:{</span><span class="se">\&quot;</span><span class="s2">groups</span><span class="se">\&quot;</span><span class="s2">:{</span><span class="se">\&quot;</span><span class="s2">Orderer</span><span class="se">\&quot;</span><span class="s2">: {</span><span class="se">\&quot;</span><span class="s2">groups</span><span class="se">\&quot;</span><span class="s2">: {</span><span class="se">\&quot;</span><span class="s2">$ORGNAME</span><span class="se">\&quot;</span><span class="s2">: {</span><span class="se">\&quot;</span><span class="s2">values</span><span class="se">\&quot;</span><span class="s2">: .[1].$</span><span class="si">{ORGNAME}</span><span class="s2">Endpoint}}}}}}&quot;</span> <span class="n">config</span><span class="o">.</span><span class="n">json</span> <span class="o">./</span><span class="n">orglevelEndpoints</span><span class="o">.</span><span class="n">json</span> <span class="o">&gt;</span> <span class="n">modified_config</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Then, follow the steps at <a class="reference external" href="./config_update.html#step-3-re-encode-and-submit-the-config">Step 3: Re-encode and submit the config</a>.</p>
+<p>If every ordering service organization performs their own channel edit, they can edit the configuration without needing further signatures (by default, the only signature needed to edit parameters within an organization is an admin of that organization). If a different organization proposes the update, then the organization being edited will need to sign the channel update request.</p>
+</section>
+<section id="migrate-to-smartbft-consensus-optional">
+<h4>Migrate to SmartBFT consensus (optional)<a class="headerlink" href="#migrate-to-smartbft-consensus-optional" title="Link to this heading">¶</a></h4>
+<p>You may continue utilizing Raft consensus for a Crash Fault Tolerant ordering service, or <a class="reference external" href="./raft_bft_migration.html">migrate to SmartBFT consensus</a> for a Byzantine Fault Tolerant ordering service after updating to the <code class="docutils literal notranslate"><span class="pre">V3_0</span></code> channel capability. SmartBFT may make sense if you distribute ordering service nodes across multiple organizations, but note that throughput may go down due to the additional consensus requirements.</p>
+<!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ -->
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="upgrading_your_components.html" class="btn btn-neutral float-right" title="Upgrading your components" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="upgrade.html" class="btn btn-neutral" title="Upgrading to the latest release" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

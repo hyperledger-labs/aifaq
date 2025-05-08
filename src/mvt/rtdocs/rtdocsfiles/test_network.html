@@ -1,0 +1,902 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using the Fabric test network &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deploying a smart contract to a channel" href="deploy_chaincode.html" />
+    <link rel="prev" title="Getting Started - Run Fabric" href="getting_started_run_fabric.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/test_network.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using the Fabric test network</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#before-you-begin">Before you begin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bring-up-the-test-network">Bring up the test network</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-components-of-the-test-network">The components of the test network</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-channel">Creating a channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-a-chaincode-on-the-channel">Starting a chaincode on the channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interacting-with-the-network">Interacting with the network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bring-down-the-network">Bring down the network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">Next steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bring-up-the-network-with-certificate-authorities">Bring up the network with Certificate Authorities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-happening-behind-the-scenes">What’s happening behind the scenes?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bring-up-the-network-using-bft-ordering-service">Bring up the network using BFT ordering service</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#next-steps-to-use-bft-ordering-service">Next steps to use BFT ordering service</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#selinux">SELinux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#btf-ordering-service-on-selinux">BTF ordering service on SELinux</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="write_first_app.html">Running a Fabric Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_basic.html">Running External Chaincode Builders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_data_tutorial.html">Using Private Data in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_remove_org.html">Removing an Org from a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chaincode4ade.html">Writing Your First Chaincode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer-chaincode-devmode.html">Running chaincode in development mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+      <li class="breadcrumb-item active">Using the Fabric test network</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/test_network.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-the-fabric-test-network">
+<h1>Using the Fabric test network<a class="headerlink" href="#using-the-fabric-test-network" title="Link to this heading">¶</a></h1>
+<p>After you have downloaded the Hyperledger Fabric Docker images and samples, you
+can deploy a test network by using scripts that are provided in the
+<code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> repository. The test network is provided for learning about Fabric
+by running nodes on your local machine. Developers can use the
+network to test their smart contracts and applications. The network is meant to
+be used only as a tool for education and testing and not as a model for how to set up
+a network. In general, modifications to the scripts are discouraged and could break the network. It is based on a limited configuration that should not be used as a template for deploying a production network:</p>
+<ul class="simple">
+<li><p>It includes two peer organizations and an ordering organization.</p></li>
+<li><p>For simplicity, a single node Raft ordering service is configured.</p></li>
+<li><p>To reduce complexity, a TLS Certificate Authority (CA) is not deployed. All certificates are issued by the root CAs.</p></li>
+<li><p>The sample network deploys a Fabric network with Docker Compose. Because the
+nodes are isolated within a Docker Compose network, the test network is not configured to connect to other running Fabric nodes.</p></li>
+</ul>
+<p>To learn how to use Fabric in production, see <a class="reference external" href="deployment_guide_overview.html">Deploying a production network</a>.</p>
+<p><strong>Note:</strong> These instructions have been verified to work against the
+latest stable Fabric Docker images and the pre-compiled setup utilities within the
+supplied tar file. If you run these commands with images or tools from the
+current main branch, it is possible that you will encounter errors.</p>
+<section id="before-you-begin">
+<h2>Before you begin<a class="headerlink" href="#before-you-begin" title="Link to this heading">¶</a></h2>
+<p>Before you can run the test network, you need to install Fabric Samples in your
+environment. Follow the instructions on <a class="reference external" href="getting_started.html">getting_started</a>
+to install the required software. If you are using a Linux distribution with SELinux enabled you need to add a small change to the Docker/Podman compose files described in the <a class="reference external" href="#selinux">SELinux section</a> below.</p>
+</section>
+<section id="bring-up-the-test-network">
+<h2>Bring up the test network<a class="headerlink" href="#bring-up-the-test-network" title="Link to this heading">¶</a></h2>
+<p>You can find the scripts to bring up the network in the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> directory
+of the <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> repository. Navigate to the test network directory by
+using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">fabric</span><span class="o">-</span><span class="n">samples</span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">network</span>
+</pre></div>
+</div>
+<p>In this directory, you can find an annotated script, <code class="docutils literal notranslate"><span class="pre">network.sh</span></code>, that stands
+up a Fabric network using the Docker images on your local machine. You can run
+<code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">-h</span></code> to print the script help text:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+  <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="o">&lt;</span><span class="n">Mode</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">Flags</span><span class="p">]</span>
+    <span class="n">Modes</span><span class="p">:</span>
+      <span class="n">up</span> <span class="o">-</span> <span class="n">Bring</span> <span class="n">up</span> <span class="n">Fabric</span> <span class="n">orderer</span> <span class="ow">and</span> <span class="n">peer</span> <span class="n">nodes</span><span class="o">.</span> <span class="n">No</span> <span class="n">channel</span> <span class="ow">is</span> <span class="n">created</span>
+      <span class="n">up</span> <span class="n">createChannel</span> <span class="o">-</span> <span class="n">Bring</span> <span class="n">up</span> <span class="n">fabric</span> <span class="n">network</span> <span class="k">with</span> <span class="n">one</span> <span class="n">channel</span>
+      <span class="n">createChannel</span> <span class="o">-</span> <span class="n">Create</span> <span class="ow">and</span> <span class="n">join</span> <span class="n">a</span> <span class="n">channel</span> <span class="n">after</span> <span class="n">the</span> <span class="n">network</span> <span class="ow">is</span> <span class="n">created</span>
+      <span class="n">deployCC</span> <span class="o">-</span> <span class="n">Deploy</span> <span class="n">a</span> <span class="n">chaincode</span> <span class="n">to</span> <span class="n">a</span> <span class="n">channel</span> <span class="p">(</span><span class="n">defaults</span> <span class="n">to</span> <span class="n">asset</span><span class="o">-</span><span class="n">transfer</span><span class="o">-</span><span class="n">basic</span><span class="p">)</span>
+      <span class="n">down</span> <span class="o">-</span> <span class="n">Bring</span> <span class="n">down</span> <span class="n">the</span> <span class="n">network</span>
+
+    <span class="n">Flags</span><span class="p">:</span>
+    <span class="n">Used</span> <span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">up</span><span class="p">,</span> <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">createChannel</span><span class="p">:</span>
+    <span class="o">-</span><span class="n">ca</span> <span class="o">-</span> <span class="n">Use</span> <span class="n">Certificate</span> <span class="n">Authorities</span> <span class="n">to</span> <span class="n">generate</span> <span class="n">network</span> <span class="n">crypto</span> <span class="n">material</span>
+    <span class="o">-</span><span class="n">bft</span> <span class="o">-</span> <span class="n">Use</span> <span class="n">Orderers</span> <span class="k">with</span> <span class="n">consensus</span> <span class="nb">type</span> <span class="n">BFT</span> <span class="p">(</span><span class="n">Not</span> <span class="n">available</span> <span class="ow">in</span> <span class="n">Fabric</span> <span class="n">v2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">channel</span> <span class="n">name</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">channel</span> <span class="n">to</span> <span class="n">create</span> <span class="p">(</span><span class="n">defaults</span> <span class="n">to</span> <span class="s2">&quot;mychannel&quot;</span><span class="p">)</span>
+    <span class="o">-</span><span class="n">s</span> <span class="o">&lt;</span><span class="n">dbtype</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">Peer</span> <span class="n">state</span> <span class="n">database</span> <span class="n">to</span> <span class="n">deploy</span><span class="p">:</span> <span class="n">goleveldb</span> <span class="p">(</span><span class="n">default</span><span class="p">)</span> <span class="ow">or</span> <span class="n">couchdb</span>
+    <span class="o">-</span><span class="n">r</span> <span class="o">&lt;</span><span class="nb">max</span> <span class="n">retry</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">CLI</span> <span class="n">times</span> <span class="n">out</span> <span class="n">after</span> <span class="n">certain</span> <span class="n">number</span> <span class="n">of</span> <span class="n">attempts</span> <span class="p">(</span><span class="n">defaults</span> <span class="n">to</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="o">-</span><span class="n">d</span> <span class="o">&lt;</span><span class="n">delay</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">CLI</span> <span class="n">delays</span> <span class="k">for</span> <span class="n">a</span> <span class="n">certain</span> <span class="n">number</span> <span class="n">of</span> <span class="n">seconds</span> <span class="p">(</span><span class="n">defaults</span> <span class="n">to</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="o">-</span><span class="n">verbose</span> <span class="o">-</span> <span class="n">Verbose</span> <span class="n">mode</span>
+
+    <span class="n">Used</span> <span class="k">with</span> <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">deployCC</span>
+    <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">channel</span> <span class="n">name</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">channel</span> <span class="n">to</span> <span class="n">deploy</span> <span class="n">chaincode</span> <span class="n">to</span>
+    <span class="o">-</span><span class="n">ccn</span> <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">Chaincode</span> <span class="n">name</span><span class="o">.</span>
+    <span class="o">-</span><span class="n">ccl</span> <span class="o">&lt;</span><span class="n">language</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">Programming</span> <span class="n">language</span> <span class="n">of</span> <span class="n">the</span> <span class="n">chaincode</span> <span class="n">to</span> <span class="n">deploy</span><span class="p">:</span> <span class="n">go</span><span class="p">,</span> <span class="n">java</span><span class="p">,</span> <span class="n">javascript</span><span class="p">,</span> <span class="n">typescript</span>
+    <span class="o">-</span><span class="n">ccv</span> <span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span>  <span class="o">-</span> <span class="n">Chaincode</span> <span class="n">version</span><span class="o">.</span> <span class="mf">1.0</span> <span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="n">v2</span><span class="p">,</span> <span class="n">version3</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">etc</span>
+    <span class="o">-</span><span class="n">ccs</span> <span class="o">&lt;</span><span class="n">sequence</span><span class="o">&gt;</span>  <span class="o">-</span> <span class="n">Chaincode</span> <span class="n">definition</span> <span class="n">sequence</span><span class="o">.</span> <span class="n">Must</span> <span class="n">be</span> <span class="n">an</span> <span class="n">integer</span><span class="p">,</span> <span class="mi">1</span> <span class="p">(</span><span class="n">default</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">etc</span>
+    <span class="o">-</span><span class="n">ccp</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">&gt;</span>  <span class="o">-</span> <span class="n">File</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">chaincode</span><span class="o">.</span>
+    <span class="o">-</span><span class="n">ccep</span> <span class="o">&lt;</span><span class="n">policy</span><span class="o">&gt;</span>  <span class="o">-</span> <span class="p">(</span><span class="n">Optional</span><span class="p">)</span> <span class="n">Chaincode</span> <span class="n">endorsement</span> <span class="n">policy</span> <span class="n">using</span> <span class="n">signature</span> <span class="n">policy</span> <span class="n">syntax</span><span class="o">.</span> <span class="n">The</span> <span class="n">default</span> <span class="n">policy</span> <span class="n">requires</span> <span class="n">an</span> <span class="n">endorsement</span> <span class="kn">from</span> <span class="nn">Org1</span> <span class="ow">and</span> <span class="n">Org2</span>
+    <span class="o">-</span><span class="n">cccg</span> <span class="o">&lt;</span><span class="n">collection</span><span class="o">-</span><span class="n">config</span><span class="o">&gt;</span>  <span class="o">-</span> <span class="p">(</span><span class="n">Optional</span><span class="p">)</span> <span class="n">File</span> <span class="n">path</span> <span class="n">to</span> <span class="n">private</span> <span class="n">data</span> <span class="n">collections</span> <span class="n">configuration</span> <span class="n">file</span>
+    <span class="o">-</span><span class="n">cci</span> <span class="o">&lt;</span><span class="n">fcn</span> <span class="n">name</span><span class="o">&gt;</span>  <span class="o">-</span> <span class="p">(</span><span class="n">Optional</span><span class="p">)</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">chaincode</span> <span class="n">initialization</span> <span class="n">function</span><span class="o">.</span> <span class="n">When</span> <span class="n">a</span> <span class="n">function</span> <span class="ow">is</span> <span class="n">provided</span><span class="p">,</span> <span class="n">the</span> <span class="n">execution</span> <span class="n">of</span> <span class="n">init</span> <span class="n">will</span> <span class="n">be</span> <span class="n">requested</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">function</span> <span class="n">will</span> <span class="n">be</span> <span class="n">invoked</span><span class="o">.</span>
+
+    <span class="o">-</span><span class="n">h</span> <span class="o">-</span> <span class="n">Print</span> <span class="n">this</span> <span class="n">message</span>
+
+ <span class="n">Possible</span> <span class="n">Mode</span> <span class="ow">and</span> <span class="n">flag</span> <span class="n">combinations</span>
+   <span class="n">up</span> <span class="o">-</span><span class="n">ca</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">verbose</span>
+   <span class="n">up</span> <span class="o">-</span><span class="n">bft</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">verbose</span>
+   <span class="n">up</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">ca</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">verbose</span>
+   <span class="n">up</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">bft</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">verbose</span>
+   <span class="n">createChannel</span> <span class="o">-</span><span class="n">bft</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">verbose</span>
+   <span class="n">deployCC</span> <span class="o">-</span><span class="n">ccn</span> <span class="o">-</span><span class="n">ccl</span> <span class="o">-</span><span class="n">ccv</span> <span class="o">-</span><span class="n">ccs</span> <span class="o">-</span><span class="n">ccp</span> <span class="o">-</span><span class="n">cci</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">verbose</span>
+
+ <span class="n">Examples</span><span class="p">:</span>
+   <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">up</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">ca</span> <span class="o">-</span><span class="n">c</span> <span class="n">mychannel</span> <span class="o">-</span><span class="n">s</span> <span class="n">couchdb</span>
+   <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">c</span> <span class="n">channelName</span>
+   <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">deployCC</span> <span class="o">-</span><span class="n">ccn</span> <span class="n">basic</span> <span class="o">-</span><span class="n">ccp</span> <span class="o">../</span><span class="n">asset</span><span class="o">-</span><span class="n">transfer</span><span class="o">-</span><span class="n">basic</span><span class="o">/</span><span class="n">chaincode</span><span class="o">-</span><span class="n">javascript</span><span class="o">/</span> <span class="o">-</span><span class="n">ccl</span> <span class="n">javascript</span>
+   <span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">deployCC</span> <span class="o">-</span><span class="n">ccn</span> <span class="n">mychaincode</span> <span class="o">-</span><span class="n">ccp</span> <span class="o">./</span><span class="n">user</span><span class="o">/</span><span class="n">mychaincode</span> <span class="o">-</span><span class="n">ccv</span> <span class="mi">1</span> <span class="o">-</span><span class="n">ccl</span> <span class="n">javascript</span>
+</pre></div>
+</div>
+<p>From inside the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> directory, run the following command to remove
+any containers or artifacts from any previous runs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>You can then bring up the network by issuing the following command. You will
+experience problems if you try to run the script from another directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">up</span>
+</pre></div>
+</div>
+<p>This command creates a Fabric network that consists of two peer nodes, one
+ordering node. No channel is created when you run <code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">up</span></code>, though we
+will get there in a <a class="reference external" href="#creating-a-channel">future step</a>. If the command completes
+successfully, you will see the logs of the nodes being created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Creating</span> <span class="n">network</span> <span class="s2">&quot;fabric_test&quot;</span> <span class="k">with</span> <span class="n">the</span> <span class="n">default</span> <span class="n">driver</span>
+<span class="n">Creating</span> <span class="n">volume</span> <span class="s2">&quot;net_orderer.example.com&quot;</span> <span class="k">with</span> <span class="n">default</span> <span class="n">driver</span>
+<span class="n">Creating</span> <span class="n">volume</span> <span class="s2">&quot;net_peer0.org1.example.com&quot;</span> <span class="k">with</span> <span class="n">default</span> <span class="n">driver</span>
+<span class="n">Creating</span> <span class="n">volume</span> <span class="s2">&quot;net_peer0.org2.example.com&quot;</span> <span class="k">with</span> <span class="n">default</span> <span class="n">driver</span>
+<span class="n">Creating</span> <span class="n">peer0</span><span class="o">.</span><span class="n">org2</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">orderer</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>    <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">peer0</span><span class="o">.</span><span class="n">org1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">...</span> <span class="n">done</span>
+<span class="n">CONTAINER</span> <span class="n">ID</span>   <span class="n">IMAGE</span>                               <span class="n">COMMAND</span>             <span class="n">CREATED</span>         <span class="n">STATUS</span>                  <span class="n">PORTS</span>                                            <span class="n">NAMES</span>
+<span class="n">b6b117c81c7f</span>   <span class="n">hyperledger</span><span class="o">/</span><span class="n">fabric</span><span class="o">-</span><span class="n">peer</span><span class="p">:</span><span class="n">latest</span>      <span class="s2">&quot;peer node start&quot;</span>   <span class="mi">2</span> <span class="n">seconds</span> <span class="n">ago</span>   <span class="n">Up</span> <span class="mi">1</span> <span class="n">second</span>             <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">7051</span><span class="o">-&gt;</span><span class="mi">7051</span><span class="o">/</span><span class="n">tcp</span>                           <span class="n">peer0</span><span class="o">.</span><span class="n">org1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="mi">703</span><span class="n">ead770e05</span>   <span class="n">hyperledger</span><span class="o">/</span><span class="n">fabric</span><span class="o">-</span><span class="n">orderer</span><span class="p">:</span><span class="n">latest</span>   <span class="s2">&quot;orderer&quot;</span>           <span class="mi">2</span> <span class="n">seconds</span> <span class="n">ago</span>   <span class="n">Up</span> <span class="n">Less</span> <span class="n">than</span> <span class="n">a</span> <span class="n">second</span>   <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">7050</span><span class="o">-&gt;</span><span class="mi">7050</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">7053</span><span class="o">-&gt;</span><span class="mi">7053</span><span class="o">/</span><span class="n">tcp</span>   <span class="n">orderer</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="mi">718</span><span class="n">d43f5f312</span>   <span class="n">hyperledger</span><span class="o">/</span><span class="n">fabric</span><span class="o">-</span><span class="n">peer</span><span class="p">:</span><span class="n">latest</span>      <span class="s2">&quot;peer node start&quot;</span>   <span class="mi">2</span> <span class="n">seconds</span> <span class="n">ago</span>   <span class="n">Up</span> <span class="mi">1</span> <span class="n">second</span>             <span class="mi">7051</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">9051</span><span class="o">-&gt;</span><span class="mi">9051</span><span class="o">/</span><span class="n">tcp</span>                 <span class="n">peer0</span><span class="o">.</span><span class="n">org2</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>If you don’t get this result, jump down to <a class="reference external" href="#troubleshooting">Troubleshooting</a>
+for help on what might have gone wrong. By default, the network uses the
+cryptogen tool to bring up the network. However, you can also
+<a class="reference external" href="#bring-up-the-network-with-certificate-authorities">bring up the network with Certificate Authorities</a>.</p>
+<section id="the-components-of-the-test-network">
+<h3>The components of the test network<a class="headerlink" href="#the-components-of-the-test-network" title="Link to this heading">¶</a></h3>
+<p>After your test network is deployed, you can take some time to examine its
+components. Run the following command to list all of Docker containers that
+are running on your machine. You should see the three nodes that were created by
+the <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">ps</span> <span class="o">-</span><span class="n">a</span>
+</pre></div>
+</div>
+<p>Each node and user that interacts with a Fabric network needs to belong to an
+organization in order to participate in the network. The test
+network includes two peer organizations, Org1 and Org2. It also includes a single
+orderer organization that maintains the ordering service of the network.</p>
+<p><a class="reference external" href="peers/peers.html">Peers</a> are the fundamental components of any Fabric network.
+Peers store the blockchain ledger and validate transactions before they are
+committed to the ledger. Peers run the smart contracts that contain the business
+logic that is used to manage the assets on the blockchain ledger.</p>
+<p>Every peer in the network needs to belong to an organization. In the
+test network, each organization operates one peer each, <code class="docutils literal notranslate"><span class="pre">peer0.org1.example.com</span></code>
+and <code class="docutils literal notranslate"><span class="pre">peer0.org2.example.com</span></code>.</p>
+<p>Every Fabric network also includes an <a class="reference external" href="orderer/ordering_service.html">ordering service</a>.
+While peers validate transactions and add blocks of transactions to the
+blockchain ledger, they do not decide on the order of transactions or include
+them into new blocks. On a distributed network, peers may be running far away
+from each other and not have a common view of when a transaction was created.
+Coming to consensus on the order of transactions is a costly process that would
+create overhead for the peers.</p>
+<p>An ordering service allows peers to focus on validating transactions and
+committing them to the ledger. After ordering nodes receive endorsed transactions
+from clients, they come to consensus on the order of transactions and then add
+them to blocks. The blocks are then distributed to peer nodes, which add the
+blocks to the blockchain ledger.</p>
+<p>The sample network uses a single node Raft ordering service that is operated by
+the orderer organization. You can see the ordering node running on your machine
+as <code class="docutils literal notranslate"><span class="pre">orderer.example.com</span></code>. While the test network only uses a single node ordering
+service, a production network would have multiple ordering nodes, operated by one or
+multiple orderer organizations. The different ordering nodes would use the Raft
+consensus algorithm to come to agreement on the order of transactions across
+the network.</p>
+</section>
+</section>
+<section id="creating-a-channel">
+<h2>Creating a channel<a class="headerlink" href="#creating-a-channel" title="Link to this heading">¶</a></h2>
+<p>Now that we have peer and orderer nodes running on our machine, we can use the
+script to create a Fabric channel for transactions between Org1 and Org2.
+Channels are a private layer of communication between specific network members.
+Channels can be used only by organizations that are invited to the channel, and
+are invisible to other members of the network. Each channel has a separate
+blockchain ledger. Organizations that have been invited “join” their peers to
+the channel to store the channel ledger and validate the transactions on the
+channel.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> script to create a channel between Org1 and Org2
+and join their peers to the channel. Run the following command to create a
+channel with the default name of <code class="docutils literal notranslate"><span class="pre">mychannel</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">createChannel</span>
+</pre></div>
+</div>
+<p>If the command was successful, you can see the following message printed in your
+logs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Channel</span> <span class="s1">&#39;mychannel&#39;</span> <span class="n">joined</span>
+</pre></div>
+</div>
+<p>You can also use the channel flag to create a channel with custom name. As an
+example, the following command would create a channel named <code class="docutils literal notranslate"><span class="pre">channel1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">c</span> <span class="n">channel1</span>
+</pre></div>
+</div>
+<p>The channel flag also allows you to create multiple channels by specifying
+different channel names. After you create <code class="docutils literal notranslate"><span class="pre">mychannel</span></code> or <code class="docutils literal notranslate"><span class="pre">channel1</span></code>, you can use
+the command below to create a second channel named <code class="docutils literal notranslate"><span class="pre">channel2</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">c</span> <span class="n">channel2</span>
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> Make sure the name of the channel applies the following restrictions:</p>
+<ul class="simple">
+<li><p>contains only lower case ASCII alphanumerics, dots ‘.’, and dashes ‘-’</p></li>
+<li><p>is shorter than 250 characters</p></li>
+<li><p>starts with a letter</p></li>
+</ul>
+<p>If you want to bring up the network and create a channel in a single step, you
+can use the <code class="docutils literal notranslate"><span class="pre">up</span></code> and <code class="docutils literal notranslate"><span class="pre">createChannel</span></code> modes together:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">up</span> <span class="n">createChannel</span>
+</pre></div>
+</div>
+</section>
+<section id="starting-a-chaincode-on-the-channel">
+<h2>Starting a chaincode on the channel<a class="headerlink" href="#starting-a-chaincode-on-the-channel" title="Link to this heading">¶</a></h2>
+<p>After you have created a channel, you can start using <a class="reference external" href="smartcontract/smartcontract.html">smart contracts</a> to
+interact with the channel ledger. Smart contracts contain the business logic
+that governs assets on the blockchain ledger. Applications run by members of the
+network can invoke smart contracts to create assets on the ledger, as well as
+change and transfer those assets. Applications also query smart contracts to
+read data on the ledger.</p>
+<p>To ensure that transactions are valid, transactions created using smart contracts
+typically need to be signed by multiple organizations to be committed to the
+channel ledger. Multiple signatures are integral to the trust model of Fabric.
+Requiring multiple endorsements for a transaction prevents one organization on
+a channel from tampering with the ledger on their peer or using business logic
+that was not agreed to. To sign a transaction, each organization needs to invoke
+and execute the smart contract on their peer, which then signs the output of the
+transaction. If the output is consistent and has been signed by enough
+organizations, the transaction can be committed to the ledger. The policy that
+specifies the set organizations on the channel that need to execute the smart
+contract is referred to as the endorsement policy, which is set for each
+chaincode as part of the chaincode definition.</p>
+<p>In Fabric, smart contracts are deployed on the network in packages referred to
+as chaincode. A Chaincode is installed on the peers of an organization and then
+deployed to a channel, where it can then be used to endorse transactions and
+interact with the blockchain ledger. Before a chaincode can be deployed to a
+channel, the members of the channel need to agree on a chaincode definition that
+establishes chaincode governance. When the required number of organizations
+agree, the chaincode definition can be committed to the channel, and the
+chaincode is ready to be used.</p>
+<p>After you have used the <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> to create a channel, you can start a
+chaincode on the channel using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">deployCC</span> <span class="o">-</span><span class="n">ccn</span> <span class="n">basic</span> <span class="o">-</span><span class="n">ccp</span> <span class="o">../</span><span class="n">asset</span><span class="o">-</span><span class="n">transfer</span><span class="o">-</span><span class="n">basic</span><span class="o">/</span><span class="n">chaincode</span><span class="o">-</span><span class="n">go</span> <span class="o">-</span><span class="n">ccl</span> <span class="n">go</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">deployCC</span></code> subcommand will install the <strong>asset-transfer (basic)</strong> chaincode on
+<code class="docutils literal notranslate"><span class="pre">peer0.org1.example.com</span></code> and <code class="docutils literal notranslate"><span class="pre">peer0.org2.example.com</span></code> and then deploy
+the chaincode on the channel specified using the channel flag (or <code class="docutils literal notranslate"><span class="pre">mychannel</span></code>
+if no channel is specified).  If you are deploying a chaincode for the first
+time, the script will install the chaincode dependencies. You can use the
+language flag, <code class="docutils literal notranslate"><span class="pre">-ccl</span></code>, to install the Go, typescript or javascript versions of the chaincode.
+You can find the asset-transfer (basic) chaincode in the <code class="docutils literal notranslate"><span class="pre">asset-transfer-basic</span></code> folder of the <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code>
+directory. This folder contains sample chaincode that are provided as examples and
+used by tutorials to highlight Fabric features.</p>
+</section>
+<section id="interacting-with-the-network">
+<h2>Interacting with the network<a class="headerlink" href="#interacting-with-the-network" title="Link to this heading">¶</a></h2>
+<p>After you bring up the test network, you can use the <code class="docutils literal notranslate"><span class="pre">peer</span></code> CLI to interact
+with your network. The <code class="docutils literal notranslate"><span class="pre">peer</span></code> CLI allows you to invoke deployed smart contracts,
+update channels, or install and deploy new smart contracts from the CLI.</p>
+<p>Make sure that you are operating from the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> directory. If you
+followed the instructions to <a class="reference external" href="install.html">install the Samples, Binaries and Docker Images</a>,
+You can find the <code class="docutils literal notranslate"><span class="pre">peer</span></code> binaries in the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder of the <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code>
+repository. Use the following command to add those binaries to your CLI Path:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export PATH=${PWD}/../bin:$PATH
+</pre></div>
+</div>
+<p>You also need to set the <code class="docutils literal notranslate"><span class="pre">FABRIC_CFG_PATH</span></code> to point to the <code class="docutils literal notranslate"><span class="pre">core.yaml</span></code> file in
+the <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export FABRIC_CFG_PATH=$PWD/../config/
+</pre></div>
+</div>
+<p>You can now set the environment variables that allow you to operate the <code class="docutils literal notranslate"><span class="pre">peer</span></code>
+CLI as Org1:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for Org1
+
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID=Org1MSP
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_ADDRESS=localhost:7051
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CORE_PEER_TLS_ROOTCERT_FILE</span></code> and <code class="docutils literal notranslate"><span class="pre">CORE_PEER_MSPCONFIGPATH</span></code> environment
+variables point to the Org1 crypto material in the <code class="docutils literal notranslate"><span class="pre">organizations</span></code> folder.</p>
+<p>If you used <code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">deployCC</span> <span class="pre">-ccl</span> <span class="pre">go</span></code> to install and start the asset-transfer (basic) chaincode, you can invoke the <code class="docutils literal notranslate"><span class="pre">InitLedger</span></code> function of the (Go) chaincode to put an initial list of assets on the ledger (if using TypeScript or JavaScript <code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">deployCC</span> <span class="pre">-ccl</span> <span class="pre">javascript</span></code> for example, you will invoke the <code class="docutils literal notranslate"><span class="pre">InitLedger</span></code> function of the respective chaincodes).</p>
+<p>Run the following command to initialize the ledger with assets. (Note the CLI does not access the Fabric Gateway peer, so each endorsing peer must be specified.)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peer</span> <span class="n">chaincode</span> <span class="n">invoke</span> <span class="o">-</span><span class="n">o</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">7050</span> <span class="o">--</span><span class="n">ordererTLSHostnameOverride</span> <span class="n">orderer</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">--</span><span class="n">tls</span> <span class="o">--</span><span class="n">cafile</span> <span class="s2">&quot;$</span><span class="si">{PWD}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span> <span class="o">-</span><span class="n">C</span> <span class="n">mychannel</span> <span class="o">-</span><span class="n">n</span> <span class="n">basic</span> <span class="o">--</span><span class="n">peerAddresses</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">7051</span> <span class="o">--</span><span class="n">tlsRootCertFiles</span> <span class="s2">&quot;$</span><span class="si">{PWD}</span><span class="s2">/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt&quot;</span> <span class="o">--</span><span class="n">peerAddresses</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">9051</span> <span class="o">--</span><span class="n">tlsRootCertFiles</span> <span class="s2">&quot;$</span><span class="si">{PWD}</span><span class="s2">/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt&quot;</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;function&quot;:&quot;InitLedger&quot;,&quot;Args&quot;:[]}&#39;</span>
+</pre></div>
+</div>
+<p>If successful, you should see output similar to the following example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">Chaincode</span> <span class="n">invoke</span> <span class="n">successful</span><span class="o">.</span> <span class="n">result</span><span class="p">:</span> <span class="n">status</span><span class="p">:</span><span class="mi">200</span>
+</pre></div>
+</div>
+<p>You can now query the ledger from your CLI. Run the following command to get the list of assets that were added to your channel ledger:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peer</span> <span class="n">chaincode</span> <span class="n">query</span> <span class="o">-</span><span class="n">C</span> <span class="n">mychannel</span> <span class="o">-</span><span class="n">n</span> <span class="n">basic</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;Args&quot;:[&quot;GetAllAssets&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>If successful, you should see the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;asset1&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Tomoko&quot;</span><span class="p">,</span> <span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;asset2&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Brad&quot;</span><span class="p">,</span> <span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span> <span class="mi">400</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;asset3&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Jin Soo&quot;</span><span class="p">,</span> <span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;asset4&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Max&quot;</span><span class="p">,</span> <span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span> <span class="mi">600</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;asset5&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Adriana&quot;</span><span class="p">,</span> <span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span> <span class="mi">700</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;asset6&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;Michel&quot;</span><span class="p">,</span> <span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Chaincodes are invoked when a network member wants to transfer or change an asset on the ledger. Use the following command to change the owner of an asset on the ledger by invoking the asset-transfer (basic) chaincode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peer</span> <span class="n">chaincode</span> <span class="n">invoke</span> <span class="o">-</span><span class="n">o</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">7050</span> <span class="o">--</span><span class="n">ordererTLSHostnameOverride</span> <span class="n">orderer</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">--</span><span class="n">tls</span> <span class="o">--</span><span class="n">cafile</span> <span class="s2">&quot;$</span><span class="si">{PWD}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span> <span class="o">-</span><span class="n">C</span> <span class="n">mychannel</span> <span class="o">-</span><span class="n">n</span> <span class="n">basic</span> <span class="o">--</span><span class="n">peerAddresses</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">7051</span> <span class="o">--</span><span class="n">tlsRootCertFiles</span> <span class="s2">&quot;$</span><span class="si">{PWD}</span><span class="s2">/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt&quot;</span> <span class="o">--</span><span class="n">peerAddresses</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">9051</span> <span class="o">--</span><span class="n">tlsRootCertFiles</span> <span class="s2">&quot;$</span><span class="si">{PWD}</span><span class="s2">/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt&quot;</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;function&quot;:&quot;TransferAsset&quot;,&quot;Args&quot;:[&quot;asset6&quot;,&quot;Christopher&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>If the command is successful, you should see the following response:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2019</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">04</span> <span class="mi">17</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mf">21.048</span> <span class="n">EST</span> <span class="p">[</span><span class="n">chaincodeCmd</span><span class="p">]</span> <span class="n">chaincodeInvokeOrQuery</span> <span class="o">-&gt;</span> <span class="n">INFO</span> <span class="mi">001</span> <span class="n">Chaincode</span> <span class="n">invoke</span> <span class="n">successful</span><span class="o">.</span> <span class="n">result</span><span class="p">:</span> <span class="n">status</span><span class="p">:</span><span class="mi">200</span>
+</pre></div>
+</div>
+<p>Because the endorsement policy for the asset-transfer (basic) chaincode requires the transaction
+to be signed by Org1 and Org2, the chaincode invoke command needs to target both
+<code class="docutils literal notranslate"><span class="pre">peer0.org1.example.com</span></code> and <code class="docutils literal notranslate"><span class="pre">peer0.org2.example.com</span></code> using the <code class="docutils literal notranslate"><span class="pre">--peerAddresses</span></code>
+flag. Because TLS is enabled for the network, the command also needs to reference
+the TLS certificate for each peer using the <code class="docutils literal notranslate"><span class="pre">--tlsRootCertFiles</span></code> flag.</p>
+<p>After we invoke the chaincode, we can use another query to see how the invoke
+changed the assets on the blockchain ledger. Since we already queried the Org1
+peer, we can take this opportunity to query the chaincode running on the Org2
+peer. Set the following environment variables to operate as Org2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for Org2
+
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID=Org2MSP
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+export CORE_PEER_ADDRESS=localhost:9051
+</pre></div>
+</div>
+<p>You can now query the asset-transfer (basic) chaincode running on <code class="docutils literal notranslate"><span class="pre">peer0.org2.example.com</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peer</span> <span class="n">chaincode</span> <span class="n">query</span> <span class="o">-</span><span class="n">C</span> <span class="n">mychannel</span> <span class="o">-</span><span class="n">n</span> <span class="n">basic</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;{&quot;Args&quot;:[&quot;ReadAsset&quot;,&quot;asset6&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>The result will show that <code class="docutils literal notranslate"><span class="pre">&quot;asset6&quot;</span></code> was transferred to Christopher:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;ID&quot;</span><span class="p">:</span><span class="s2">&quot;asset6&quot;</span><span class="p">,</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;white&quot;</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span><span class="s2">&quot;owner&quot;</span><span class="p">:</span><span class="s2">&quot;Christopher&quot;</span><span class="p">,</span><span class="s2">&quot;appraisedValue&quot;</span><span class="p">:</span><span class="mi">800</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="bring-down-the-network">
+<h2>Bring down the network<a class="headerlink" href="#bring-down-the-network" title="Link to this heading">¶</a></h2>
+<p>When you are finished using the test network, you can bring down the network
+with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>The command will stop and remove the node and chaincode containers, delete the
+organization crypto material, and remove the chaincode images from your Docker
+Registry. The command also removes the channel artifacts and docker volumes from
+previous runs, allowing you to run <code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">up</span></code> again if you encountered
+any problems.</p>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>Now that you have used the test network to deploy Hyperledger Fabric on your
+local machine, you can use the tutorials to start developing your own solution:</p>
+<ul class="simple">
+<li><p>Learn how to deploy your own smart contracts to the test network using the
+<a class="reference external" href="deploy_chaincode.html">Deploying a smart contract to a channel</a> tutorial.</p></li>
+<li><p>Visit the <a class="reference external" href="write_first_app.html">Running a Fabric Application</a> tutorial
+to learn how to use the APIs provided by the Fabric SDKs to invoke smart
+contracts from your client applications.</p></li>
+</ul>
+<p>You can find the complete list of Fabric tutorials on the <a class="reference external" href="tutorials.html">tutorials</a>
+page.</p>
+</section>
+<section id="bring-up-the-network-with-certificate-authorities">
+<h2>Bring up the network with Certificate Authorities<a class="headerlink" href="#bring-up-the-network-with-certificate-authorities" title="Link to this heading">¶</a></h2>
+<p>Hyperledger Fabric uses public key infrastructure (PKI) to verify the actions of
+all network participants. Every node, network administrator, and user submitting
+transactions needs to have a public certificate and private key to verify their
+identity. These identities need to have a valid root of trust, establishing
+that the certificates were issued by an organization that is a member of the
+network. The <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> script creates all of the cryptographic material
+that is required to deploy and operate the network before it creates the peer
+and ordering nodes.</p>
+<p>By default, the script uses the cryptogen tool to create the certificates
+and keys. The tool is provided for development and testing, and can quickly
+create the required crypto material for Fabric organizations with a valid root
+of trust. When you run <code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">up</span></code>, you can see the cryptogen tool creating
+the certificates and keys for Org1, Org2, and the Orderer Org.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creating</span> <span class="n">Org1</span><span class="p">,</span> <span class="n">Org2</span><span class="p">,</span> <span class="ow">and</span> <span class="n">ordering</span> <span class="n">service</span> <span class="n">organization</span> <span class="k">with</span> <span class="n">crypto</span> <span class="kn">from</span> <span class="s1">&#39;cryptogen&#39;</span>
+
+<span class="o">/</span><span class="n">Usr</span><span class="o">/</span><span class="n">fabric</span><span class="o">-</span><span class="n">samples</span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">network</span><span class="o">/../</span><span class="nb">bin</span><span class="o">/</span><span class="n">cryptogen</span>
+
+<span class="c1">##########################################################</span>
+<span class="c1">##### Generate certificates using cryptogen tool #########</span>
+<span class="c1">##########################################################</span>
+
+<span class="c1">##########################################################</span>
+<span class="c1">############ Create Org1 Identities ######################</span>
+<span class="c1">##########################################################</span>
+<span class="o">+</span> <span class="n">cryptogen</span> <span class="n">generate</span> <span class="o">--</span><span class="n">config</span><span class="o">=./</span><span class="n">organizations</span><span class="o">/</span><span class="n">cryptogen</span><span class="o">/</span><span class="n">crypto</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">org1</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">organizations</span>
+<span class="n">org1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="o">+</span> <span class="n">res</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span> <span class="nb">set</span> <span class="o">+</span><span class="n">x</span>
+<span class="c1">##########################################################</span>
+<span class="c1">############ Create Org2 Identities ######################</span>
+<span class="c1">##########################################################</span>
+<span class="o">+</span> <span class="n">cryptogen</span> <span class="n">generate</span> <span class="o">--</span><span class="n">config</span><span class="o">=./</span><span class="n">organizations</span><span class="o">/</span><span class="n">cryptogen</span><span class="o">/</span><span class="n">crypto</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">org2</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">organizations</span>
+<span class="n">org2</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="o">+</span> <span class="n">res</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span> <span class="nb">set</span> <span class="o">+</span><span class="n">x</span>
+<span class="c1">##########################################################</span>
+<span class="c1">############ Create Orderer Org Identities ###############</span>
+<span class="c1">##########################################################</span>
+<span class="o">+</span> <span class="n">cryptogen</span> <span class="n">generate</span> <span class="o">--</span><span class="n">config</span><span class="o">=./</span><span class="n">organizations</span><span class="o">/</span><span class="n">cryptogen</span><span class="o">/</span><span class="n">crypto</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="n">orderer</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">organizations</span>
+<span class="o">+</span> <span class="n">res</span><span class="o">=</span><span class="mi">0</span>
+<span class="o">+</span> <span class="nb">set</span> <span class="o">+</span><span class="n">x</span>
+</pre></div>
+</div>
+<p>However, the test network script also provides the option to bring up the network using
+Certificate Authorities (CAs). In a production network, each organization
+operates a CA (or multiple intermediate CAs) that creates the identities that
+belong to their organization. All of the identities created by a CA run by the
+organization share the same root of trust. Although it takes more time than
+using cryptogen, bringing up the test network using CAs provides an introduction
+to how a network is deployed in production. Deploying CAs also allows you to enroll
+client identities with the Fabric SDKs and create a certificate and private key
+for your applications.</p>
+<p>If you would like to bring up a network using Fabric CAs, first run the following
+command to bring down any running networks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>You can then bring up the network with the CA flag:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">up</span> <span class="o">-</span><span class="n">ca</span>
+</pre></div>
+</div>
+<p>After you issue the command, you can see the script bringing up three CAs, one
+for each organization in the network.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##########################################################</span>
+<span class="c1">##### Generate certificates using Fabric CA&#39;s ############</span>
+<span class="c1">##########################################################</span>
+<span class="n">Creating</span> <span class="n">network</span> <span class="s2">&quot;net_default&quot;</span> <span class="k">with</span> <span class="n">the</span> <span class="n">default</span> <span class="n">driver</span>
+<span class="n">Creating</span> <span class="n">ca_org2</span>    <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">ca_org1</span>    <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">ca_orderer</span> <span class="o">...</span> <span class="n">done</span>
+</pre></div>
+</div>
+<p>It is worth taking time to examine the logs generated by the <code class="docutils literal notranslate"><span class="pre">./network.sh</span></code>
+script after the CAs have been deployed. The test network uses the Fabric CA
+client to register node and user identities with the CA of each organization. The
+script then uses the enroll command to generate an MSP folder for each identity.
+The MSP folder contains the certificate and private key for each identity, and
+establishes the identity’s role and membership in the organization that operated
+the CA. You can use the following command to examine the MSP folder of the Org1
+admin user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span> <span class="n">organizations</span><span class="o">/</span><span class="n">peerOrganizations</span><span class="o">/</span><span class="n">org1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">Admin</span><span class="nd">@org1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>The command will reveal the MSP folder structure and configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/
+└── msp
+    ├── IssuerPublicKey
+    ├── IssuerRevocationPublicKey
+    ├── cacerts
+    │   └── localhost-7054-ca-org1.pem
+    ├── config.yaml
+    ├── keystore
+    │   └── 58e81e6f1ee8930df46841bf88c22a08ae53c1332319854608539ee78ed2fd65_sk
+    ├── signcerts
+    │   └── cert.pem
+    └── user
+</pre></div>
+</div>
+<p>You can find the certificate of the admin user in the <code class="docutils literal notranslate"><span class="pre">signcerts</span></code> folder and the
+private key in the <code class="docutils literal notranslate"><span class="pre">keystore</span></code> folder. To learn more about MSPs, see the <a class="reference external" href="membership/membership.html">Membership Service Provider</a>
+concept topic.</p>
+<p>Both cryptogen and the Fabric CAs generate the cryptographic material for each organization
+in the <code class="docutils literal notranslate"><span class="pre">organizations</span></code> folder. You can find the commands that are used to set up the
+network in the <code class="docutils literal notranslate"><span class="pre">registerEnroll.sh</span></code> script in the <code class="docutils literal notranslate"><span class="pre">organizations/fabric-ca</span></code> directory.
+To learn more about how you would use the Fabric CA to deploy a Fabric network,
+visit the <a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html">Fabric CA operations guide</a>.
+You can learn more about how Fabric uses PKI by visiting the <a class="reference external" href="identity/identity.html">identity</a>
+and <a class="reference external" href="membership/membership.html">membership</a> concept topics.</p>
+</section>
+<section id="what-s-happening-behind-the-scenes">
+<h2>What’s happening behind the scenes?<a class="headerlink" href="#what-s-happening-behind-the-scenes" title="Link to this heading">¶</a></h2>
+<p>If you are interested in learning more about the sample network, you can
+investigate the files and scripts in the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> directory. The steps
+below provide a guided tour of what happens when you issue the command of
+<code class="docutils literal notranslate"><span class="pre">./network.sh</span> <span class="pre">up</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">./network.sh</span></code> creates the certificates and keys for two peer organizations
+and the orderer organization. By default, the script uses the cryptogen tool
+using the configuration files located in the <code class="docutils literal notranslate"><span class="pre">organizations/cryptogen</span></code> folder.
+If you use the <code class="docutils literal notranslate"><span class="pre">-ca</span></code> flag to create Certificate Authorities, the script uses
+Fabric CA server configuration files and <code class="docutils literal notranslate"><span class="pre">registerEnroll.sh</span></code> script located in
+the <code class="docutils literal notranslate"><span class="pre">organizations/fabric-ca</span></code> folder. Both cryptogen and the Fabric CAs create
+the crypto material and MSP folders for all three organizations in the
+<code class="docutils literal notranslate"><span class="pre">organizations</span></code> folder.</p></li>
+<li><p>Once the organization crypto material has been generated, the <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> can bring up the nodes of the network. The
+script uses the <code class="docutils literal notranslate"><span class="pre">docker-compose-test-net.yaml</span></code> file in the <code class="docutils literal notranslate"><span class="pre">docker</span></code> folder
+to create the peer and orderer nodes. The <code class="docutils literal notranslate"><span class="pre">docker</span></code> folder also contains the
+<code class="docutils literal notranslate"><span class="pre">docker-compose-e2e.yaml</span></code> file that brings up the nodes of the network
+alongside three Fabric CAs.</p></li>
+<li><p>If you use the <code class="docutils literal notranslate"><span class="pre">createChannel</span></code> subcommand, <code class="docutils literal notranslate"><span class="pre">./network.sh</span></code> runs the
+<code class="docutils literal notranslate"><span class="pre">createChannel.sh</span></code> script in the <code class="docutils literal notranslate"><span class="pre">scripts</span></code> folder to create a channel
+using the supplied channel name. The script uses the <code class="docutils literal notranslate"><span class="pre">configtxgen</span></code> tool to create the channel genesis block
+based on the <code class="docutils literal notranslate"><span class="pre">ChannelUsingRaft</span></code> channel profile in the <code class="docutils literal notranslate"><span class="pre">configtx/configtx.yaml</span></code> file. After creating the channel, the script uses the peer cli to join <code class="docutils literal notranslate"><span class="pre">peer0.org1.example.com</span></code> and <code class="docutils literal notranslate"><span class="pre">peer0.org2.example.com</span></code> to the channel, and make both of the peers anchor peers.</p></li>
+<li><p>If you issue the <code class="docutils literal notranslate"><span class="pre">deployCC</span></code> command, <code class="docutils literal notranslate"><span class="pre">./network.sh</span></code> runs the <code class="docutils literal notranslate"><span class="pre">deployCC.sh</span></code>
+script to install the <strong>asset-transfer (basic)</strong> chaincode on both peers and then define then
+chaincode on the channel. Once the chaincode definition is committed to the
+channel, the peer cli initializes the chaincode using the <code class="docutils literal notranslate"><span class="pre">Init</span></code> and invokes
+the chaincode to put initial data on the ledger.</p></li>
+</ul>
+</section>
+<section id="bring-up-the-network-using-bft-ordering-service">
+<h2>Bring up the network using BFT ordering service<a class="headerlink" href="#bring-up-the-network-using-bft-ordering-service" title="Link to this heading">¶</a></h2>
+<p>You can try out the Byzantine Fault Tolerant (BFT) ordering service, newly added since v3.0,
+together with the test network.</p>
+<p>If you would like to bring up a network using BFT ordering service, first run the following
+command to bring down any running networks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>Then, with the BFT flag (-bft), run the network up and create a channel on that network:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">up</span> <span class="o">-</span><span class="n">bft</span>
+<span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">createChannel</span> <span class="o">-</span><span class="n">bft</span>
+</pre></div>
+</div>
+<p>These commands will start a Fabric network consisting of 4 orderers managed by OrdererOrg,
+1 peer managed by Org1 and 1 peer managed by Org2.
+They also will create a channel named “mychannel” in which the 4 orderers with BFT consensus type and the 2 peers participate.</p>
+<p>After you have created the channel with BFT consensus type,
+you can start a chaincode on the channel or interact with your network as well as the previous instructions.
+For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">deployCC</span> <span class="o">-</span><span class="n">ccn</span> <span class="n">basic</span> <span class="o">-</span><span class="n">ccp</span> <span class="o">../</span><span class="n">asset</span><span class="o">-</span><span class="n">transfer</span><span class="o">-</span><span class="n">basic</span><span class="o">/</span><span class="n">chaincode</span><span class="o">-</span><span class="n">go</span> <span class="o">-</span><span class="n">ccl</span> <span class="n">go</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<section id="next-steps-to-use-bft-ordering-service">
+<h3>Next steps to use BFT ordering service<a class="headerlink" href="#next-steps-to-use-bft-ordering-service" title="Link to this heading">¶</a></h3>
+<p>To understand more about the BFT ordering service, refer to the following information:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="./orderer/ordering_service.html">What is BFT and what is BFT Ordering service?</a></p></li>
+<li><p><a class="reference external" href="./create_channel/add_orderer.html">Adding orderer to an existing network</a></p></li>
+<li><p><a class="reference external" href="./bft_configuration.html">Configuring and operating a BFT ordering service</a></p></li>
+</ul>
+</section>
+</section>
+<section id="selinux">
+<h2>SELinux<a class="headerlink" href="#selinux" title="Link to this heading">¶</a></h2>
+<p>To use the test-network on Linux distributions where SELinux is enabled like Fedora or RHEL you need to modify the Docker/Podman compose files or you will run into permission issues with volumes and access to the Docker socket when building the Chaincode container.</p>
+<p>Resolve the volume permission issues by adding a <code class="docutils literal notranslate"><span class="pre">:z</span></code> to the end of the line in the volume entries shown in:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test-network/compose/compose-ca.yaml</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test-network/compose/compose-test-net.yaml</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test-network/compose/docker/docker-compose-test-net.yaml</span></code> in case you use Docker</p></li>
+<li><p>OR <code class="docutils literal notranslate"><span class="pre">test-network/compose/podman/podman-compose-test-net.yaml</span></code> in case you use Podman.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># test-network/compose/compose-ca.yaml</span>
+<span class="c1"># ca_org1 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/fabric-ca/org1:/etc/hyperledger/fabric-ca-server:z</span>
+
+<span class="c1"># ca_org2 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/fabric-ca/org2:/etc/hyperledger/fabric-ca-server:z</span>
+
+<span class="c1"># ca_orderer container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/fabric-ca/ordererOrg:/etc/hyperledger/fabric-ca-server:z</span>
+
+<span class="c1"># test-network/compose/compose-test-net.yaml</span>
+<span class="c1"># Orderer container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp:z</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls:z</span>
+
+<span class="c1"># PeerOrg1 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com:/etc/hyperledger/fabric:z</span>
+
+<span class="c1"># PeerOrg2 container</span>
+<span class="w">    </span><span class="w w-Error"> </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com:/etc/hyperledger/fabric:z</span>
+
+<span class="c1"># test-network/compose/docker/docker-compose-test-net.yaml</span>
+<span class="c1"># PeerOrg1 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docker/peercfg:/etc/hyperledger/peercfg:z</span>
+
+<span class="c1"># PeerOrg2 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docker/peercfg:/etc/hyperledger/peercfg:z</span>
+</pre></div>
+</div>
+<p>Resolve the issue with forbidden access to the Docker socket by either using Chaincode-as-a-Service or opting out of SELinux enforcement for the peer containers. You can do the latter by adding <code class="docutils literal notranslate"><span class="pre">:z</span></code> to Docker socket volume entries and disabling the security options in <code class="docutils literal notranslate"><span class="pre">test-network/compose/docker/docker-compose-test-net.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># test-network/compose/docker/docker-compose-test-net.yaml</span>
+<span class="c1"># PeerOrg1 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DOCKER_SOCK}:/host/var/run/docker.sock:z</span>
+<span class="w">    </span><span class="nt">security_opt</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">label:disable</span>
+
+<span class="c1"># PeerOrg2 container</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DOCKER_SOCK}:/host/var/run/docker.sock:z</span>
+<span class="w">    </span><span class="nt">security_opt</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">label:disable</span>
+</pre></div>
+</div>
+<section id="btf-ordering-service-on-selinux">
+<h3>BTF ordering service on SELinux<a class="headerlink" href="#btf-ordering-service-on-selinux" title="Link to this heading">¶</a></h3>
+<p>If you want to start the test-network with the BTF ordering service on a Linux distribution with SELinux enabled you have to perform the changes listed above in the compose files with <code class="docutils literal notranslate"><span class="pre">*-btf-test-net.yaml</span></code> in their names instead of <code class="docutils literal notranslate"><span class="pre">*-test-net.yaml</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test-network/compose/compose-ca.yaml</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test-network/compose/compose-btf-test-net.yaml</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test-network/compose/docker/docker-compose-btf-test-net.yaml</span></code> in case you use Docker</p></li>
+<li><p>OR <code class="docutils literal notranslate"><span class="pre">test-network/compose/podman/podman-compose-btf-test-net.yaml</span></code> in case you use Podman.</p></li>
+</ul>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<p>If you have any problems with the tutorial, review the following:</p>
+<ul>
+<li><p>You should always start your network fresh. You can use the following command
+to remove the artifacts, crypto material, containers, volumes, and chaincode
+images from previous runs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">network</span><span class="o">.</span><span class="n">sh</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>You <strong>will</strong> see errors if you do not remove old containers, images, and
+volumes.</p>
+</li>
+<li><p>If you see Docker errors, first check your Docker version (<a class="reference external" href="prereqs.html">Prerequisites</a>),
+and then try restarting your Docker process. Problems with Docker are
+oftentimes not immediately recognizable. For example, you may see errors
+that are the result of your node not being able to access the crypto material
+mounted within a container.</p>
+<p>If problems persist, you can remove your images and start from scratch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker rm -f $(docker ps -aq)
+docker rmi -f $(docker images -q)
+</pre></div>
+</div>
+</li>
+<li><p>If you are running Docker Desktop on macOS and experience the following error during chaincode installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span><span class="p">:</span> <span class="n">chaincode</span> <span class="n">install</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">status</span><span class="p">:</span> <span class="mi">500</span> <span class="o">-</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">invoke</span> <span class="n">backing</span> <span class="n">implementation</span> <span class="n">of</span> <span class="s1">&#39;InstallChaincode&#39;</span><span class="p">:</span> <span class="n">could</span> <span class="ow">not</span> <span class="n">build</span> <span class="n">chaincode</span><span class="p">:</span> <span class="n">docker</span> <span class="n">build</span> <span class="n">failed</span><span class="p">:</span> <span class="n">docker</span> <span class="n">image</span> <span class="n">inspection</span> <span class="n">failed</span><span class="p">:</span> <span class="n">Get</span> <span class="s2">&quot;http://unix.sock/images/dev-peer0.org1.example.com-basic_1.0-4ec191e793b27e953ff2ede5a8bcc63152cecb1e4c3f301a26e22692c61967ad-42f57faac8360472e47cbbbf3940e81bba83439702d085878d148089a1b213ca/json&quot;</span><span class="p">:</span> <span class="n">dial</span> <span class="n">unix</span> <span class="o">/</span><span class="n">host</span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span><span class="p">:</span> <span class="n">connect</span><span class="p">:</span> <span class="n">no</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
+<span class="n">Chaincode</span> <span class="n">installation</span> <span class="n">on</span> <span class="n">peer0</span><span class="o">.</span><span class="n">org1</span> <span class="n">has</span> <span class="n">failed</span>
+<span class="n">Deploying</span> <span class="n">chaincode</span> <span class="n">failed</span>
+</pre></div>
+</div>
+<p>This problem may be caused by Docker Desktop file sharing setting <code class="docutils literal notranslate"><span class="pre">gRPC</span> <span class="pre">FUSE</span></code>, select a different file sharing implementation.</p>
+</li>
+<li><p>If you see errors on your create, approve, commit, invoke or query commands,
+make sure you have properly updated the channel name and chaincode name.
+There are placeholder values in the supplied sample commands.</p></li>
+<li><p>If you see the error below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span><span class="p">:</span> <span class="n">Error</span> <span class="n">endorsing</span> <span class="n">chaincode</span><span class="p">:</span> <span class="n">rpc</span> <span class="n">error</span><span class="p">:</span> <span class="n">code</span> <span class="o">=</span> <span class="mi">2</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">Error</span> <span class="n">installing</span> <span class="n">chaincode</span> <span class="n">code</span> <span class="n">mycc</span><span class="p">:</span><span class="mf">1.0</span><span class="p">(</span><span class="n">chaincode</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">hyperledger</span><span class="o">/</span><span class="n">production</span><span class="o">/</span><span class="n">chaincodes</span><span class="o">/</span><span class="n">mycc</span><span class="mf">.1.0</span> <span class="n">exits</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You likely have chaincode images (e.g. <code class="docutils literal notranslate"><span class="pre">dev-peer1.org2.example.com-asset-transfer-1.0</span></code> or
+<code class="docutils literal notranslate"><span class="pre">dev-peer0.org1.example.com-asset-transfer-1.0</span></code>) from prior runs. Remove them and try
+again.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker rmi -f $(docker images | grep dev-peer[0-9] | awk &#39;{print $3}&#39;)
+</pre></div>
+</div>
+</li>
+<li><p>If you see the below error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">configtx</span><span class="o">/</span><span class="n">tool</span><span class="o">/</span><span class="n">localconfig</span><span class="p">]</span> <span class="n">Load</span> <span class="o">-&gt;</span> <span class="n">CRIT</span> <span class="mi">002</span> <span class="n">Error</span> <span class="n">reading</span> <span class="n">configuration</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="n">Config</span> <span class="n">Type</span> <span class="s2">&quot;&quot;</span>
+<span class="n">panic</span><span class="p">:</span> <span class="n">Error</span> <span class="n">reading</span> <span class="n">configuration</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="n">Config</span> <span class="n">Type</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Then you did not set the <code class="docutils literal notranslate"><span class="pre">FABRIC_CFG_PATH</span></code> environment variable properly. The
+configtxgen tool needs this variable in order to locate the configtx.yaml. Go
+back and execute an <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FABRIC_CFG_PATH=$PWD/configtx/configtx.yaml</span></code>,
+then recreate your channel artifacts.</p>
+</li>
+<li><p>If you see an error stating that you still have “active endpoints”, then prune
+your Docker networks. This will wipe your previous networks and start you with a
+fresh environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">network</span> <span class="n">prune</span>
+</pre></div>
+</div>
+<p>You will see the following message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>WARNING! This will remove all networks not used by at least one container.
+Are you sure you want to continue? [y/N]
+</pre></div>
+</div>
+<p>Select <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+</li>
+<li><p>If you see an error similar to the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span><span class="p">:</span> <span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">createChannel</span><span class="o">.</span><span class="n">sh</span><span class="p">:</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span><span class="o">^</span><span class="n">M</span><span class="p">:</span> <span class="n">bad</span> <span class="n">interpreter</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
+</pre></div>
+</div>
+<p>Ensure that the file in question (<strong>createChannel.sh</strong> in this example) is
+encoded in the Unix format. This was most likely caused by not setting
+<code class="docutils literal notranslate"><span class="pre">core.autocrlf</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> in your Git configuration (see
+<a class="reference external" href="prereqs.html#windows">Windows</a>). There are several ways of fixing this. If you have
+access to the vim editor for instance, open the file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vim</span> <span class="o">./</span><span class="n">fabric</span><span class="o">-</span><span class="n">samples</span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">network</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">createChannel</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>Then change its format by executing the following vim command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="nb">set</span> <span class="n">ff</span><span class="o">=</span><span class="n">unix</span>
+</pre></div>
+</div>
+</li>
+<li><p>If you are running on a Linux distribution with SELinux enabled like Fedora or RHEL and your test-network peer and orderer containers keep crashing with the following errors:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># peer 1 &amp; 2</span>
+ERRO<span class="w"> </span><span class="o">[</span>main<span class="o">]</span><span class="w"> </span>InitCmd<span class="w"> </span>-&gt;<span class="w"> </span>Fatal<span class="w"> </span>error<span class="w"> </span>when<span class="w"> </span>initializing<span class="w"> </span>core<span class="w"> </span>config<span class="w"> </span>:<span class="w"> </span>error<span class="w"> </span>when<span class="w"> </span>reading<span class="w"> </span>core<span class="w"> </span>config<span class="w"> </span>file:<span class="w"> </span>Config<span class="w"> </span>File<span class="w"> </span><span class="s2">&quot;core&quot;</span><span class="w"> </span>Not<span class="w"> </span>Found<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;[/etc/hyperledger/peercfg]&quot;</span>
+
+<span class="c1"># orderer</span>
+PANI<span class="w"> </span><span class="o">[</span>orderer.common.server<span class="o">]</span><span class="w"> </span>loadLocalMSP<span class="w"> </span>-&gt;<span class="w"> </span>Failed<span class="w"> </span>to<span class="w"> </span>get<span class="w"> </span><span class="nb">local</span><span class="w"> </span>msp<span class="w"> </span>config:<span class="w"> </span>could<span class="w"> </span>not<span class="w"> </span>initialize<span class="w"> </span>BCCSP<span class="w"> </span>Factories:<span class="w"> </span>Failed<span class="w"> </span>initializing<span class="w"> </span>BCCSP:<span class="w"> </span>Could<span class="w"> </span>not<span class="w"> </span>initialize<span class="w"> </span>BCCSP<span class="w"> </span>SW<span class="w"> </span><span class="o">[</span>Failed<span class="w"> </span>to<span class="w"> </span>initialize<span class="w"> </span>software<span class="w"> </span>key<span class="w"> </span>store:<span class="w"> </span>open<span class="w"> </span>/var/hyperledger/orderer/msp/keystore:<span class="w"> </span>permission<span class="w"> </span>denied<span class="o">]</span>
+</pre></div>
+</div>
+<p>Read the <a class="reference external" href="#selinux">SELinux section</a> above.</p>
+</li>
+<li><p>If you are running on a Linux distribution with SELinux enabled like Fedora or RHEL and you can not install a chaincode on your test-network with the following error:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Error:<span class="w"> </span>chaincode<span class="w"> </span>install<span class="w"> </span>failed<span class="w"> </span>with<span class="w"> </span>status:<span class="w"> </span><span class="m">500</span><span class="w"> </span>-<span class="w"> </span>failed<span class="w"> </span>to<span class="w"> </span>invoke<span class="w"> </span>backing<span class="w"> </span>implementation<span class="w"> </span>of<span class="w"> </span><span class="s1">&#39;InstallChaincode&#39;</span>:<span class="w"> </span>could<span class="w"> </span>not<span class="w"> </span>build<span class="w"> </span>chaincode:<span class="w"> </span>docker<span class="w"> </span>build<span class="w"> </span>failed:<span class="w"> </span>docker<span class="w"> </span>image<span class="w"> </span>inspection<span class="w"> </span>failed:<span class="w"> </span>Get<span class="w"> </span><span class="s2">&quot;http://unix.sock/images/dev-peer0.org1.example.com-basic_1.0-c6a45e2d5563c883869149c3dbd941c22fbe27daa21f0552834f5a53fbb8058a-fe69b7bdc0bbe5769bbff0572aa6986343c77b61c84077999a9b65f29c5c0025/json&quot;</span>:<span class="w"> </span>dial<span class="w"> </span>unix<span class="w"> </span>/host/var/run/docker.sock:<span class="w"> </span>connect:<span class="w"> </span>permission<span class="w"> </span>denied
+Chaincode<span class="w"> </span>installation<span class="w"> </span>on<span class="w"> </span>peer0.org1<span class="w"> </span>has<span class="w"> </span>failed
+Deploying<span class="w"> </span>chaincode<span class="w"> </span>failed
+</pre></div>
+</div>
+<p>Read the <a class="reference external" href="#selinux">SELinux section</a> above.</p>
+</li>
+</ul>
+<p>If you continue to see errors, share your logs on one of the Fabric <a class="reference external" href="https://discord.com/invite/hyperledger">Discord channels</a> or on
+<a class="reference external" href="https://stackoverflow.com/questions/tagged/hyperledger-fabric">StackOverflow</a>.</p>
+<!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ -->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="deploy_chaincode.html" class="btn btn-neutral float-right" title="Deploying a smart contract to a channel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="getting_started_run_fabric.html" class="btn btn-neutral" title="Getting Started - Run Fabric" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

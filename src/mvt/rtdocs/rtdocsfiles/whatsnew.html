@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What’s new in Hyperledger Fabric &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Key Concepts" href="key_concepts.html" />
+    <link rel="prev" title="Introduction" href="whatis.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/whatsnew.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What’s new in Hyperledger Fabric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-new-in-hyperledger-fabric-v3-0">What’s New in Hyperledger Fabric v3.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#byzantine-fault-tolerant-bft-ordering-service">Byzantine Fault Tolerant (BFT) ordering service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#support-for-ed25519">Support for Ed25519</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hyperledger-fabric-v2-5">Hyperledger Fabric v2.5</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrading-to-fabric-v2-5">Upgrading to Fabric v2.5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What’s new in Hyperledger Fabric</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/whatsnew.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="what-s-new-in-hyperledger-fabric">
+<h1>What’s new in Hyperledger Fabric<a class="headerlink" href="#what-s-new-in-hyperledger-fabric" title="Link to this heading">¶</a></h1>
+<section id="what-s-new-in-hyperledger-fabric-v3-0">
+<h2>What’s New in Hyperledger Fabric v3.0<a class="headerlink" href="#what-s-new-in-hyperledger-fabric-v3-0" title="Link to this heading">¶</a></h2>
+<section id="byzantine-fault-tolerant-bft-ordering-service">
+<h3>Byzantine Fault Tolerant (BFT) ordering service<a class="headerlink" href="#byzantine-fault-tolerant-bft-ordering-service" title="Link to this heading">¶</a></h3>
+<p>Hyperledger Fabric has utilized a Raft crash fault tolerant (CFT) ordering service since version v1.4.
+A Byzantine Fault Tolerant (BFT) ordering service can withstand not only crash failures, but also a subset of nodes behaving maliciously.
+Fabric v3.0 is the first release to provide a BFT ordering service based on the
+<a class="reference external" href="https://arxiv.org/abs/2107.06922">SmartBFT</a> <a class="reference external" href="https://github.com/hyperledger-labs/SmartBFT">consensus library</a>.
+Consider using the BFT orderer if true decentralization is required,
+where up to and not including a third of the parties running the orderers may not be trusted due to malicious intent or being compromised.</p>
+<p>Channel capability <cite>V3_0</cite> must be enabled to utilize SmartBFT consensus.</p>
+<p>Learn more about the BFT ordering service in the <strong>BFT</strong> section of the <a class="reference internal" href="orderer/ordering_service.html"><span class="doc">The Ordering Service</span></a> documentation.</p>
+<p>For more details see the <a class="reference internal" href="bft_configuration.html"><span class="doc">Configuring and operating a BFT ordering service</span></a> topic.</p>
+<p>Try it out for yourself! Look for the <strong>Bring up the network using BFT ordering service</strong> in the <a class="reference internal" href="test_network.html"><span class="doc">Using the Fabric test network</span></a> tutorial.
+Alternatively, you can run the binaries locally by following the steps in the <a class="reference external" href="https://github.com/hyperledger/fabric-samples/tree/main/test-network-nano-bash">test-network-nano-bash sample</a>.</p>
+</section>
+<section id="support-for-ed25519">
+<h3>Support for Ed25519<a class="headerlink" href="#support-for-ed25519" title="Link to this heading">¶</a></h3>
+<p>Ed25519 cryptographic algorithm is now supported in addition to ECDSA for MSP functions including transaction signing and verification.</p>
+<p>Channel capability <cite>V3_0</cite> must be enabled to utilize certificates with Ed25519 keys.</p>
+</section>
+</section>
+<section id="hyperledger-fabric-v2-5">
+<h2>Hyperledger Fabric v2.5<a class="headerlink" href="#hyperledger-fabric-v2-5" title="Link to this heading">¶</a></h2>
+<p>Hyperledger Fabric v2.5 remains the long-term support (LTS) release for production users.
+Check out the <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/release-2.5/whatsnew.html">What’s New in v2.5 topic</a>
+to learn about features since the prior v2.2 LTS release, including
+the ability to manage channels without a system channel,
+the ability to take ledger snapshots and join peers to a channel based on a snapshot,
+and the new Fabric Gateway and related client application libraries.</p>
+<section id="upgrading-to-fabric-v2-5">
+<h3>Upgrading to Fabric v2.5<a class="headerlink" href="#upgrading-to-fabric-v2-5" title="Link to this heading">¶</a></h3>
+<p>Hyperledger Fabric v2.5 will be maintained for an extended period of time.
+Users of prior versions are encouraged to upgrade to Fabric v2.5 to continue receiving fixes and security updates in subsequent v2.5.x releases.
+A simple in-place upgrade from the prior Fabric v2.2 LTS release is possible.
+If you would like to upgrade from earlier releases there are additional considerations.
+Please see the <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/release-2.5/upgrade.html">Fabric v2.5 upgrade documentation</a> for complete details.</p>
+</section>
+</section>
+</section>
+<section id="release-notes">
+<h1>Release notes<a class="headerlink" href="#release-notes" title="Link to this heading">¶</a></h1>
+<p>The release notes provide more details about each release.
+Additionally, take a look at the announcements about changes and deprecations that are copied into each of the latest release notes.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hyperledger/fabric/releases/tag/v3.0.0">Fabric v3.0.0 release notes</a>.</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="key_concepts.html" class="btn btn-neutral float-right" title="Key Concepts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="whatis.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

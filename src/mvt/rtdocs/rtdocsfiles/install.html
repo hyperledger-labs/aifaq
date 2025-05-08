@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Install Fabric and Fabric Samples &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fabric Contract APIs and Application APIs" href="sdk_chaincode.html" />
+    <link rel="prev" title="Prerequisites" href="prereqs.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/install.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="getting_started.html">Getting Started - Install</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="prereqs.html">Prerequisites</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Install Fabric and Fabric Samples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#download-fabric-samples-docker-images-and-binaries">Download Fabric samples, Docker images, and binaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-which-components">Choosing which components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-which-version">Choosing which version</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sdk_chaincode.html">Fabric Contract APIs and Application APIs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="getting_started.html">Getting Started - Install</a></li>
+      <li class="breadcrumb-item active">Install Fabric and Fabric Samples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/install.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="install-fabric-and-fabric-samples">
+<h1>Install Fabric and Fabric Samples<a class="headerlink" href="#install-fabric-and-fabric-samples" title="Link to this heading">¶</a></h1>
+<p>Please install the <a class="reference external" href="./prereqs.html">Prerequisites</a> before following these install instructions.</p>
+<p>We think the best way to understand something is to use it yourself.  To help you use Fabric, we have created a simple Fabric test network using Docker compose, and a set of sample applications that demonstrate its core capabilities.</p>
+<p>We also have precompiled <code class="docutils literal notranslate"><span class="pre">Fabric</span> <span class="pre">CLI</span> <span class="pre">tool</span> <span class="pre">binaries</span></code> and <code class="docutils literal notranslate"><span class="pre">Fabric</span> <span class="pre">Docker</span> <span class="pre">Images</span></code> which will be downloaded to your environment, to get you going.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">install-fabric.sh</span></code> script introduced in the next section automates the process to set up your environment. Specifically, it performs the following steps:</p>
+<ul class="simple">
+<li><p>Clones the <a class="reference external" href="https://github.com/hyperledger/fabric-samples">hyperledger/fabric-samples</a> repository.</p></li>
+<li><p>Downloads the latest Hyperledger Fabric Docker images and tags them as <code class="docutils literal notranslate"><span class="pre">latest</span></code></p></li>
+<li><p>Downloads the following platform-specific Hyperledger Fabric CLI tool binaries and config files into the <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> <code class="docutils literal notranslate"><span class="pre">/bin</span></code> and <code class="docutils literal notranslate"><span class="pre">/config</span></code> directories. These binaries will help you interact with the test network.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">configtxgen</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configtxlator</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cryptogen</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">discover</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ledgerutil</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orderer</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">osnadmin</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">peer</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fabric-ca-client</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fabric-ca-server</span></code></p></li>
+</ul>
+</li>
+</ul>
+<section id="download-fabric-samples-docker-images-and-binaries">
+<h2>Download Fabric samples, Docker images, and binaries<a class="headerlink" href="#download-fabric-samples-docker-images-and-binaries" title="Link to this heading">¶</a></h2>
+<p>A working directory is required - for example, Go Developers use the <code class="docutils literal notranslate"><span class="pre">$HOME/go/src/github.com/&lt;your_github_userid&gt;</span></code> directory.  This is a Golang Community recommendation for Go projects.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$HOME</span>/go/src/github.com/&lt;your_github_userid&gt;
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$HOME</span>/go/src/github.com/&lt;your_github_userid&gt;
+</pre></div>
+</div>
+<p>To get the install script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-sSLO<span class="w"> </span>https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>install-fabric.sh
+</pre></div>
+</div>
+<p>Run the script with the <code class="docutils literal notranslate"><span class="pre">-h</span></code> option to see the options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./install-fabric.sh<span class="w"> </span>-h
+Usage:<span class="w"> </span>./install-fabric.sh<span class="w"> </span><span class="o">[</span>-f<span class="p">|</span>--fabric-version<span class="w"> </span>&lt;arg&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>-c<span class="p">|</span>--ca-version<span class="w"> </span>&lt;arg&gt;<span class="o">]</span><span class="w"> </span>&lt;comp-1&gt;<span class="w"> </span><span class="o">[</span>&lt;comp-2&gt;<span class="o">]</span><span class="w"> </span>...<span class="w"> </span><span class="o">[</span>&lt;comp-n&gt;<span class="o">]</span><span class="w"> </span>...
+<span class="w">        </span>&lt;comp&gt;:<span class="w"> </span>Component<span class="w"> </span>to<span class="w"> </span>install<span class="w"> </span>one<span class="w"> </span>or<span class="w"> </span>more<span class="w"> </span>of<span class="w">  </span>d<span class="o">[</span>ocker<span class="o">]</span><span class="p">|</span>b<span class="o">[</span>inary<span class="o">]</span><span class="p">|</span>s<span class="o">[</span>amples<span class="o">]</span>.<span class="w"> </span>If<span class="w"> </span>none<span class="w"> </span>specified,<span class="w"> </span>all<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>installed
+<span class="w">        </span>-f,<span class="w"> </span>--fabric-version:<span class="w"> </span>FabricVersion<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s1">&#39;2.5.9&#39;</span><span class="o">)</span>
+<span class="w">        </span>-c,<span class="w"> </span>--ca-version:<span class="w"> </span>Fabric<span class="w"> </span>CA<span class="w"> </span>Version<span class="w"> </span><span class="o">(</span>default:<span class="w"> </span><span class="s1">&#39;1.5.12&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="choosing-which-components">
+<h2>Choosing which components<a class="headerlink" href="#choosing-which-components" title="Link to this heading">¶</a></h2>
+<p>To specify the components to download add one or more of the following arguments. Each argument can be shortened to its first letter.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docker</span></code> to use Docker to download the Fabric Container Images</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">podman</span></code> to use podman to download the Fabric Container Images</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code> to download the Fabric binaries</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">samples</span></code> to clone the fabric-samples github repo to the current directory</p></li>
+</ul>
+<p>To pull the Docker containers and clone the samples repo, run one of these commands for example</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./install-fabric.sh<span class="w"> </span>docker<span class="w"> </span>samples<span class="w"> </span>binary
+or
+./install-fabric.sh<span class="w"> </span>d<span class="w"> </span>s<span class="w"> </span>b
+</pre></div>
+</div>
+<p>If no arguments are supplied, then the arguments <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">binary</span> <span class="pre">samples</span></code> are assumed.</p>
+</section>
+<section id="choosing-which-version">
+<h2>Choosing which version<a class="headerlink" href="#choosing-which-version" title="Link to this heading">¶</a></h2>
+<p>By default the latest version of the components are used; these can be altered by using the options <code class="docutils literal notranslate"><span class="pre">--fabric-version</span></code> and <code class="docutils literal notranslate"><span class="pre">-ca-version</span></code>.  <code class="docutils literal notranslate"><span class="pre">-f</span></code> and <code class="docutils literal notranslate"><span class="pre">-c</span></code> are the respective short forms.</p>
+<p>For example, to download the v2.5.9 binaries, run this command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./install-fabric.sh<span class="w"> </span>--fabric-version<span class="w"> </span><span class="m">2</span>.5.9<span class="w"> </span>binary
+</pre></div>
+</div>
+<p>You have completed installing Fabric samples, Docker images, and binaries to your system.</p>
+<ul class="simple">
+<li><p>If you are looking to set up your environment to start contributing to Fabric, please refer to the instructions for <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/latest/dev-setup/devenv.html">Setting up the contributor development environment</a>.</p></li>
+</ul>
+<blockquote>
+<div><p>Note: this is an updated install script with the same end-result as the existing script, but with an improved syntax. This script adopts the positive opt-in approach to selecting the components to install.  The original script is still present at the same location <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-sSL</span> <span class="pre">https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/bootstrap.sh|</span> <span class="pre">bash</span> <span class="pre">-s</span></code></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>If you need help, post your questions and share your logs on the <strong>fabric-questions</strong> channel on <a class="reference external" href="https://discord.com/invite/hyperledger">Hyperledger Discord Chat</a> or on <a class="reference external" href="https://stackoverflow.com/questions/tagged/hyperledger-fabric">StackOverflow</a>.</p></li>
+</ul>
+<!--- Licensed under Creative Commons Attribution 4.0 International License
+https://creativecommons.org/licenses/by/4.0/ -->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sdk_chaincode.html" class="btn btn-neutral float-right" title="Fabric Contract APIs and Application APIs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="prereqs.html" class="btn btn-neutral" title="Prerequisites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Removing an Org from a Channel &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Updating a channel configuration" href="config_update.html" />
+    <link rel="prev" title="Adding an Org to a Channel" href="channel_update_tutorial.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/channel_remove_org.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="test_network.html">Using the Fabric test network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="write_first_app.html">Running a Fabric Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_basic.html">Running External Chaincode Builders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_data_tutorial.html">Using Private Data in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Removing an Org from a Channel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stop-org2-peer">Stop Org2 Peer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fetch-the-configuration">Fetch the Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convert-the-configuration-to-json-and-trim-it-down">Convert the Configuration to JSON and Trim It Down</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remove-org2-from-channel">Remove Org2 from Channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remove-the-org2-crypto-material-from-config-block">Remove the Org2 Crypto Material from Config Block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sign-and-submit-the-config-update">Sign and Submit the Config Update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restart-org1-peer-and-org3-peer">Restart Org1 Peer and Org3 Peer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updating-collection-definition-file-optional">Updating Collection Definition File (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transfer-collection-to-another-org-optional">Transfer Collection to Another Org (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chaincode4ade.html">Writing Your First Chaincode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer-chaincode-devmode.html">Running chaincode in development mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Removing an Org from a Channel</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/channel_remove_org.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="removing-an-org-from-a-channel">
+<h1>Removing an Org from a Channel<a class="headerlink" href="#removing-an-org-from-a-channel" title="Link to this heading">¶</a></h1>
+<p><strong><em>NOTE:</em></strong></p>
+<p>As a prerequisite of this tutorial, a blockchain network consisting of 3 organizations should have been created by referencing steps in <a class="reference external" href="./channel_update_tutorial.html">Adding an Org to a Channel</a>.</p>
+<hr class="docutils" />
+<p>This tutorial removes Org2 from the Hyperledger Fabric test network consisting of Org1, Org2 and Org3.</p>
+<section id="stop-org2-peer">
+<h2>Stop Org2 Peer<a class="headerlink" href="#stop-org2-peer" title="Link to this heading">¶</a></h2>
+<p>Before removing Org2 from the Fabric network, stop the Org2 peer.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>stop<span class="w"> </span>peer0.org2.example.com
+</pre></div>
+</div>
+</section>
+<section id="fetch-the-configuration">
+<h2>Fetch the Configuration<a class="headerlink" href="#fetch-the-configuration" title="Link to this heading">¶</a></h2>
+<p>We will be operating from the root of the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> subdirectory within your local clone of <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>fabric-samples/test-network
+</pre></div>
+</div>
+<p>Issue the following commands to operate as the Org1 admin.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># you can issue all of these commands at once</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../config/
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org1MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:7051
+</pre></div>
+</div>
+<p>We can now issue the command to fetch the latest config block:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>channel<span class="w"> </span>fetch<span class="w"> </span>config<span class="w"> </span>channel-artifacts/config_block.pb<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>-c<span class="w"> </span>channel1<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span>
+</pre></div>
+</div>
+<p>This command saves the binary protobuf channel configuration block to <code class="docutils literal notranslate"><span class="pre">config_block.pb</span></code>. Note that the choice of name and file extension is arbitrary. However, following a convention which identifies both the type of object being represented and its encoding (protobuf or JSON) is recommended.</p>
+<p>When you issued the <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">channel</span> <span class="pre">fetch</span></code> command, the following output is displayed in your logs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mf">27.837</span> <span class="n">CST</span> <span class="mi">0001</span> <span class="n">INFO</span> <span class="p">[</span><span class="n">channelCmd</span><span class="p">]</span> <span class="n">InitCmdFactory</span> <span class="o">-&gt;</span> <span class="n">Endorser</span> <span class="ow">and</span> <span class="n">orderer</span> <span class="n">connections</span> <span class="n">initialized</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mf">27.845</span> <span class="n">CST</span> <span class="mi">0002</span> <span class="n">INFO</span> <span class="p">[</span><span class="n">cli</span><span class="o">.</span><span class="n">common</span><span class="p">]</span> <span class="n">readBlock</span> <span class="o">-&gt;</span> <span class="n">Received</span> <span class="n">block</span><span class="p">:</span> <span class="mi">4</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mf">27.845</span> <span class="n">CST</span> <span class="mi">0003</span> <span class="n">INFO</span> <span class="p">[</span><span class="n">channelCmd</span><span class="p">]</span> <span class="n">fetch</span> <span class="o">-&gt;</span> <span class="n">Retrieving</span> <span class="n">last</span> <span class="n">config</span> <span class="n">block</span><span class="p">:</span> <span class="mi">4</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">14</span><span class="p">:</span><span class="mi">35</span><span class="p">:</span><span class="mf">27.848</span> <span class="n">CST</span> <span class="mi">0004</span> <span class="n">INFO</span> <span class="p">[</span><span class="n">cli</span><span class="o">.</span><span class="n">common</span><span class="p">]</span> <span class="n">readBlock</span> <span class="o">-&gt;</span> <span class="n">Received</span> <span class="n">block</span><span class="p">:</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</section>
+<section id="convert-the-configuration-to-json-and-trim-it-down">
+<h2>Convert the Configuration to JSON and Trim It Down<a class="headerlink" href="#convert-the-configuration-to-json-and-trim-it-down" title="Link to this heading">¶</a></h2>
+<p>The channel configuration block was stored in the <code class="docutils literal notranslate"><span class="pre">channel-artifacts</span></code> folder to keep the update process separate from other artifacts. Change into the <code class="docutils literal notranslate"><span class="pre">channel-artifacts</span></code> folder to complete the next steps:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>channel-artifacts
+</pre></div>
+</div>
+<p>Now we will make use of the <code class="docutils literal notranslate"><span class="pre">configtxlator</span></code> tool to decode this channel configuration block into JSON format (which can be read and modified by humans):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>configtxlator<span class="w"> </span>proto_decode<span class="w"> </span>--input<span class="w"> </span>config_block.pb<span class="w"> </span>--type<span class="w"> </span>common.Block<span class="w"> </span>--output<span class="w"> </span>config_block.json
+</pre></div>
+</div>
+<p>We also must strip away all of the headers, metadata, creator signatures, and so on that are irrelevant to the change we want to make. We accomplish this by means of the <code class="docutils literal notranslate"><span class="pre">jq</span></code> tool (you will need to install the jq tool on your local machine):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jq<span class="w"> </span><span class="s1">&#39;.data.data[0].payload.data.config&#39;</span><span class="w"> </span>config_block.json<span class="w"> </span>&gt;config.json
+</pre></div>
+</div>
+<p>This command leaves us with a trimmed down JSON object – <code class="docutils literal notranslate"><span class="pre">config.json</span></code> – which will serve as the baseline for our config update.</p>
+</section>
+<section id="remove-org2-from-channel">
+<h2>Remove Org2 from Channel<a class="headerlink" href="#remove-org2-from-channel" title="Link to this heading">¶</a></h2>
+<p>We’ll use the <code class="docutils literal notranslate"><span class="pre">jq</span></code> tool once more to remove <code class="docutils literal notranslate"><span class="pre">Org2MSP</span></code> from the channel’s application group field:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jq<span class="w"> </span><span class="s1">&#39;del(.channel_group.groups.Application.groups.Org2MSP)&#39;</span><span class="w"> </span>config.json<span class="w"> </span>&gt;<span class="w"> </span>modified_config.json
+</pre></div>
+</div>
+</section>
+<section id="remove-the-org2-crypto-material-from-config-block">
+<h2>Remove the Org2 Crypto Material from Config Block<a class="headerlink" href="#remove-the-org2-crypto-material-from-config-block" title="Link to this heading">¶</a></h2>
+<p>Now we have two JSON files of interest – <code class="docutils literal notranslate"><span class="pre">config.json</span></code> and <code class="docutils literal notranslate"><span class="pre">modified_config.json</span></code>. The initial file contains all three Orgs, whereas the “modified” file contains only Org1 and Org3 material. At this point it’s simply a matter of re-encoding these two JSON files and calculating the delta.</p>
+<p>First, translate <code class="docutils literal notranslate"><span class="pre">config.json</span></code> back into a protobuf called <code class="docutils literal notranslate"><span class="pre">config.pb</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>configtxlator<span class="w"> </span>proto_encode<span class="w"> </span>--input<span class="w"> </span>config.json<span class="w"> </span>--type<span class="w"> </span>common.Config<span class="w"> </span>--output<span class="w"> </span>config.pb
+</pre></div>
+</div>
+<p>Next, encode <code class="docutils literal notranslate"><span class="pre">modified_config.json</span></code> to <code class="docutils literal notranslate"><span class="pre">modified_config.pb</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>configtxlator<span class="w"> </span>proto_encode<span class="w"> </span>--input<span class="w"> </span>modified_config.json<span class="w"> </span>--type<span class="w"> </span>common.Config<span class="w"> </span>--output<span class="w"> </span>modified_config.pb
+</pre></div>
+</div>
+<p>Now use <code class="docutils literal notranslate"><span class="pre">configtxlator</span></code> to calculate the delta between these two config protobufs. This command will output a new protobuf binary named <code class="docutils literal notranslate"><span class="pre">config_update.pb</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>configtxlator<span class="w"> </span>compute_update<span class="w"> </span>--channel_id<span class="w"> </span>channel1<span class="w"> </span>--original<span class="w"> </span>config.pb<span class="w"> </span>--updated<span class="w"> </span>modified_config.pb<span class="w"> </span>--output<span class="w"> </span>config_update.pb
+</pre></div>
+</div>
+<p>Decode delta object into JSON format:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>configtxlator<span class="w"> </span>proto_decode<span class="w"> </span>--input<span class="w"> </span>config_update.pb<span class="w"> </span>--type<span class="w"> </span>common.ConfigUpdate<span class="w"> </span>--output<span class="w"> </span>config_update.json
+</pre></div>
+</div>
+<p>Now, we have a decoded update file – <code class="docutils literal notranslate"><span class="pre">config_update.json</span></code> – that we need to wrap in an envelope message. This step will give us back the header field that we stripped away earlier. We’ll name this file <code class="docutils literal notranslate"><span class="pre">config_update_in_envelope.json</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;payload&quot;:{&quot;header&quot;:{&quot;channel_header&quot;:{&quot;channel_id&quot;:&quot;channel1&quot;, &quot;type&quot;:2}},&quot;data&quot;:{&quot;config_update&quot;:&#39;</span><span class="k">$(</span>cat<span class="w"> </span>config_update.json<span class="k">)</span><span class="s1">&#39;}}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.<span class="w"> </span>&gt;<span class="w"> </span>config_update_in_envelope.json
+</pre></div>
+</div>
+<p>Using our properly formed JSON – <code class="docutils literal notranslate"><span class="pre">config_update_in_envelope.json</span></code> – we will leverage the <code class="docutils literal notranslate"><span class="pre">configtxlator</span></code> tool one last time and convert it into the fully fledged protobuf format that Fabric requires. We’ll name our final update object <code class="docutils literal notranslate"><span class="pre">config_update_in_envelope.pb</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>configtxlator<span class="w"> </span>proto_encode<span class="w"> </span>--input<span class="w"> </span>config_update_in_envelope.json<span class="w"> </span>--type<span class="w"> </span>common.Envelope<span class="w"> </span>--output<span class="w"> </span>config_update_in_envelope.pb
+</pre></div>
+</div>
+</section>
+<section id="sign-and-submit-the-config-update">
+<h2>Sign and Submit the Config Update<a class="headerlink" href="#sign-and-submit-the-config-update" title="Link to this heading">¶</a></h2>
+<p>Before writing the configuration to the ledger, we need signatures from the requisite Admin users.</p>
+<p>First, let’s sign this update proto as Org1. Navigate back to the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>..
+</pre></div>
+</div>
+<p>Export the Org1 environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../config/
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org1MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:7051
+</pre></div>
+</div>
+<p>Run the following <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">channel</span> <span class="pre">signconfigtx</span></code> command to sign the update as Org1:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>channel<span class="w"> </span>signconfigtx<span class="w"> </span>-f<span class="w"> </span>channel-artifacts/config_update_in_envelope.pb
+</pre></div>
+</div>
+<p>Export the Org2 environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../config/
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org2MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:9051
+</pre></div>
+</div>
+<p>Run the following <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">channel</span> <span class="pre">signconfigtx</span></code> command to sign the update as Org2:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>channel<span class="w"> </span>signconfigtx<span class="w"> </span>-f<span class="w"> </span>channel-artifacts/config_update_in_envelope.pb
+</pre></div>
+</div>
+<p>Export the Org3 environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../config/
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org3MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:11051
+</pre></div>
+</div>
+<p>Run the following <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">channel</span> <span class="pre">signconfigtx</span></code> command to sign the update as Org3:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>channel<span class="w"> </span>signconfigtx<span class="w"> </span>-f<span class="w"> </span>channel-artifacts/config_update_in_envelope.pb
+</pre></div>
+</div>
+<p>We will now finally issue the <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">channel</span> <span class="pre">update</span></code> command to send the update to channel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>channel<span class="w"> </span>update<span class="w"> </span>-f<span class="w"> </span>channel-artifacts/config_update_in_envelope.pb<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>-c<span class="w"> </span>channel1<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span>
+</pre></div>
+</div>
+<p>You should see a message similar to the following if your update has been submitted successfully:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2024</span>-03-18<span class="w"> </span><span class="m">14</span>:40:10.761<span class="w"> </span>CST<span class="w"> </span><span class="m">0002</span><span class="w"> </span>INFO<span class="w"> </span><span class="o">[</span>channelCmd<span class="o">]</span><span class="w"> </span>update<span class="w"> </span>-&gt;<span class="w"> </span>Successfully<span class="w"> </span>submitted<span class="w"> </span>channel<span class="w"> </span>update
+</pre></div>
+</div>
+<p>Now, all operations to remove Org2 from the Fabric environment are complete.
+You can inspect the logs for peer0.org1.example.com and peer0.org3.example.com by issuing the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">logs</span> <span class="n">peer0</span><span class="o">.</span><span class="n">org1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">-</span><span class="n">f</span>
+<span class="n">docker</span> <span class="n">logs</span> <span class="n">peer0</span><span class="o">.</span><span class="n">org3</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span> <span class="o">-</span><span class="n">f</span>
+</pre></div>
+</div>
+<p>Inspect the logs for the peers, you will see the following gossip warning message about peer0.org2.example.com. Since Org2 is already removed from the Fabric network, Org1 peer and Org3 peer are not able to connect to Org2 peer any more.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">06</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mf">10.811</span> <span class="n">UTC</span> <span class="mi">0086</span> <span class="n">WARN</span> <span class="p">[</span><span class="n">gossip</span><span class="o">.</span><span class="n">gossip</span><span class="p">]</span> <span class="n">func3</span> <span class="o">-&gt;</span> <span class="n">Failed</span> <span class="n">determining</span> <span class="n">organization</span> <span class="n">of</span> <span class="mi">87333</span><span class="n">f25423a5270cddbed5078fde14056ed2899e4ce7ffc6476e81f330201d1</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">06</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mf">11.108</span> <span class="n">UTC</span> <span class="mi">0087</span> <span class="n">WARN</span> <span class="p">[</span><span class="n">peer</span><span class="o">.</span><span class="n">gossip</span><span class="o">.</span><span class="n">sa</span><span class="p">]</span> <span class="n">OrgByPeerIdentity</span> <span class="o">-&gt;</span> <span class="n">Peer</span> <span class="n">Identity</span> <span class="p">[</span><span class="mi">7</span><span class="n">b</span> <span class="mi">22</span> <span class="mi">43</span> <span class="mi">4</span><span class="n">e</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">22</span> <span class="mi">70</span> <span class="mi">65</span> <span class="mi">65</span> <span class="mi">72</span> <span class="mi">30</span> <span class="mi">2</span><span class="n">e</span> <span class="mi">6</span><span class="n">f</span> <span class="mi">72</span> <span class="mi">67</span> <span class="mi">32</span> <span class="mi">2</span><span class="n">e</span> <span class="mi">65</span> <span class="mi">78</span> <span class="mi">61</span> <span class="mi">6</span><span class="n">d</span> <span class="mi">70</span> <span class="mi">6</span><span class="n">c</span> <span class="mi">65</span> <span class="mi">2</span><span class="n">e</span> <span class="mi">63</span> <span class="mi">6</span><span class="n">f</span> <span class="mi">6</span><span class="n">d</span> <span class="mi">22</span> <span class="mi">2</span><span class="n">c</span> <span class="mi">22</span> <span class="mi">49</span> <span class="mi">73</span> <span class="mi">73</span> <span class="mi">75</span> <span class="mi">65</span> <span class="mi">72</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">43</span> <span class="mi">4</span><span class="n">e</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">22</span> <span class="mi">63</span> <span class="mi">61</span> <span class="mi">2</span><span class="n">e</span> <span class="mi">6</span><span class="n">f</span> <span class="mi">72</span> <span class="mi">67</span> <span class="mi">32</span> <span class="mi">2</span><span class="n">e</span> <span class="mi">65</span> <span class="mi">78</span> <span class="mi">61</span> <span class="mi">6</span><span class="n">d</span> <span class="mi">70</span> <span class="mi">6</span><span class="n">c</span> <span class="mi">65</span> <span class="mi">2</span><span class="n">e</span> <span class="mi">63</span> <span class="mi">6</span><span class="n">f</span> <span class="mi">6</span><span class="n">d</span> <span class="mi">22</span> <span class="mi">2</span><span class="n">c</span> <span class="mi">22</span> <span class="mi">49</span> <span class="mi">73</span> <span class="mi">73</span> <span class="mi">75</span> <span class="mi">65</span> <span class="mi">72</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">4</span><span class="n">c</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">53</span> <span class="mi">54</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">43</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">22</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">53</span> <span class="mi">61</span> <span class="mi">6</span><span class="n">e</span> <span class="mi">20</span> <span class="mi">46</span> <span class="mi">72</span> <span class="mi">61</span> <span class="mi">6</span><span class="n">e</span> <span class="mi">63</span> <span class="mi">69</span> <span class="mi">73</span> <span class="mi">63</span> <span class="mi">6</span><span class="n">f</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">55</span> <span class="mi">53</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">22</span> <span class="mi">2</span><span class="n">c</span> <span class="mi">22</span> <span class="mi">49</span> <span class="mi">73</span> <span class="mi">73</span> <span class="mi">75</span> <span class="mi">65</span> <span class="mi">72</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">4</span><span class="n">f</span> <span class="mi">55</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">6</span><span class="n">e</span> <span class="mi">75</span> <span class="mi">6</span><span class="n">c</span> <span class="mi">6</span><span class="n">c</span> <span class="mi">2</span><span class="n">c</span> <span class="mi">22</span> <span class="mi">4</span><span class="n">c</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">53</span> <span class="mi">54</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">43</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">22</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">53</span> <span class="mi">61</span> <span class="mi">6</span><span class="n">e</span> <span class="mi">20</span> <span class="mi">46</span> <span class="mi">72</span> <span class="mi">61</span> <span class="mi">6</span><span class="n">e</span> <span class="mi">63</span> <span class="mi">69</span> <span class="mi">73</span> <span class="mi">63</span> <span class="mi">6</span><span class="n">f</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">2</span><span class="n">d</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">55</span> <span class="mi">53</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">22</span> <span class="mi">2</span><span class="n">c</span> <span class="mi">22</span> <span class="mi">4</span><span class="n">d</span> <span class="mi">53</span> <span class="mi">50</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">22</span> <span class="mi">4</span><span class="n">f</span> <span class="mi">72</span> <span class="mi">67</span> <span class="mi">32</span> <span class="mi">4</span><span class="n">d</span> <span class="mi">53</span> <span class="mi">50</span> <span class="mi">22</span> <span class="mi">2</span><span class="n">c</span> <span class="mi">22</span> <span class="mi">4</span><span class="n">f</span> <span class="mi">55</span> <span class="mi">22</span> <span class="mi">3</span><span class="n">a</span> <span class="mi">5</span><span class="n">b</span> <span class="mi">22</span> <span class="mi">70</span> <span class="mi">65</span> <span class="mi">65</span> <span class="mi">72</span> <span class="mi">22</span> <span class="mi">5</span><span class="n">d</span> <span class="mi">7</span><span class="n">d</span><span class="p">]</span> <span class="n">cannot</span> <span class="n">be</span> <span class="n">desirialized</span><span class="o">.</span> <span class="n">No</span> <span class="n">MSP</span> <span class="n">found</span> <span class="n">able</span> <span class="n">to</span> <span class="n">do</span> <span class="n">that</span><span class="o">.</span>
+
+</pre></div>
+</div>
+</section>
+<section id="restart-org1-peer-and-org3-peer">
+<h2>Restart Org1 Peer and Org3 Peer<a class="headerlink" href="#restart-org1-peer-and-org3-peer" title="Link to this heading">¶</a></h2>
+<p>You can eliminate the warnings by restarting Org1 peer and Org3 peer.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>stop<span class="w"> </span>peer0.org1.example.com
+docker<span class="w"> </span>start<span class="w"> </span>peer0.org1.example.com
+docker<span class="w"> </span>stop<span class="w"> </span>peer0.org3.example.com
+docker<span class="w"> </span>start<span class="w"> </span>peer0.org3.example.com
+</pre></div>
+</div>
+</section>
+<section id="updating-collection-definition-file-optional">
+<h2>Updating Collection Definition File (Optional)<a class="headerlink" href="#updating-collection-definition-file-optional" title="Link to this heading">¶</a></h2>
+<p>In case you use private data collection in your chaincode, you should now remove Org2MSP from the collection definition and update the chaincode since Org2MSP is no longer defined in the Fabric network.
+For example, a collection is defined to hold private data between Org1 and Org2:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pdc1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;, &#39;Org2MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;endorsementPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;signaturePolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;, &#39;Org2MSP.member&#39;)&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>After Org2 is removed, reference to Org2MSP should be removed from collection definition, so the collection is now held by Org1 only:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pdc1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;endorsementPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;signaturePolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;)&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="transfer-collection-to-another-org-optional">
+<h2>Transfer Collection to Another Org (Optional)<a class="headerlink" href="#transfer-collection-to-another-org-optional" title="Link to this heading">¶</a></h2>
+<p>What should we do if an existing collection is held by the removed Org only.
+For example, the following collection pdc2 is held by Org2 only:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pdc2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org2MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;endorsementPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;signaturePolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org2MSP.member&#39;)&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>As stated in <a class="reference external" href="./private-data-arch.html#updating-a-collection-definition">Updating a collection definition</a>, existing collections must be included in collection definition file, so we cannot simply remove the collection from collection definition file.</p>
+<blockquote>
+<div><p>If a collection configuration is specified when updating the chaincode definition, a definition for each of the existing collections must be included.</p>
+</div></blockquote>
+<p>As a workaround, you could transfer the collection to another existing organization. In this case, we transferred pdc2 to Org3:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pdc2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org3MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;endorsementPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;signaturePolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org3MSP.member&#39;)&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>After this transfer, Org3 peer will try to fetch private data of pdc2 from other peers. This is called private data reconciliation. Private data reconciliation occurs periodically based on <code class="docutils literal notranslate"><span class="pre">peer.gossip.pvtData.reconciliationEnabled</span></code> and <code class="docutils literal notranslate"><span class="pre">peer.gossip.pvtData.reconcileSleepInterval</span></code> properties in core.yaml.
+Since Org2 peer is already removed from Fabric network, Org3 peer will have no way to retrieve private data from Org2 peer. The following warning message will display in Org3 peer log:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">06</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mf">51.065</span> <span class="n">UTC</span> <span class="mi">0047</span> <span class="n">WARN</span> <span class="p">[</span><span class="n">gossip</span><span class="o">.</span><span class="n">privdata</span><span class="p">]</span> <span class="n">fetchPrivateData</span> <span class="o">-&gt;</span> <span class="n">Do</span> <span class="ow">not</span> <span class="n">know</span> <span class="nb">any</span> <span class="n">peer</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">channel</span> <span class="p">(</span><span class="n">channel1</span><span class="p">)</span> <span class="n">that</span> <span class="n">matches</span> <span class="n">the</span> <span class="n">policies</span> <span class="p">,</span> <span class="n">aborting</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel1</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">06</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mf">51.065</span> <span class="n">UTC</span> <span class="mi">0048</span> <span class="n">ERRO</span> <span class="p">[</span><span class="n">gossip</span><span class="o">.</span><span class="n">privdata</span><span class="p">]</span> <span class="n">reconcile</span> <span class="o">-&gt;</span> <span class="n">reconciliation</span> <span class="n">error</span> <span class="n">when</span> <span class="n">trying</span> <span class="n">to</span> <span class="n">fetch</span> <span class="n">missing</span> <span class="n">items</span> <span class="kn">from</span> <span class="nn">different</span> <span class="n">peers</span><span class="p">:</span> <span class="n">Empty</span> <span class="n">membership</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel1</span>
+<span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span> <span class="mi">06</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mf">51.065</span> <span class="n">UTC</span> <span class="mi">0049</span> <span class="n">ERRO</span> <span class="p">[</span><span class="n">gossip</span><span class="o">.</span><span class="n">privdata</span><span class="p">]</span> <span class="n">run</span> <span class="o">-&gt;</span> <span class="n">Failed</span> <span class="n">to</span> <span class="n">reconcile</span> <span class="n">missing</span> <span class="n">private</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span>  <span class="n">Empty</span> <span class="n">membership</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel1</span>
+</pre></div>
+</div>
+<p>You could configure <code class="docutils literal notranslate"><span class="pre">peer.gossip.pvtData.reconciliationEnabled=false</span></code> for Org3 peer to stop reconciliation and suppress the error log.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="config_update.html" class="btn btn-neutral float-right" title="Updating a channel configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="channel_update_tutorial.html" class="btn btn-neutral" title="Adding an Org to a Channel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
