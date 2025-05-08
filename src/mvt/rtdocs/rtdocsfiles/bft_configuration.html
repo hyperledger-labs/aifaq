@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuring and operating a BFT ordering service &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Migrating from Raft to BFT" href="raft_bft_migration.html" />
+    <link rel="prev" title="Configuring and operating a Raft ordering service" href="raft_configuration.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/bft_configuration.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ops_guide.html">Operations Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="msp.html">Membership Service Providers (MSP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="certs_management.html">Certificates Management Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer_ledger_snapshot.html">Taking ledger snapshots and using them to join channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hsm.html">Using a Hardware Security Module (HSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configtx.html">Channel Configuration (configtx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="endorsement-policies.html">Endorsement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_endorsement_and_validation.html">Pluggable transaction endorsement and validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access_control.html">Access Control Lists (ACL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="idemix.html">MSP Implementation with Identity Mixer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_service.html">The Operations Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics_reference.html">Metrics Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_launcher.html">External Builders and Launchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_service.html">Running Chaincode as an External Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error-handling.html">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging-control.html">Logging Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enable_tls.html">Securing Communication With Transport Layer Security (TLS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raft_configuration.html">Configuring and operating a Raft ordering service</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuring and operating a BFT ordering service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#conceptual-overview">Conceptual overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#local-configuration">Local configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#channel-configuration">Channel configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#block-validation-policy">Block validation policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reconfiguration">Reconfiguration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metrics">Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="raft_bft_migration.html">Migrating from Raft to BFT</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="ops_guide.html">Operations Guides</a></li>
+      <li class="breadcrumb-item active">Configuring and operating a BFT ordering service</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bft_configuration.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuring-and-operating-a-bft-ordering-service">
+<h1>Configuring and operating a BFT ordering service<a class="headerlink" href="#configuring-and-operating-a-bft-ordering-service" title="Link to this heading">¶</a></h1>
+<p><strong>Audience</strong>: <em>BFT ordering service admins</em></p>
+<section id="conceptual-overview">
+<h2>Conceptual overview<a class="headerlink" href="#conceptual-overview" title="Link to this heading">¶</a></h2>
+<p>For a high level overview of the concept of ordering and how the supported
+ordering service implementations (including BFT) work at a high level, check
+out our conceptual documentation on the <a class="reference external" href="./orderer/ordering_service.html">Ordering Service</a>.</p>
+<p>To learn about the process of setting up an ordering node, check out our
+documentation on <a class="reference external" href="./deployorderer/ordererplan.html">Planning for an ordering service</a>.</p>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>A BFT cluster is configured in two places:</p>
+<ul class="simple">
+<li><p><strong>Local configuration</strong>: Governs node specific aspects, such as TLS
+communication, replication behavior, and file storage.</p></li>
+<li><p><strong>Channel configuration</strong>: Defines the membership of the  BFT cluster for the
+corresponding channel, as well as protocol specific parameters such as timeouts.</p></li>
+</ul>
+<p>Unlike the <a class="reference external" href="./raft_configuration.html">Raft ordering service</a>, where nodes identify each other using TLS pinning,
+BFT nodes identify each other using their enrollment certificate.</p>
+<p>Each channel has its own instance of a BFT protocol running. Thus, each
+BFT node must be referenced in the configuration of each channel it participates in
+by adding its enrollment certificate (in <code class="docutils literal notranslate"><span class="pre">PEM</span></code> format) and MSP ID to the channel
+config.</p>
+<p>The following <a class="reference external" href="https://github.com/hyperledger/fabric/blob/main/sampleconfig/configtx.yaml">section</a> from <code class="docutils literal notranslate"><span class="pre">configtx.yaml</span></code> shows four BFT nodes (also called
+“consenters”) in the channel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">ConsenterMapping</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">Host</span><span class="p">:</span> <span class="n">bft0</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+      <span class="n">Port</span><span class="p">:</span> <span class="mi">7050</span>
+      <span class="n">MSPID</span><span class="p">:</span> <span class="n">OrdererOrg1</span>
+      <span class="n">Identity</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">identity</span>
+      <span class="n">ClientTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ClientTLSCert0</span>
+      <span class="n">ServerTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ServerTLSCert0</span>
+    <span class="o">-</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">Host</span><span class="p">:</span> <span class="n">bft1</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+      <span class="n">Port</span><span class="p">:</span> <span class="mi">7050</span>
+      <span class="n">MSPID</span><span class="p">:</span> <span class="n">OrdererOrg2</span>
+      <span class="n">Identity</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">identity</span>
+      <span class="n">ClientTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ClientTLSCert1</span>
+      <span class="n">ServerTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ServerTLSCert1</span>
+    <span class="o">-</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">3</span>
+      <span class="n">Host</span><span class="p">:</span> <span class="n">bft2</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+      <span class="n">Port</span><span class="p">:</span> <span class="mi">7050</span>
+      <span class="n">MSPID</span><span class="p">:</span> <span class="n">OrdererOrg3</span>
+      <span class="n">Identity</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">identity</span>
+      <span class="n">ClientTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ClientTLSCert2</span>
+      <span class="n">ServerTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ServerTLSCert2</span>
+    <span class="o">-</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">4</span>
+      <span class="n">Host</span><span class="p">:</span> <span class="n">bft3</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+      <span class="n">Port</span><span class="p">:</span> <span class="mi">7050</span>
+      <span class="n">MSPID</span><span class="p">:</span> <span class="n">OrdererOrg4</span>
+      <span class="n">Identity</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">identity</span>
+      <span class="n">ClientTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ClientTLSCert3</span>
+      <span class="n">ServerTLSCert</span><span class="p">:</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">ServerTLSCert3</span>
+</pre></div>
+</div>
+<p>When the channel config block is created, the <code class="docutils literal notranslate"><span class="pre">configtxgen</span></code> tool reads the paths
+to the identities (enrollment certificates) and TLS certificates, and replaces the paths with the corresponding bytes of
+the identities and certificates.
+Note that the <code class="docutils literal notranslate"><span class="pre">Identity</span></code> refers to the path of the enrollment certificate, and not to the entire MSP directory.</p>
+<p>Note: it is possible to remove or add an ordering node to a channel dynamically, a process described in the reconfiguration section below and in more detail in the <a class="reference external" href="./create_channel/add_orderer.html">reconfiguration tutorial</a>.</p>
+<p>In addition, note that the <a class="reference external" href="./capabilities_concept.html">channel capabilities</a> V3.0 flag must be set to true.</p>
+<section id="local-configuration">
+<h3>Local configuration<a class="headerlink" href="#local-configuration" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">orderer.yaml</span></code> has two configuration sections that are relevant for BFT
+orderers:</p>
+<p><strong>Cluster</strong>, which determines the communication configuration, and
+<strong>Consensus</strong>, which determines BFT protocol related configuration.</p>
+<p><strong>Cluster parameters:</strong></p>
+<p>By default, the BFT service is running in the same gRPC server as the client
+facing gRPC API (which is used for transaction submission or block retrieval), but it can be
+configured to have a separate gRPC server with a separate port.</p>
+<p>This is useful for cases where you want TLS certificates issued by the
+organizational CAs, but used only by the cluster nodes to communicate among each
+other, and TLS certificates issued by a public TLS CA for the client facing API.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ClientCertificate</span></code>, <code class="docutils literal notranslate"><span class="pre">ClientPrivateKey</span></code>: The file path of the client TLS certificate
+and corresponding private key.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ListenPort</span></code>: The port the cluster listens on.
+It must be same as <code class="docutils literal notranslate"><span class="pre">consenters[i].Port</span></code> in Channel configuration.
+If blank, the port is the same port as the orderer general port (<code class="docutils literal notranslate"><span class="pre">general.listenPort</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ListenAddress</span></code>: The address the cluster service is listening on.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ServerCertificate</span></code>, <code class="docutils literal notranslate"><span class="pre">ServerPrivateKey</span></code>: The TLS server certificate key pair
+which is used when the cluster service is running on a separate gRPC server
+(different port).</p></li>
+</ul>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">ListenPort</span></code>, <code class="docutils literal notranslate"><span class="pre">ListenAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">ServerCertificate</span></code>, <code class="docutils literal notranslate"><span class="pre">ServerPrivateKey</span></code> must
+be either set together or unset together.
+If they are unset, they are inherited from the general TLS section,
+in example <code class="docutils literal notranslate"><span class="pre">general.tls.{privateKey,</span> <span class="pre">certificate}</span></code>.
+When general TLS is disabled:</p>
+<ul class="simple">
+<li><p>Use a different <code class="docutils literal notranslate"><span class="pre">ListenPort</span></code> than the orderer general port</p></li>
+<li><p>Properly configure TLS root CAs in the channel configuration.</p></li>
+</ul>
+<p>Currently, if the cluster communication uses a separate listener, then mutual TLS authentication is implicitly enforced,
+while if the cluster communication uses the same gRPC server as the client facing gRPC API, it is not implicitly enforced.</p>
+<p>There are also hidden configuration parameters for <code class="docutils literal notranslate"><span class="pre">general.cluster</span></code> which can be
+used to further fine tune the cluster communication or replication mechanisms:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SendBufferSize</span></code>: Regulates the number of messages in the egress buffer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DialTimeout</span></code>, <code class="docutils literal notranslate"><span class="pre">RPCTimeout</span></code>: Specify the timeouts of creating connections and
+establishing streams.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ReplicationBufferSize</span></code>: the maximum number of bytes that can be allocated
+for each in-memory buffer used for block replication from other cluster nodes.
+Each channel has its own memory buffer. Defaults to <code class="docutils literal notranslate"><span class="pre">20971520</span></code> which is <code class="docutils literal notranslate"><span class="pre">20MB</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PullTimeout</span></code>: the maximum duration the ordering node will wait for a block
+to be received before it aborts. Defaults to five seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ReplicationRetryTimeout</span></code>: The maximum duration the ordering node will wait
+between two consecutive attempts. Defaults to five seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TLSHandshakeTimeShift</span></code>: If the TLS certificates of the ordering nodes
+expire and are not replaced in time (see TLS certificate rotation below),
+communication between them cannot be established, and it will be impossible
+to send new transactions to the ordering service.
+To recover from such a scenario, it is possible to make TLS handshakes
+between ordering nodes consider the time to be shifted backwards a given
+amount that is configured to <code class="docutils literal notranslate"><span class="pre">TLSHandshakeTimeShift</span></code>.
+This setting only applies when a separate cluster listener is in use.  If
+the cluster service is sharing the orderer’s main gRPC server, then instead
+specify <code class="docutils literal notranslate"><span class="pre">TLSHandshakeTimeShift</span></code> in the <code class="docutils literal notranslate"><span class="pre">General.TLS</span></code> section.</p></li>
+</ul>
+<p><strong>Consensus parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">WALDir</span></code>: the location at which Write Ahead Logs for BFT are stored.
+Each channel will have its own subdirectory named after the channel ID.</p></li>
+</ul>
+</section>
+<section id="channel-configuration">
+<h3>Channel configuration<a class="headerlink" href="#channel-configuration" title="Link to this heading">¶</a></h3>
+<p>Apart from the (already discussed) consenters, the BFT channel configuration has a section which relates to protocol specific knobs.
+It is possible to change these values dynamically at runtime, described in the Reconfiguration section below.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestBatchMaxCount</span></code>: The maximal number of requests in a batch. A request batch that reaches this count is proposed immediately.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestBatchMaxBytes</span></code>: The maximal total size of requests in a batch, in bytes. This is also the maximal size of a single request. A request batch that reaches this size is proposed immediately.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestBatchMaxInterval</span></code>: The maximal time interval a request batch can wait before it is proposed. A request batch is accumulating requests until <code class="docutils literal notranslate"><span class="pre">RequestBatchMaxInterval</span></code> had elapsed from the time the batch was first created (i.e. the time the first request was added to it), or until it is of count <code class="docutils literal notranslate"><span class="pre">RequestBatchMaxCount</span></code>, or it reaches <code class="docutils literal notranslate"><span class="pre">RequestBatchMaxBytes</span></code>, whichever occurs first.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IncomingMessageBufferSize</span></code>: The size of the buffer holding incoming messages before they are processed (maximal number of messages).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestPoolSize</span></code> : The number of pending requests retained by the node. The <code class="docutils literal notranslate"><span class="pre">RequestPoolSize</span></code> is recommended to be at least double (x2) the <code class="docutils literal notranslate"><span class="pre">RequestBatchMaxCount</span></code>. This cannot be changed dynamically and the node must be restarted to pick up the change.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestForwardTimeout</span></code>: Is started from the moment a request is submitted, and defines the interval after which a request is forwarded to the leader.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestComplainTimeout</span></code>: Is started when <code class="docutils literal notranslate"><span class="pre">RequestForwardTimeout</span></code> expires, and defines the interval after which the node complains about the view leader.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestAutoRemoveTimeout</span></code>: Is started when <code class="docutils literal notranslate"><span class="pre">RequestComplainTimeout</span></code> expires, and defines the interval after which a request is removed (dropped) from the request pool.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ViewChangeResendInterval</span></code>: Defines the interval after which the ViewChange message is resent.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ViewChangeTimeout</span></code>: Is started when a node first receives a quorum of <code class="docutils literal notranslate"><span class="pre">ViewChange</span></code> messages, and defines the interval after which the node will try to initiate a view change with a higher view number.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LeaderHeartbeatTimeout</span></code>: Is the interval after which, if nodes do not receive a “sign of life” from the leader, they complain about the current leader and try to initiate a view change. A sign of life is either a heartbeat or a message from the leader.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LeaderHeartbeatCount</span></code>: Is the number of heartbeats per <code class="docutils literal notranslate"><span class="pre">LeaderHeartbeatTimeout</span></code> that the leader should emit. The heartbeat-interval is equal to: <code class="docutils literal notranslate"><span class="pre">LeaderHeartbeatTimeout/LeaderHeartbeatCount</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CollectTimeout</span></code>: Is the interval after which the node stops listening to <code class="docutils literal notranslate"><span class="pre">StateTransferResponse</span></code> messages, stops collecting information about view metadata from remote nodes.</p></li>
+</ul>
+</section>
+</section>
+<section id="block-validation-policy">
+<h2>Block validation policy<a class="headerlink" href="#block-validation-policy" title="Link to this heading">¶</a></h2>
+<p>The block validation policy in a Fabric channel defaults to a policy that requires a signature from any orderer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="c1"># BlockValidation specifies what signatures must be included in the block</span>
+        <span class="c1"># from the orderer for the peer to validate it.</span>
+        <span class="n">BlockValidation</span><span class="p">:</span>
+            <span class="n">Type</span><span class="p">:</span> <span class="n">ImplicitMeta</span>
+            <span class="n">Rule</span><span class="p">:</span> <span class="s2">&quot;ANY Writers&quot;</span>
+</pre></div>
+</div>
+<p>In BFT, the <a class="reference external" href="./commands/configtxgen.html">configtxgen</a> tool encodes a policy that is suitable for BFT.
+It automatically derives the policy from the nodes configured in the <code class="docutils literal notranslate"><span class="pre">ConsenterMapping</span></code> section.
+However, when adding or removing ordering service nodes from the channel,
+the policy should be adjusted accordingly as described in the reconfiguration <a class="reference external" href="./create_channel/add_orderer.html#add-the-orderer-to-the-policy-rules">tutorial</a>.</p>
+</section>
+<section id="reconfiguration">
+<h2>Reconfiguration<a class="headerlink" href="#reconfiguration" title="Link to this heading">¶</a></h2>
+<p>The  BFT orderer supports dynamic (meaning, while the channel is being serviced) addition and removal of nodes, and configuration changes.
+The only configuration parameter which cannot be changed dynamically is the <code class="docutils literal notranslate"><span class="pre">RequestPoolSize</span></code>.</p>
+<p>Note that your cluster must be operational and able to achieve consensus before you attempt to reconfigure it.
+As a rule, you should never attempt any configuration changes to the  BFT consenters, such as adding or removing a consenter, or rotating a consenter’s certificate, unless all consenters are online and healthy.
+Unless it is a removal of a consenter that is known to be offline.</p>
+<p>If you do decide to change these parameters, it is recommended to only attempt such a change during a maintenance cycle.
+Problems are most likely to occur when a reconfiguration is attempted in clusters with only a few nodes while a node is down.
+For example, if you have four nodes in your consenters set and one of them is down, it means you have three out of four nodes alive.
+Extending the cluster to five nodes means until the fifth node finishes replicating, the cluster is not functional.
+To add a new node to the ordering service:</p>
+<ol class="arabic simple">
+<li><p><strong>Ensure the orderer organization that owns the new node is one of the orderer organizations on the channel</strong>. If the orderer organization is not an administrator, the node will be unable to pull blocks as a follower or be joined to the consenter set.</p></li>
+<li><p><strong>Start the new ordering node</strong>. For information about how to deploy an ordering node, check out <a class="reference external" href="./deployorderer/ordererdeploy.html">Planning for an ordering service</a>. Note that while you use the <code class="docutils literal notranslate"><span class="pre">osnadmin</span></code> CLI to create and join a channel, you do not need to point to a configuration block when starting the node.</p></li>
+<li><p><strong>Use the <code class="docutils literal notranslate"><span class="pre">osnadmin</span></code> CLI to add the first orderer to the channel</strong>. For more information, check out the <a class="reference external" href="./create_channel/create_channel_participation.html#step-two-use-the-osnadmin-cli-to-add-the-first-orderer-to-the-channel">Create a channel</a> tutorial.</p></li>
+<li><p><strong>Wait for the ordering node to replicate the blocks</strong> from existing nodes for all channels its certificates have been added to. When an ordering node is added to a channel, it is added as a “follower”, a state in which it can replicate blocks but is not part of the “consenter set” actively servicing the channel. When the node finishes replicating the blocks, its status should change from “onboarding” to “active”. Note that an “active” ordering node is still not part of the consenter set.</p></li>
+<li><p><strong>Add the new ordering node to the consenter set</strong> as described in the <a class="reference external" href="./create_channel/add_orderer.html">reconfiguration tutorial</a></p></li>
+</ol>
+<p>To remove an ordering node from the consenter set of a channel, use a channel config update transaction to remove its endpoint and certificates from the channel. For more information, check out the <a class="reference external" href="./create_channel/add_orderer.html">reconfiguration tutorial</a></p>
+<p>Once an ordering node is removed from the channel, the other ordering nodes stop communicating with the removed orderer in the context of the removed channel. They might still be communicating on other channels.</p>
+<p>If the intent is to delete the node entirely, remove it from all channels before shutting down the node.</p>
+</section>
+<section id="metrics">
+<h2>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">¶</a></h2>
+<p>For a description of the Operations Service and how to set it up, check out
+<a class="reference external" href="operations_service.html">our documentation on the Operations Service</a>.</p>
+<p>For a list at the metrics that are gathered by the Operations Service, check out
+our <a class="reference external" href="metrics_reference.html">reference material on metrics</a>.</p>
+<p>While the metrics you prioritize will have a lot to do with your particular use case and configuration, these are the metrics you should consider monitoring:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cluster_size</span></code>: the number of nodes in this channel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">committed_block_number</span></code>: the number of the latest committed block.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_leader</span></code>: the leadership status of the current node according to the latest committed block: 1 if it is the leader else 0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leader_id</span></code>: the id of the current leader according to the latest committed block.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="raft_bft_migration.html" class="btn btn-neutral float-right" title="Migrating from Raft to BFT" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="raft_configuration.html" class="btn btn-neutral" title="Configuring and operating a Raft ordering service" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

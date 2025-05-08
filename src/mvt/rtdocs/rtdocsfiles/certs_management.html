@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificates Management Guide &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Taking ledger snapshots and using them to join channels" href="peer_ledger_snapshot.html" />
+    <link rel="prev" title="Membership Service Providers (MSP)" href="msp.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/certs_management.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ops_guide.html">Operations Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="msp.html">Membership Service Providers (MSP)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Certificates Management Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites-and-resources">Prerequisites and Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-concepts">Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#certificate-types">Certificate Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enrollment-certificates">Enrollment Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tls-certificates">TLS Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#certificate-expiration">Certificate Expiration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#certificates-and-locations">Certificates and Locations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#organization-ca-certificates">Organization CA Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tls-ca-certificates">TLS CA Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#peer-certificates">Peer Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#orderer-certificates">Orderer Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#admin-certificates">Admin Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#client-certificates">Client Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#certificate-decoding">Certificate Decoding</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#certificate-renewal">Certificate Renewal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#renewal-of-expired-certificates">Renewal of Expired Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#renew-peer-certificates">Renew Peer Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#renew-orderer-certificates">Renew Orderer Certificates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#renew-orderer-tls-certificates-without-reusing-the-private-key">Renew Orderer TLS Certificates Without Reusing the Private Key</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#renew-ca-certificate">Renew CA Certificate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="peer_ledger_snapshot.html">Taking ledger snapshots and using them to join channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hsm.html">Using a Hardware Security Module (HSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configtx.html">Channel Configuration (configtx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="endorsement-policies.html">Endorsement policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pluggable_endorsement_and_validation.html">Pluggable transaction endorsement and validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="access_control.html">Access Control Lists (ACL)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="idemix.html">MSP Implementation with Identity Mixer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations_service.html">The Operations Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics_reference.html">Metrics Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_launcher.html">External Builders and Launchers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_service.html">Running Chaincode as an External Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error-handling.html">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging-control.html">Logging Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enable_tls.html">Securing Communication With Transport Layer Security (TLS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raft_configuration.html">Configuring and operating a Raft ordering service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bft_configuration.html">Configuring and operating a BFT ordering service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raft_bft_migration.html">Migrating from Raft to BFT</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="ops_guide.html">Operations Guides</a></li>
+      <li class="breadcrumb-item active">Certificates Management Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/certs_management.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="certificates-management-guide">
+<h1>Certificates Management Guide<a class="headerlink" href="#certificates-management-guide" title="Link to this heading">¶</a></h1>
+<p><strong>Audience</strong>: Hyperledger Fabric network admins</p>
+<p>This guide provides overview information and details for a network administrator to manage certificates (certs) in Hyperledger Fabric.</p>
+<section id="prerequisites-and-resources">
+<h2>Prerequisites and Resources<a class="headerlink" href="#prerequisites-and-resources" title="Link to this heading">¶</a></h2>
+<p>The following Fabric documentation resources on identities, Membership Service Providers (MSPs) and Certificate Authorities (CAs) provide context for understanding certificate management:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="./identity/identity.html#identity">Identity</a></p></li>
+<li><p><a class="reference external" href="./membership/membership.html">MSP Overview</a></p></li>
+<li><p><a class="reference external" href="./msp.html">MSP Configuration</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/deployguide/use_CA.html#overview-of-registration-and-enrollment">Registration and Enrollment</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/deployguide/use_CA.html#register-an-identity">Registering an Identity</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/deployguide/use_CA.html#enroll-an-identity">Enrolling an Identity</a></p></li>
+</ul>
+</section>
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">¶</a></h2>
+<p><strong>Registration</strong> – A username and password pair, stored in the Certificate Authority (CA). This registration is created by a CA admin user, has no expiration, and contains any required roles and attributes.</p>
+<p><strong>Enrollment</strong> – A public/private key pair and an X.509 certificate issued by the organization’s Certificate Authority (CA). The certificate encodes roles, attributes, and metadata, which represent an identity in a Fabric network. An enrollment is associated with a CA registration by username and password.</p>
+<p><strong>Identity</strong> - A public certificate and its private key used for encryption. The public certificate is the X.509 certificate issued by the CA, while the private key is stored out of band, on a secure storage.</p>
+<p><strong>TLS</strong> - A public Transport Layer Security (TLS) Certificate that authorizes client and node communications. On Fabric, registration and enrollment are the same for X.509 Certificates and TLS Certificates.</p>
+</section>
+<section id="certificate-types">
+<h2>Certificate Types<a class="headerlink" href="#certificate-types" title="Link to this heading">¶</a></h2>
+<p>Hyperledger Fabric implements two types of certificates: 1) <strong>Enrollment</strong> Certificates for identities and 2) <strong>TLS</strong> Certificates for node and client communications.</p>
+<section id="enrollment-certificates">
+<h3>Enrollment Certificates<a class="headerlink" href="#enrollment-certificates" title="Link to this heading">¶</a></h3>
+<p>Enrollment Certificates are classed into four types:</p>
+<ul class="simple">
+<li><p><strong>Admin</strong></p></li>
+<li><p><strong>Peer</strong></p></li>
+<li><p><strong>Orderer</strong></p></li>
+<li><p><strong>Client</strong></p></li>
+</ul>
+<p>Each Enrollment Certificate type has a specific role:</p>
+<p><strong>Admin:</strong> X.509 Certificates used to authenticate admin identities, which are required to make changes to  Fabric configurations.</p>
+<p><strong>Peer:</strong> X.509 Certificates used to enroll peer nodes, located physically on the node or mapped to the node. For a Fabric peer node to start, it must have a valid Enrollment Certificate with the required attributes.</p>
+<p><strong>Orderer:</strong> X.509 Certificates used to enroll orderer nodes, located physically on the node or mapped to the node. For a Fabric orderer node to start, it must have a valid Enrollment Certificate with the required attributes.</p>
+<p><strong>Client:</strong> X.509 Certificates that allow signed requests to be passed from clients to Fabric nodes. Client certs define the identities of client applications submitting transactions to a Fabric network.</p>
+</section>
+<section id="tls-certificates">
+<h3>TLS Certificates<a class="headerlink" href="#tls-certificates" title="Link to this heading">¶</a></h3>
+<p>TLS Certificates allow Fabric nodes and clients to sign and encrypt communications. A valid TLS Certificate is required for any channel communication.</p>
+</section>
+<section id="certificate-expiration">
+<h3>Certificate Expiration<a class="headerlink" href="#certificate-expiration" title="Link to this heading">¶</a></h3>
+<p>Enrollment and TLS Certificates are assigned an expiration date by the issuing Certificate Authority (CA).  Expiration dates must be monitored, and certificates must be re-enrolled before expiration. The most important certificate parameter is the <strong>Not After</strong> element, which indicates its expiration date.</p>
+</section>
+</section>
+<section id="certificates-and-locations">
+<h2>Certificates and Locations<a class="headerlink" href="#certificates-and-locations" title="Link to this heading">¶</a></h2>
+<p>Organization CAs supply X.509 Enrollment Certificates for identities and the TLS CAs supply TLS Certificates for securing node and client communications.</p>
+<section id="organization-ca-certificates">
+<h3>Organization CA Certificates<a class="headerlink" href="#organization-ca-certificates" title="Link to this heading">¶</a></h3>
+<p>Organization CA Root Certificates and Organization CA Admin Certificates provide authorization to interact with the certificate authority for the organization, as described below.</p>
+<section id="organization-ca-root-certificate">
+<h4>Organization CA Root Certificate<a class="headerlink" href="#organization-ca-root-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Public Certificate that permits verification of all certificates issued by the Organization CA. Organization CA Root Certificates are self-signed certificates if creating a new Certificate Authority (CA), or provided by an external CA.</p>
+<p><strong>Location</strong>: Stored on disk in the Organization CA directory (ca-cert.pem), and copied into the channel configuration to verify identifies for the organization.</p>
+<p><strong>Impact if expired</strong>: A new Organization CA Root Certificate must be issued. Organization CA Root Certificates are valid for 15 years.</p>
+</section>
+<section id="organization-ca-admin-certificate">
+<h4>Organization CA Admin Certificate<a class="headerlink" href="#organization-ca-admin-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Certificate used when making admin requests to the Organization CA.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<blockquote>**Note**: Each identity has a local **msp** directory structure which contains its certificate in the **signcerts** directory and its private key in the **keystore** directory. For details on the **msp** directory, refer to [MSP Structure](https://hyperledger-fabric.readthedocs.io/en/latest/membership/membership.html#msp-structure).</blockquote>
+<pre>
+msp
+ ├── IssuerPublicKey
+ ├── IssuerRevocationPublicKey
+ ├── cacerts
+ │   └── localhost-7053.pem
+ ├── keystore
+ │   └── key.pem
+ ├── signcerts
+ │   └── cert.pem
+ └── user
+</pre>
+<p><strong>Impact if expired</strong>: The Organization Administrator cannot register new identities with the CA, but transaction traffic does not stop.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-orderer-org-s-ca-admin">Reference - Enroll Orderer Org CA Admin</a></p>
+</section>
+</section>
+<section id="tls-ca-certificates">
+<h3>TLS CA Certificates<a class="headerlink" href="#tls-ca-certificates" title="Link to this heading">¶</a></h3>
+<p>TLS CA Root Certificates and TLS CA Admin Certificates provide authorization to interact with the certificate authority for the TLS, as described below.</p>
+<section id="tls-ca-root-certificate">
+<h4>TLS CA Root Certificate<a class="headerlink" href="#tls-ca-root-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Public certificate that permits verification of all certificates issued by the TLS CA. TLS CA Root Certificates are self-signed certificates if creating a new Certificate Authority (CA), or provided by an external CA.</p>
+<p><strong>Location</strong>: Stored on disk in the TLS CA directory (ca-cert.pem), and copied into the channel configuration to verify TLS Certificates for the organization.</p>
+<p><strong>Impact if expired</strong>: A new TLS CA Root Certificate must be issued. TLS CA Root Certificates are valid for 15 years.</p>
+</section>
+<section id="tls-ca-admin-certificate">
+<h4>TLS CA Admin Certificate<a class="headerlink" href="#tls-ca-admin-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Certificate used for admin requests to the TLS CA.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<pre>
+msp
+ ├── IssuerPublicKey
+ ├── IssuerRevocationPublicKey
+ ├── cacerts
+ │   └── localhost-7053.pem
+ ├── keystore
+ │   └── key.pem
+ ├── signcerts
+ │   └── cert.pem
+ └── user
+</pre>
+<p><strong>Impact if expired</strong>: The Fabric Administrator will no longer be able to register TLS certificates in the TLS CA for nodes in the network.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-tls-ca-s-admin">Reference - Enroll TLS CA Admin</a></p>
+</section>
+</section>
+<section id="peer-certificates">
+<h3>Peer Certificates<a class="headerlink" href="#peer-certificates" title="Link to this heading">¶</a></h3>
+<p>A Peer Enrollment Certificate and a Peer TLS Certificate are issued for each peer in an organization.</p>
+<section id="peer-enrollment-certificate">
+<h4>Peer Enrollment Certificate<a class="headerlink" href="#peer-enrollment-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Authenticates the identity of the peer node when endorsing transactions.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<pre>
+org1ca
+└── peer1
+    ├── msp
+    │    ├── admincerts
+    │    │   └── cert.pem
+    │    ├── cacerts
+    │    │   └── localhost-7053.pem
+    │    ├── keystore
+    │    │   └── key.pem
+    │    ├── signcerts
+    │    │   └── cert.pem
+    │    └── user
+    |── tls
+</pre>
+<p><strong>Impact if expired</strong>: Production outage. Peers do not start without a valid Enrollment Certificate.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-peer1">Reference - Enroll peer</a></p>
+</section>
+<section id="peer-tls-certificate">
+<h4>Peer TLS Certificate<a class="headerlink" href="#peer-tls-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Authenticates node component communication on the channel.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<pre>
+org1ca/
+└── peer1
+    ├── msp
+    └── tls
+        ├── cacerts
+        ├── keystore
+        │   └── key.pem
+        ├── signcerts
+        │   └── cert.pem
+        ├── tlscacerts
+        │   └── tls-localhost-7053.pem
+        └── user
+</pre>
+<p><strong>Impact if expired</strong>: Production outage. No communication to the peer is possible.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-peer1">Reference - Enroll peer</a></p>
+</section>
+</section>
+<section id="orderer-certificates">
+<h3>Orderer Certificates<a class="headerlink" href="#orderer-certificates" title="Link to this heading">¶</a></h3>
+<p>Orderer Enrollment Certificates and Orderer TLS Certificates are issued for each ordering service node in an organization.</p>
+<section id="orderer-enrollment-certificate">
+<h4>Orderer Enrollment Certificate<a class="headerlink" href="#orderer-enrollment-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: The public key that the orderer uses to sign blocks.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<pre>
+ └── orderer1
+     ├── msp
+     │   ├── admincerts
+     │   │   └── cert.pem
+     │   ├── cacerts
+     │   │   └── localhost-7053.pem
+     │   ├── keystore
+     │   │   └── key.pem
+     │   ├── signcerts
+     │   │   └── cert.pem
+     │   |── user
+     └── tls
+</pre>
+<p><strong>Impact if expired</strong>: Production outage. Orderers do not start without a valid Enrollment Certificate.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-orderer">Reference - Enroll orderer</a></p>
+</section>
+<section id="orderer-tls-certificate">
+<h4>Orderer TLS Certificate<a class="headerlink" href="#orderer-tls-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: TLS Certificate for the ordering node communication.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<pre>
+ordererca/
+└── orderer1
+    ├── msp
+    └── tls
+        ├── cacerts
+        ├── keystore
+        |   └── key.pem
+        ├── signcerts
+        │   └── cert.pem
+        ├── tlscacerts
+        │   └── tls-localhost-7053.pem
+        └── user
+  </pre>
+<p><strong>Impact if expired</strong>: Production outage. Ordering nodes are no longer allowed to participate in cluster.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-orderer">Reference - Enroll orderer</a></p>
+</section>
+</section>
+<section id="admin-certificates">
+<h3>Admin Certificates<a class="headerlink" href="#admin-certificates" title="Link to this heading">¶</a></h3>
+<p>Ordering Service Organization Channel Admin Certificates and Peer Service Organization Channel Admin Certificates are issued for each organization.</p>
+<section id="ordering-service-organization-channel-admin-certificate">
+<h4>Ordering Service Organization Channel Admin Certificate<a class="headerlink" href="#ordering-service-organization-channel-admin-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong>: Certificate for an organization administrator to manage ordering service and channel updates.</p>
+<p><strong>Location</strong>: Dependent on implementation:</p>
+<pre>
+ordererca/
+└── ordereradmin
+└── msp
+    ├── admincerts
+    │   └── cert.pem
+    ├── cacerts
+    │   └── localhost-7053.pem
+    ├── keystore
+    │   └── key.pem
+    ├── signcerts
+    │   └── cert.pem
+    └── user
+</pre>
+<p><strong>Impact if expired</strong>: Transactions can continue to work successfully. Cannot modify channels from a client application or manage the orderer from the console.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-org0-s-admin">Reference - Enroll Org Admin</a></p>
+</section>
+<section id="peer-service-organization-channel-admin-certificate">
+<h4>Peer Service Organization Channel Admin Certificate<a class="headerlink" href="#peer-service-organization-channel-admin-certificate" title="Link to this heading">¶</a></h4>
+<p><strong>Description</strong> - Certificate for an organization administrator to manage a peer, including channel and chaincode services.</p>
+<p><strong>Location</strong> - Dependent on implementation:</p>
+<pre>
+org1ca/
+└── org1admin
+└── msp
+├── admincerts
+│     └── cert.pem
+├── cacerts
+│     └── localhost-7053.pem
+├── keystore
+│     └── key.pem
+├── signcerts
+│     └── cert.pem
+└── user
+</pre>
+<p><strong>Impact if expired</strong>: Transactions can continue to work successfully. Cannot install new smart contracts from a client application or manage the peer from the console.</p>
+<p><a class="reference external" href="https://hyperledger-fabric-ca.readthedocs.io/en/latest/operations_guide.html#enroll-org1-s-admin">Reference - Enroll Org Admin</a></p>
+</section>
+</section>
+<section id="client-certificates">
+<h3>Client Certificates<a class="headerlink" href="#client-certificates" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong>: Two types of Client Certificates are issued for each organization:</p>
+<ol class="arabic simple">
+<li><p><strong>Organization Enrollment Certificate</strong> - Authenticates the client identity for interactions with peers and orderers.</p></li>
+<li><p><strong>TLS Certificate</strong> - Authenticates client communications, and only required if mutual TLS is configured.</p></li>
+</ol>
+<p>Client Certificates expire after one year, using the Hyperledger Fabric CA default settings. Client Certificates can be re-enrolled using the command line Hyperledger Fabric CA utility.</p>
+<p><strong>Impact if expired</strong>: Client Certificates must be re-enrolled before expiration or the client application will not be able to interact with the Fabric nodes.</p>
+</section>
+<section id="certificate-decoding">
+<h3>Certificate Decoding<a class="headerlink" href="#certificate-decoding" title="Link to this heading">¶</a></h3>
+<p>X.509 Certificates are created by an enrollment of the certificate, based on its registration. The X.509 Certificate contains metadata describing its purpose and identifying the parent CA. The cert expiration is specified in the <strong>Not After</strong> field.</p>
+<p>The certificate details can be decoded using the OpenSSL utility:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># openssl x509 -in cert.pem -text -noout</span>
+</pre></div>
+</div>
+<p>The following example shows a decoded certificate:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Certificate</span><span class="p">:</span>
+    <span class="n">Data</span><span class="p">:</span>
+        <span class="n">Version</span><span class="p">:</span> <span class="mi">3</span> <span class="p">(</span><span class="mh">0x2</span><span class="p">)</span>
+        <span class="n">Serial</span> <span class="n">Number</span><span class="p">:</span>
+            <span class="mi">47</span><span class="p">:</span><span class="mi">4</span><span class="n">d</span><span class="p">:</span><span class="mi">5</span><span class="n">d</span><span class="p">:</span><span class="n">f6</span><span class="p">:</span><span class="n">db</span><span class="p">:</span><span class="mi">92</span><span class="p">:</span><span class="mi">6</span><span class="n">b</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">98</span><span class="p">:</span><span class="mi">8</span><span class="n">d</span><span class="p">:</span><span class="mi">9</span><span class="n">c</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mi">0</span><span class="n">c</span><span class="p">:</span><span class="n">ad</span><span class="p">:</span><span class="n">b6</span><span class="p">:</span><span class="mi">77</span><span class="p">:</span><span class="n">c5</span><span class="p">:</span><span class="n">de</span><span class="p">:</span><span class="n">d2</span><span class="p">:</span><span class="n">ed</span>
+        <span class="n">Signature</span> <span class="n">Algorithm</span><span class="p">:</span> <span class="n">ecdsa</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">SHA256</span>
+        <span class="n">Issuer</span><span class="p">:</span> <span class="n">C</span> <span class="o">=</span> <span class="n">US</span><span class="p">,</span> <span class="n">ST</span> <span class="o">=</span> <span class="n">North</span> <span class="n">Carolina</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">Hyperledger</span><span class="p">,</span> <span class="n">OU</span> <span class="o">=</span> <span class="n">Fabric</span><span class="p">,</span> <span class="n">CN</span> <span class="o">=</span> <span class="n">orderer1ca</span>
+        <span class="n">Validity</span>
+            <span class="n">Not</span> <span class="n">Before</span><span class="p">:</span> <span class="n">Feb</span>  <span class="mi">4</span> <span class="mi">14</span><span class="p">:</span><span class="mi">55</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2022</span> <span class="n">GMT</span>
+            <span class="n">Not</span> <span class="n">After</span> <span class="p">:</span> <span class="n">Feb</span>  <span class="mi">4</span> <span class="mi">15</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">00</span> <span class="mi">2023</span> <span class="n">GMT</span>
+        <span class="n">Subject</span><span class="p">:</span> <span class="n">C</span> <span class="o">=</span> <span class="n">US</span><span class="p">,</span> <span class="n">ST</span> <span class="o">=</span> <span class="n">North</span> <span class="n">Carolina</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">Hyperledger</span><span class="p">,</span> <span class="n">OU</span> <span class="o">=</span> <span class="n">orderer</span><span class="p">,</span> <span class="n">CN</span> <span class="o">=</span> <span class="n">orderer1</span>
+        <span class="n">Subject</span> <span class="n">Public</span> <span class="n">Key</span> <span class="n">Info</span><span class="p">:</span>
+            <span class="n">Public</span> <span class="n">Key</span> <span class="n">Algorithm</span><span class="p">:</span> <span class="nb">id</span><span class="o">-</span><span class="n">ecPublicKey</span>
+                <span class="n">Public</span><span class="o">-</span><span class="n">Key</span><span class="p">:</span> <span class="p">(</span><span class="mi">256</span> <span class="n">bit</span><span class="p">)</span>
+                <span class="n">pub</span><span class="p">:</span>
+                    <span class="mi">04</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="n">ec</span><span class="p">:</span><span class="n">d5</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mi">3</span><span class="n">e</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">9</span><span class="n">d</span><span class="p">:</span><span class="mi">64</span><span class="p">:</span><span class="n">a4</span><span class="p">:</span><span class="n">a4</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="n">a5</span><span class="p">:</span><span class="n">fe</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span>
+                    <span class="n">e2</span><span class="p">:</span><span class="n">f0</span><span class="p">:</span><span class="n">dd</span><span class="p">:</span><span class="n">e4</span><span class="p">:</span><span class="n">ee</span><span class="p">:</span><span class="n">b9</span><span class="p">:</span><span class="mi">3</span><span class="n">f</span><span class="p">:</span><span class="mi">3</span><span class="n">e</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="n">b2</span><span class="p">:</span><span class="mi">3</span><span class="n">a</span><span class="p">:</span><span class="n">d4</span><span class="p">:</span><span class="mi">68</span><span class="p">:</span><span class="n">b1</span><span class="p">:</span><span class="n">b2</span><span class="p">:</span>
+                    <span class="mi">4</span><span class="n">f</span><span class="p">:</span><span class="mi">82</span><span class="p">:</span><span class="mi">1</span><span class="n">a</span><span class="p">:</span><span class="mi">3</span><span class="n">a</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="n">db</span><span class="p">:</span><span class="mi">92</span><span class="p">:</span><span class="mi">6</span><span class="n">d</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="n">c9</span><span class="p">:</span><span class="n">c2</span><span class="p">:</span><span class="mi">3</span><span class="n">b</span><span class="p">:</span><span class="mi">3</span><span class="n">d</span><span class="p">:</span><span class="n">fc</span><span class="p">:</span><span class="mi">7</span><span class="n">a</span><span class="p">:</span>
+                    <span class="n">f0</span><span class="p">:</span><span class="n">fa</span><span class="p">:</span><span class="n">cc</span><span class="p">:</span><span class="mi">8</span><span class="n">b</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="n">e8</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="n">cb</span><span class="p">:</span><span class="n">a1</span><span class="p">:</span><span class="mi">6</span><span class="n">e</span><span class="p">:</span><span class="n">eb</span><span class="p">:</span><span class="n">b3</span><span class="p">:</span><span class="mi">6</span><span class="n">c</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="n">a2</span><span class="p">:</span>
+                    <span class="n">f8</span><span class="p">:</span><span class="n">fc</span><span class="p">:</span><span class="mi">3</span><span class="n">c</span><span class="p">:</span><span class="n">af</span><span class="p">:</span><span class="mi">24</span>
+                <span class="n">ASN1</span> <span class="n">OID</span><span class="p">:</span> <span class="n">prime256v1</span>
+                <span class="n">NIST</span> <span class="n">CURVE</span><span class="p">:</span> <span class="n">P</span><span class="o">-</span><span class="mi">256</span>
+        <span class="n">X509v3</span> <span class="n">extensions</span><span class="p">:</span>
+            <span class="n">X509v3</span> <span class="n">Key</span> <span class="n">Usage</span><span class="p">:</span> <span class="n">critical</span>
+                <span class="n">Digital</span> <span class="n">Signature</span>
+            <span class="n">X509v3</span> <span class="n">Basic</span> <span class="n">Constraints</span><span class="p">:</span> <span class="n">critical</span>
+                <span class="n">CA</span><span class="p">:</span><span class="n">FALSE</span>
+            <span class="n">X509v3</span> <span class="n">Subject</span> <span class="n">Key</span> <span class="n">Identifier</span><span class="p">:</span>
+                <span class="mi">63</span><span class="p">:</span><span class="mi">97</span><span class="p">:</span><span class="n">F5</span><span class="p">:</span><span class="n">CA</span><span class="p">:</span><span class="n">BB</span><span class="p">:</span><span class="n">B7</span><span class="p">:</span><span class="mi">4</span><span class="n">B</span><span class="p">:</span><span class="mi">26</span><span class="p">:</span><span class="mi">84</span><span class="p">:</span><span class="n">D9</span><span class="p">:</span><span class="mi">65</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="n">E3</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="n">A4</span><span class="p">:</span><span class="mi">7</span><span class="n">B</span><span class="p">:</span><span class="n">EE</span><span class="p">:</span><span class="mi">79</span><span class="p">:</span><span class="n">FF</span>
+            <span class="n">X509v3</span> <span class="n">Authority</span> <span class="n">Key</span> <span class="n">Identifier</span><span class="p">:</span>
+                <span class="n">keyid</span><span class="p">:</span><span class="n">BA</span><span class="p">:</span><span class="mi">2</span><span class="n">A</span><span class="p">:</span><span class="n">F8</span><span class="p">:</span><span class="n">EA</span><span class="p">:</span><span class="n">A5</span><span class="p">:</span><span class="mi">7</span><span class="n">D</span><span class="p">:</span><span class="n">DF</span><span class="p">:</span><span class="mi">1</span><span class="n">D</span><span class="p">:</span><span class="mi">0</span><span class="n">F</span><span class="p">:</span><span class="n">CF</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">82</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">7</span><span class="n">E</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">61</span><span class="p">:</span><span class="n">D0</span><span class="p">:</span><span class="n">D8</span>
+            <span class="n">X509v3</span> <span class="n">Subject</span> <span class="n">Alternative</span> <span class="n">Name</span><span class="p">:</span>
+                <span class="n">DNS</span><span class="p">:</span><span class="n">server1</span><span class="o">.</span><span class="n">testorg</span><span class="o">.</span><span class="n">com</span>
+            <span class="mf">1.2.3.4.5.6.7.8.1</span><span class="p">:</span>
+                <span class="p">{</span><span class="s2">&quot;attrs&quot;</span><span class="p">:{</span><span class="s2">&quot;hf.Affiliation&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;hf.EnrollmentID&quot;</span><span class="p">:</span><span class="s2">&quot;orderer1&quot;</span><span class="p">,</span><span class="s2">&quot;hf.Type&quot;</span><span class="p">:</span><span class="s2">&quot;orderer&quot;</span><span class="p">}}</span>
+    <span class="n">Signature</span> <span class="n">Algorithm</span><span class="p">:</span> <span class="n">ecdsa</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">SHA256</span>
+         <span class="mi">30</span><span class="p">:</span><span class="mi">45</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="n">e1</span><span class="p">:</span><span class="mi">93</span><span class="p">:</span><span class="n">f6</span><span class="p">:</span><span class="mi">3</span><span class="n">c</span><span class="p">:</span><span class="mi">08</span><span class="p">:</span><span class="n">f2</span><span class="p">:</span><span class="n">b9</span><span class="p">:</span><span class="n">fb</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="n">c9</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="n">d0</span><span class="p">:</span><span class="n">cf</span><span class="p">:</span>
+         <span class="n">e1</span><span class="p">:</span><span class="n">a6</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="n">a3</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mi">78</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="n">d9</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">2</span><span class="n">c</span><span class="p">:</span><span class="mi">1</span><span class="n">e</span><span class="p">:</span><span class="mi">2</span><span class="n">c</span><span class="p">:</span><span class="mi">91</span><span class="p">:</span><span class="mi">80</span><span class="p">:</span><span class="n">fd</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="n">ad</span><span class="p">:</span><span class="mi">62</span><span class="p">:</span>
+         <span class="mi">9</span><span class="n">c</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">42</span><span class="p">:</span><span class="mi">5</span><span class="n">e</span><span class="p">:</span><span class="n">a0</span><span class="p">:</span><span class="mi">8</span><span class="n">a</span><span class="p">:</span><span class="mi">2</span><span class="n">a</span><span class="p">:</span><span class="n">ec</span><span class="p">:</span><span class="n">f5</span><span class="p">:</span><span class="mi">83</span><span class="p">:</span><span class="mi">46</span><span class="p">:</span><span class="n">f0</span><span class="p">:</span><span class="mi">99</span><span class="p">:</span><span class="mi">6</span><span class="n">a</span><span class="p">:</span><span class="mi">7</span><span class="n">e</span><span class="p">:</span>
+         <span class="n">eb</span><span class="p">:</span><span class="n">a8</span><span class="p">:</span><span class="mi">97</span><span class="p">:</span><span class="mi">1</span><span class="n">f</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">99</span><span class="p">:</span><span class="mi">9</span><span class="n">d</span><span class="p">:</span><span class="n">ae</span><span class="p">:</span><span class="mi">8</span><span class="n">d</span><span class="p">:</span><span class="n">ef</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="n">da</span><span class="p">:</span><span class="n">bb</span><span class="p">:</span><span class="mi">67</span><span class="p">:</span><span class="n">ed</span><span class="p">:</span><span class="mi">80</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="certificate-renewal">
+<h2>Certificate Renewal<a class="headerlink" href="#certificate-renewal" title="Link to this heading">¶</a></h2>
+<p>All nodes and clients should have their enrollment and TLS certificates renewed before expiring to avoid disruption of service.
+Use the Fabric CA enroll or reenroll function to get updated certificates from the issuing Fabric Certificate Authority (CA).
+The reenroll function allows the reuse of an existing private key, which is especially important for orderer TLS certificates.</p>
+<section id="renewal-of-expired-certificates">
+<h3>Renewal of Expired Certificates<a class="headerlink" href="#renewal-of-expired-certificates" title="Link to this heading">¶</a></h3>
+<p>Certificates can still be renewed by using the reenroll function after they expire, but Fabric CA must be at version v1.5.5 or above, and must be configured to allow it.
+Enable the <code class="docutils literal notranslate"><span class="pre">reenrollignorecertexpiry</span></code> option on the Fabric CA server prior to reenrollment by adding the <code class="docutils literal notranslate"><span class="pre">reenrollignorecertexpiry</span></code> parameter to the fabric-ca-server-config.yaml, as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ca</span><span class="p">:</span>
+  <span class="n">certfile</span><span class="p">:</span> <span class="o">/</span><span class="n">crypto</span><span class="o">/</span><span class="n">tlsca</span><span class="o">/</span><span class="n">cert</span><span class="o">.</span><span class="n">pem</span>
+  <span class="n">chainfile</span><span class="p">:</span> <span class="o">/</span><span class="n">crypto</span><span class="o">/</span><span class="n">tlsca</span><span class="o">/</span><span class="n">chain</span><span class="o">.</span><span class="n">pem</span>
+  <span class="n">keyfile</span><span class="p">:</span> <span class="o">/</span><span class="n">crypto</span><span class="o">/</span><span class="n">tlsca</span><span class="o">/</span><span class="n">key</span><span class="o">.</span><span class="n">pem</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">tlsca</span>
+  <span class="n">reenrollignorecertexpiry</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>Alternatively, <code class="docutils literal notranslate"><span class="pre">reenrollignorecertexpiry</span></code> can be also be set with an environment variable or Fabric CA server startup flag:</p>
+<ul class="simple">
+<li><p>Set the FABRIC_CA_SERVER_CA_REENROLLIGNORECERTEXPIRY environment variable to true at CA startup</p></li>
+<li><p>Start the CA with the flag –ca.reenrollignorecertexpiry=true</p></li>
+</ul>
+<p>Restart the Fabric CA servers.</p>
+</section>
+<section id="renew-peer-certificates">
+<h3>Renew Peer Certificates<a class="headerlink" href="#renew-peer-certificates" title="Link to this heading">¶</a></h3>
+<p>For peer enrollment certificates and TLS certificates you can use either the <code class="docutils literal notranslate"><span class="pre">enroll</span></code> or <code class="docutils literal notranslate"><span class="pre">reenroll</span></code> function from the Fabric CA client. Use <code class="docutils literal notranslate"><span class="pre">reenroll</span></code> if you would like to reuse a private key by passing the <code class="docutils literal notranslate"><span class="pre">csr.keyrequest.reusekey</span></code> option and indicating the <code class="docutils literal notranslate"><span class="pre">mspdir</span></code> location of the existing private key (the private key is found in the <mspdir>/keystore directory):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fabric</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">client</span> <span class="n">enroll</span> <span class="o">--&lt;</span><span class="n">OTHER</span><span class="o">-</span><span class="n">OPTIONS</span><span class="o">&gt;</span>
+
+<span class="n">fabric</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">client</span> <span class="n">reenroll</span> <span class="o">--</span><span class="n">csr</span><span class="o">.</span><span class="n">keyrequest</span><span class="o">.</span><span class="n">reusekey</span> <span class="o">--</span><span class="n">mspdir</span> <span class="o">&lt;</span><span class="n">LOCATION</span><span class="o">-</span><span class="n">OF</span><span class="o">-</span><span class="n">IDENTITY</span><span class="s1">&#39;S-MSP-DIRECTORY-THAT-CONTAINS-THE-EXISTING-PRIVATE-KEY&gt; --&lt;OTHER-OPTIONS&gt;</span>
+</pre></div>
+</div>
+<p>Replace the peer’s enrollment certificate or TLS certificate.</p>
+<p>The peer’s enrollment certificate is configured to be in the peer’s <code class="docutils literal notranslate"><span class="pre">&lt;peer.mspConfigPath&gt;/signcerts</span></code> directory (if private key was not reused the new private key should also be updated in the <code class="docutils literal notranslate"><span class="pre">&lt;peer.mspConfigPath&gt;/keystore</span></code> directory).</p>
+<p>The peer’s TLS certificate is configured to be in the peer’s <code class="docutils literal notranslate"><span class="pre">&lt;peer.tls.cert.file&gt;</span></code> directory/file (if private key was not reused the new private key should also be updated in the <code class="docutils literal notranslate"><span class="pre">&lt;peer.tls.key.file&gt;</span></code>).</p>
+<p>Restart the peer.</p>
+</section>
+<section id="renew-orderer-certificates">
+<h3>Renew Orderer Certificates<a class="headerlink" href="#renew-orderer-certificates" title="Link to this heading">¶</a></h3>
+<p>For orderer enrollment certificates you can also use the <code class="docutils literal notranslate"><span class="pre">enroll</span></code> or <code class="docutils literal notranslate"><span class="pre">reenroll</span></code> function, using the steps described above for peers.</p>
+<p>Orderer TLS certificates must be reenrolled with the option to reuse the private key. This is due to the orderer TLS certificates being configured in the application channel (orderer to orderer communication is verified using the public key in the configured TLS certificate). As of v1.4.9 and v2.2.1, orderer nodes verify a matching key rather than the entire configured TLS certificate, enabling orderer TLS certificate renewal without requiring a channel configuration update to update the certificate.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">reenroll</span></code> and reuse the TLS certificate’s private key by passing the <code class="docutils literal notranslate"><span class="pre">csr.keyrequest.reusekey</span></code> option and indicating the <code class="docutils literal notranslate"><span class="pre">mspdir</span></code> location of the existing private key (the private key is found in the <code class="docutils literal notranslate"><span class="pre">&lt;mspdir&gt;/keystore</span></code> directory):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fabric</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">client</span> <span class="n">reenroll</span> <span class="o">--</span><span class="n">csr</span><span class="o">.</span><span class="n">keyrequest</span><span class="o">.</span><span class="n">reusekey</span> <span class="o">--</span><span class="n">mspdir</span> <span class="o">&lt;</span><span class="n">LOCATION</span><span class="o">-</span><span class="n">OF</span><span class="o">-</span><span class="n">IDENTITY</span><span class="s1">&#39;S-MSP-DIRECTORY-THAT-CONTAINS-THE-EXISTING-PRIVATE-KEY&gt; --&lt;OTHER-OPTIONS&gt;`</span>
+</pre></div>
+</div>
+<p>Replace the orderer’s enrollment certificate or TLS certificate.</p>
+<p>The orderer’s enrollment certificate is configured to be in the orderer’s <code class="docutils literal notranslate"><span class="pre">&lt;General.LocalMSPDir&gt;/signcerts</span></code> directory (if private key was not reused the new private key should also be updated in the <code class="docutils literal notranslate"><span class="pre">&lt;General.LocalMSPDir&gt;/keystore</span></code> directory).</p>
+<p>The orderer’s TLS certificate is configured to be in the orderer’s <code class="docutils literal notranslate"><span class="pre">&lt;General.TLS.Certificate&gt;</span></code> directory/file (don’t update the private key since it was reused).</p>
+<p>Restart the orderer node.</p>
+</section>
+<section id="renew-orderer-tls-certificates-without-reusing-the-private-key">
+<h3>Renew Orderer TLS Certificates Without Reusing the Private Key<a class="headerlink" href="#renew-orderer-tls-certificates-without-reusing-the-private-key" title="Link to this heading">¶</a></h3>
+<p>While it is recommended to reuse the private key for orderer TLS certificate renewal, this may not be possible in all situations. Additional steps and planning are required since each ordering service channel must be updated for the new orderer TLS certificate.</p>
+<p>Suppose you do not reuse the orderer TLS private key during re-enrollment, and the original orderer TLS certificates have not yet expired. In that case, you must update the orderer TLS certificates one at a time on each node and in each channel configuration and then verify the orderer function before moving on to other orderer node TLS certificate updates.</p>
+<p>If you do not reuse the orderer TLS private key and the original orderer TLS certificates have expired, the ordering service will not be able to form consensus and will therefore not be able to process transactions including channel configuration updates. The ordering service recovery process is complicated as you must temporarily utilize the orderer <code class="docutils literal notranslate"><span class="pre">TLSHandshakeTimeShift</span></code> property on all nodes and restart them in order to form consensus with the expired certificates so that channel configuration updates can be processed to update the TLS certificates. Update a majority of the orderer TLS certificates (e.g. 3 out of 5) one at a time on each node and in the channel configuration. Once a majority have been updated the new certificate expiration dates will no longer fall within the <code class="docutils literal notranslate"><span class="pre">TLSHandshakeTimeShift</span></code> and therefore the updated ordering nodes will fall out of the consenter set causing loss of consensus again. Next, remove the <code class="docutils literal notranslate"><span class="pre">TLSHandshakeTimeShift</span></code> setting from all nodes. Upon restart the majority of updated orderer nodes will now form consensus and you can then update the remaining orderer TLS certificates (e.g. 2 out of 5) one at a time on each node and in the channel configuration.</p>
+</section>
+<section id="renew-ca-certificate">
+<h3>Renew CA Certificate<a class="headerlink" href="#renew-ca-certificate" title="Link to this heading">¶</a></h3>
+<p>If an organization’s CA certificate is going to expire, or if the organization simply wants to utilize a different CA certificate,
+the organization can make the update in a phased approach.</p>
+<p>First, the organization can submit a channel configuration update that includes both the old and the new CA certificate for their organization,
+by including them both in their msp’s <code class="docutils literal notranslate"><span class="pre">cacerts</span></code> directory (and corresponding <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> updates) when creating the channel configuration transaction
+(or in the <code class="docutils literal notranslate"><span class="pre">tlscacerts</span></code> directory for TLS CA certs).
+The channel configuration transaction makes the new CA certificate known to all nodes on the channel.</p>
+<p>Next, the organization can issue new orderer and peer certificates or TLS certificates (Fabric CA register and enroll commands) based on the new CA,
+and distribute the new credentials to each of the orderers and peers.
+Note that new orderer TLS certificates will also require channel configuration updates one at a time for each orderer node as described above.
+The organization can retire any remaining nodes that have certificates issued from the old CA.</p>
+<p>Finally, the organization can submit another channel configuration update that removes the old CA certificate from their msp’s <code class="docutils literal notranslate"><span class="pre">cacerts</span></code> directory (or <code class="docutils literal notranslate"><span class="pre">tlscacerts</span></code> directory).</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="peer_ledger_snapshot.html" class="btn btn-neutral float-right" title="Taking ledger snapshots and using them to join channels" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="msp.html" class="btn btn-neutral" title="Membership Service Providers (MSP)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

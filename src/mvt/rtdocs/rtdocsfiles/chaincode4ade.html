@@ -1,0 +1,779 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing Your First Chaincode &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running chaincode in development mode" href="peer-chaincode-devmode.html" />
+    <link rel="prev" title="Updating a channel configuration" href="config_update.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/chaincode4ade.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="test_network.html">Using the Fabric test network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="write_first_app.html">Running a Fabric Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_basic.html">Running External Chaincode Builders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_data_tutorial.html">Using Private Data in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_remove_org.html">Removing an Org from a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Writing Your First Chaincode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-chaincode">What is Chaincode?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fabric-contract-api">Fabric Contract API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#asset-transfer-chaincode">Asset Transfer Chaincode</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#choosing-a-location-for-the-code">Choosing a Location for the Code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#housekeeping">Housekeeping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#initializing-the-chaincode">Initializing the Chaincode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pulling-it-all-together">Pulling it All Together</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#chaincode-access-control">Chaincode access control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#managing-external-dependencies-for-chaincode-written-in-go">Managing external dependencies for chaincode written in Go</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#json-determinism">JSON determinism</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#technical-problem">Technical Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a-solution">A solution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#golang">Golang</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Node.js</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Java</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="peer-chaincode-devmode.html">Running chaincode in development mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Writing Your First Chaincode</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/chaincode4ade.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="writing-your-first-chaincode">
+<h1>Writing Your First Chaincode<a class="headerlink" href="#writing-your-first-chaincode" title="Link to this heading">¶</a></h1>
+<section id="what-is-chaincode">
+<h2>What is Chaincode?<a class="headerlink" href="#what-is-chaincode" title="Link to this heading">¶</a></h2>
+<p>Chaincode is a program, written in <a class="reference external" href="https://golang.org">Go</a>, <a class="reference external" href="https://nodejs.org">Node.js</a>,
+or <a class="reference external" href="https://java.com/en/">Java</a> that implements a prescribed interface.
+Chaincode runs in a separate process from the peer and initializes and manages
+the ledger state through transactions submitted by applications.</p>
+<p>A chaincode typically handles business logic agreed to by members of the
+network, so it similar to a “smart contract”. A chaincode can be invoked to update or query
+the ledger in a proposal transaction. Given the appropriate permission, a chaincode
+may invoke another chaincode, either in the same channel or in different channels, to access its state.
+Note that, if the called chaincode is on a different channel from the calling chaincode,
+only read query is allowed. That is, the called chaincode on a different channel is only a <code class="docutils literal notranslate"><span class="pre">Query</span></code>,
+which does not participate in state validation checks in subsequent commit phase.</p>
+<p>In the following sections, we will explore chaincode through the eyes of an
+application developer. We’ll present a asset-transfer chaincode sample walkthrough,
+and the purpose of each method in the Fabric Contract API. If you
+are a network operator who is deploying a chaincode to running network,
+visit the <a class="reference internal" href="deploy_chaincode.html"><span class="doc">Deploying a smart contract to a channel</span></a> tutorial and the <a class="reference internal" href="chaincode_lifecycle.html"><span class="doc">Fabric chaincode lifecycle</span></a>
+concept topic.</p>
+<p>This tutorial provides an overview of the high level APIs provided by the Fabric Contract API.
+To learn more about developing smart contracts using the Fabric contract API, visit the <a class="reference internal" href="sdk_chaincode.html"><span class="doc">Fabric Contract APIs and Application APIs</span></a> topic.</p>
+</section>
+<section id="fabric-contract-api">
+<h2>Fabric Contract API<a class="headerlink" href="#fabric-contract-api" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fabric-contract-api</span></code> provides the contract interface, a high level API for application developers to implement Smart Contracts.
+Within Hyperledger Fabric, Smart Contracts are also known as Chaincode. Working with this API provides a high level entry point to writing business logic.
+Documentation of the Fabric Contract API for different languages can be found at the links below:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://godoc.org/github.com/hyperledger/fabric-contract-api-go/contractapi">Go</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger.github.io/fabric-chaincode-node/main/api/">Node.js</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger.github.io/fabric-chaincode-java/main/api/org/hyperledger/fabric/contract/package-summary.html">Java</a></p></li>
+</ul>
+</div></blockquote>
+<p>Note that when using the contract api, each chaincode function that is called is passed a transaction context “ctx”, from which
+you can get the chaincode stub (GetStub() ), which has functions to access the ledger (e.g. GetState() ) and make requests
+to update the ledger (e.g. PutState() ). You can learn more at the language-specific links below.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://godoc.org/github.com/hyperledger/fabric-chaincode-go/shim#Chaincode">Go</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger.github.io/fabric-chaincode-node/main/api/fabric-shim.ChaincodeInterface.html">Node.js</a></p></li>
+<li><p><a class="reference external" href="https://hyperledger.github.io/fabric-chaincode-java/main/api/org/hyperledger/fabric/shim/Chaincode.html">Java</a></p></li>
+</ul>
+</div></blockquote>
+<p>In this tutorial using Go chaincode, we will demonstrate the use of these APIs
+by implementing a asset-transfer chaincode application that manages simple “assets”.</p>
+</section>
+<section id="asset-transfer-chaincode">
+<span id="id1"></span><h2>Asset Transfer Chaincode<a class="headerlink" href="#asset-transfer-chaincode" title="Link to this heading">¶</a></h2>
+<p>Our application is a basic sample chaincode to initialize a ledger with assets, create, read, update, and delete assets, check to see
+if an asset exists, and transfer assets from one owner to another.</p>
+<section id="choosing-a-location-for-the-code">
+<h3>Choosing a Location for the Code<a class="headerlink" href="#choosing-a-location-for-the-code" title="Link to this heading">¶</a></h3>
+<p>If you haven’t been doing programming in Go, you may want to make sure that
+you have <a class="reference external" href="https://golang.org">Go</a> installed and your system properly configured. We assume
+you are using a version that supports modules.</p>
+<p>Now, you will want to create a directory for your chaincode application.</p>
+<p>To keep things simple, let’s use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>//<span class="w"> </span>atcc<span class="w"> </span>is<span class="w"> </span>shorthand<span class="w"> </span><span class="k">for</span><span class="w"> </span>asset<span class="w"> </span>transfer<span class="w"> </span>chaincode
+mkdir<span class="w"> </span>atcc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>atcc
+</pre></div>
+</div>
+<p>Now, let’s create the module and the source file that we’ll fill in with code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>atcc
+touch<span class="w"> </span>atcc.go
+</pre></div>
+</div>
+</section>
+<section id="housekeeping">
+<h3>Housekeeping<a class="headerlink" href="#housekeeping" title="Link to this heading">¶</a></h3>
+<p>First, let’s start with some housekeeping. As with every chaincode, it implements the
+<a class="reference external" href="https://godoc.org/github.com/hyperledger/fabric-contract-api-go/contractapi">fabric-contract-api interface</a>,
+so let’s add the Go import statements for the necessary dependencies for our chaincode. We’ll import the
+fabric contract api package and define our SmartContract.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">  </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">  </span><span class="s">&quot;log&quot;</span>
+<span class="w">  </span><span class="s">&quot;github.com/hyperledger/fabric-contract-api-go/contractapi&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// SmartContract provides functions for managing an Asset</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">SmartContract</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">Contract</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next, let’s add a struct <code class="docutils literal notranslate"><span class="pre">Asset</span></code> to represent simple assets on the ledger.
+Note the JSON annotations, which will be used to marshal the asset to JSON which is stored on the ledger.
+JSON though is not a deterministic data format - the order of elements can change, whilst still representing the same data semantically.
+The challenge, therefore, is to be able to generate a consistent set of JSON.
+Below is also shown a good approach to achieve consistency which consists of creating an asset object struct following alphabetic order.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// Asset describes basic details of what makes up a simple asset</span>
+<span class="c1">// Insert struct field in alphabetic order =&gt; to achieve determinism across languages</span>
+<span class="c1">// golang keeps the order when marshal to json but doesn&#39;t order automatically</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Asset</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">AppraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;AppraisedValue&quot;`</span>
+<span class="w">  </span><span class="nx">Color</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;Color&quot;`</span>
+<span class="w">  </span><span class="nx">ID</span><span class="w">             </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;ID&quot;`</span>
+<span class="w">  </span><span class="nx">Owner</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;Owner&quot;`</span>
+<span class="w">  </span><span class="nx">Size</span><span class="w">           </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;Size&quot;`</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="initializing-the-chaincode">
+<h3>Initializing the Chaincode<a class="headerlink" href="#initializing-the-chaincode" title="Link to this heading">¶</a></h3>
+<p>Next, we’ll implement the <code class="docutils literal notranslate"><span class="pre">InitLedger</span></code> function to populate the ledger with some initial data.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// InitLedger adds a base set of assets to the ledger</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">InitLedger</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assets</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Tomoko&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset2&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Brad&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset3&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;green&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Jin Soo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset4&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;yellow&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Max&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset5&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Adriana&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset6&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;white&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Michel&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">800</span><span class="p">},</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">assets</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">asset</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to put to world state. %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next, we write a function to create an asset on the ledger that does not yet exist. When writing chaincode, it
+is a good idea to check for the existence of something on the ledger prior to taking an action on it, as is demonstrated
+in the <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> function below.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// CreateAsset issues a new asset to the world state with given details.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">CreateAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">owner</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">exists</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s already exists&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ID</span><span class="p">:</span><span class="w">             </span><span class="nx">id</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Color</span><span class="p">:</span><span class="w">          </span><span class="nx">color</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Size</span><span class="p">:</span><span class="w">           </span><span class="nx">size</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Owner</span><span class="p">:</span><span class="w">          </span><span class="nx">owner</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="p">,</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now that we have populated the ledger with some initial assets and created an asset,
+let’s write a function <code class="docutils literal notranslate"><span class="pre">ReadAsset</span></code> that allows us to read an asset from the ledger.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// ReadAsset returns the asset stored in the world state with given id.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">ReadAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Asset</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetState</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read from world state: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">assetJSON</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s does not exist&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="nx">Asset</span>
+<span class="w">  </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now that we have assets on our ledger we can interact with, let’s write a chaincode function
+<code class="docutils literal notranslate"><span class="pre">UpdateAsset</span></code> that allows us to update attributes of the asset that we are allowed to change.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// UpdateAsset updates an existing asset in the world state with provided parameters.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">UpdateAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">owner</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">exists</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s does not exist&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// overwriting original asset with new asset</span>
+<span class="w">  </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ID</span><span class="p">:</span><span class="w">             </span><span class="nx">id</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Color</span><span class="p">:</span><span class="w">          </span><span class="nx">color</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Size</span><span class="p">:</span><span class="w">           </span><span class="nx">size</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Owner</span><span class="p">:</span><span class="w">          </span><span class="nx">owner</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="p">,</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>There may be cases where we need the ability to delete an asset from the ledger,
+so let’s write a <code class="docutils literal notranslate"><span class="pre">DeleteAsset</span></code> function to handle that requirement.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// DeleteAsset deletes an given asset from the world state.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">DeleteAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">exists</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s does not exist&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">DelState</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We said earlier that is was a good idea to check to see if an asset exists before
+taking an action on it, so let’s write a function called <code class="docutils literal notranslate"><span class="pre">AssetExists</span></code> to implement that requirement.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// AssetExists returns true when asset with given ID exists in world state</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetState</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read from world state: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">assetJSON</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next, we’ll write a function we’ll call <code class="docutils literal notranslate"><span class="pre">TransferAsset</span></code> that enables the transfer of an asset from one owner to another.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// TransferAsset updates the owner field of asset with given id in world state.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">TransferAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">newOwner</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">asset</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ReadAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">asset</span><span class="p">.</span><span class="nx">Owner</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">newOwner</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s write a function we’ll call <code class="docutils literal notranslate"><span class="pre">GetAllAssets</span></code> that enables the querying of the ledger to
+return all of the assets on the ledger.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// GetAllAssets returns all assets found in world state</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">GetAllAssets</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="o">*</span><span class="nx">Asset</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// range query with empty string for startKey and endKey does an</span>
+<span class="w">  </span><span class="c1">// open-ended query of all assets in the chaincode namespace.</span>
+<span class="w">  </span><span class="nx">resultsIterator</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetStateByRange</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">defer</span><span class="w"> </span><span class="nx">resultsIterator</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">assets</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">Asset</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="nx">resultsIterator</span><span class="p">.</span><span class="nx">HasNext</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">queryResponse</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">resultsIterator</span><span class="p">.</span><span class="nx">Next</span><span class="p">()</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="nx">Asset</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">queryResponse</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">assets</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">assets</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">assets</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note" id="chaincode-sample">
+<p class="admonition-title">Note</p>
+<p>The full chaincode sample below is presented as a way to
+to keep this tutorial as clear and straightforward as possible. In a
+real-world implementation, it is likely that packages will be segmented
+where a <code class="docutils literal notranslate"><span class="pre">main</span></code> package imports the chaincode package to allow for easy unit testing.
+To see what this looks like, see the asset-transfer <a class="reference external" href="https://github.com/hyperledger/fabric-samples/tree/main/asset-transfer-basic/chaincode-go">Go chaincode</a>
+in fabric-samples. If you look at <code class="docutils literal notranslate"><span class="pre">assetTransfer.go</span></code>, you will see that
+it contains <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">main</span></code> and imports <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">chaincode</span></code> defined in <code class="docutils literal notranslate"><span class="pre">smartcontract.go</span></code> and
+located at <code class="docutils literal notranslate"><span class="pre">fabric-samples/asset-transfer-basic/chaincode-go/chaincode/</span></code>.</p>
+</div>
+</section>
+<section id="pulling-it-all-together">
+<h3>Pulling it All Together<a class="headerlink" href="#pulling-it-all-together" title="Link to this heading">¶</a></h3>
+<p>Finally, we need to add the <code class="docutils literal notranslate"><span class="pre">main</span></code> function, which will call the
+<a class="reference external" href="https://godoc.org/github.com/hyperledger/fabric-contract-api-go/contractapi#ContractChaincode.Start">ContractChaincode.Start</a>
+function. Here’s the whole chaincode program source.</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">  </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">  </span><span class="s">&quot;log&quot;</span>
+
+<span class="w">  </span><span class="s">&quot;github.com/hyperledger/fabric-contract-api-go/contractapi&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// SmartContract provides functions for managing an Asset</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">SmartContract</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">Contract</span>
+<span class="p">}</span>
+
+<span class="c1">// Asset describes basic details of what makes up a simple asset</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Asset</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">ID</span><span class="w">             </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;ID&quot;`</span>
+<span class="w">  </span><span class="nx">Color</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;color&quot;`</span>
+<span class="w">  </span><span class="nx">Size</span><span class="w">           </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;size&quot;`</span>
+<span class="w">  </span><span class="nx">Owner</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;owner&quot;`</span>
+<span class="w">  </span><span class="nx">AppraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;appraisedValue&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// InitLedger adds a base set of assets to the ledger</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">InitLedger</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assets</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Tomoko&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset2&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Brad&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset3&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;green&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Jin Soo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset4&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;yellow&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Max&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">600</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset5&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;black&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Adriana&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;asset6&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;white&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Size</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Michel&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="mi">800</span><span class="p">},</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">assets</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">asset</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to put to world state. %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// CreateAsset issues a new asset to the world state with given details.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">CreateAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">owner</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">exists</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s already exists&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ID</span><span class="p">:</span><span class="w">             </span><span class="nx">id</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Color</span><span class="p">:</span><span class="w">          </span><span class="nx">color</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Size</span><span class="p">:</span><span class="w">           </span><span class="nx">size</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Owner</span><span class="p">:</span><span class="w">          </span><span class="nx">owner</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="p">,</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// ReadAsset returns the asset stored in the world state with given id.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">ReadAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Asset</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetState</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read from world state: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">assetJSON</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s does not exist&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="nx">Asset</span>
+<span class="w">  </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// UpdateAsset updates an existing asset in the world state with provided parameters.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">UpdateAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">owner</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">exists</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s does not exist&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// overwriting original asset with new asset</span>
+<span class="w">  </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ID</span><span class="p">:</span><span class="w">             </span><span class="nx">id</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Color</span><span class="p">:</span><span class="w">          </span><span class="nx">color</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Size</span><span class="p">:</span><span class="w">           </span><span class="nx">size</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">Owner</span><span class="p">:</span><span class="w">          </span><span class="nx">owner</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="nx">appraisedValue</span><span class="p">,</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// DeleteAsset deletes an given asset from the world state.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">DeleteAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">exists</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the asset %s does not exist&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">DelState</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// AssetExists returns true when asset with given ID exists in world state</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">AssetExists</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetState</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read from world state: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">assetJSON</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// TransferAsset updates the owner field of asset with given id in world state.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">TransferAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">newOwner</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">asset</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ReadAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">asset</span><span class="p">.</span><span class="nx">Owner</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">newOwner</span>
+<span class="w">  </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutState</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSON</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// GetAllAssets returns all assets found in world state</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">GetAllAssets</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="o">*</span><span class="nx">Asset</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// range query with empty string for startKey and endKey does an</span>
+<span class="w">  </span><span class="c1">// open-ended query of all assets in the chaincode namespace.</span>
+<span class="w">  </span><span class="nx">resultsIterator</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetStateByRange</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">defer</span><span class="w"> </span><span class="nx">resultsIterator</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">assets</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">Asset</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="nx">resultsIterator</span><span class="p">.</span><span class="nx">HasNext</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">queryResponse</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">resultsIterator</span><span class="p">.</span><span class="nx">Next</span><span class="p">()</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="nx">Asset</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">queryResponse</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">assets</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">assets</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">assets</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assetChaincode</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">NewChaincode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">SmartContract</span><span class="p">{})</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Panicf</span><span class="p">(</span><span class="s">&quot;Error creating asset-transfer-basic chaincode: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">assetChaincode</span><span class="p">.</span><span class="nx">Start</span><span class="p">();</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Panicf</span><span class="p">(</span><span class="s">&quot;Error starting asset-transfer-basic chaincode: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="chaincode-access-control">
+<h2>Chaincode access control<a class="headerlink" href="#chaincode-access-control" title="Link to this heading">¶</a></h2>
+<p>Chaincode can utilize the client (request submitter) certificate for access
+control decisions. The certificate can be retrieved with the <code class="docutils literal notranslate"><span class="pre">ctx.GetStub().GetCreator()</span></code> contract API.
+Additionally the Fabric contract API provides extension APIs that extract client identity
+from the submitter’s certificate that can be used for access control decisions,
+whether that is based on client identity itself, the org identity,
+or a client identity attribute such as an OU in the certificate or a custom attribute.</p>
+<p>For example an asset that is represented as a key/value on the ledger may include the
+client’s identity as part of the value. The value may be in JSON format where one
+of the JSON attributes is the asset owner. The chaincode logic could then ensure
+that only the asset owner is authorized to make updates to the asset’s key/value in the future.
+The <a class="reference external" href="https://github.com/hyperledger/fabric-chaincode-go/blob/main/pkg/cid/README.md">client identity library extension APIs</a>
+can be used within chaincode to retrieve this submitter information to make such access control decisions.</p>
+</section>
+<section id="managing-external-dependencies-for-chaincode-written-in-go">
+<span id="vendoring"></span><h2>Managing external dependencies for chaincode written in Go<a class="headerlink" href="#managing-external-dependencies-for-chaincode-written-in-go" title="Link to this heading">¶</a></h2>
+<p>Your Go chaincode depends on Go packages (like the chaincode shim) that are not
+part of the standard library. The source to these packages must be included in
+your chaincode package when it is installed to a peer. If you have structured
+your chaincode as a module, the easiest way to do this is to “vendor” the
+dependencies with <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">mod</span> <span class="pre">vendor</span></code> before packaging your chaincode.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>go<span class="w"> </span>mod<span class="w"> </span>tidy
+go<span class="w"> </span>mod<span class="w"> </span>vendor
+</pre></div>
+</div>
+<p>This places the external dependencies for your chaincode into a local <code class="docutils literal notranslate"><span class="pre">vendor</span></code>
+directory.</p>
+<p>Once dependencies are vendored in your chaincode directory, <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">chaincode</span> <span class="pre">package</span></code>
+and <code class="docutils literal notranslate"><span class="pre">peer</span> <span class="pre">chaincode</span> <span class="pre">install</span></code> operations will then include code associated with the
+dependencies into the chaincode package.</p>
+</section>
+<section id="json-determinism">
+<h2>JSON determinism<a class="headerlink" href="#json-determinism" title="Link to this heading">¶</a></h2>
+<p>Being able to predictably handle data formats is critical, and also the ability to search the data held within the blockchain.</p>
+<section id="technical-problem">
+<h3>Technical Problem<a class="headerlink" href="#technical-problem" title="Link to this heading">¶</a></h3>
+<p>The format of the data that is stored in Fabric is at the discretion of the user.
+The lowest level API accepts a byte array and stores that - what this represents is not a concern to Fabric.
+The important thing is when simulating transactions, given the same inputs chaincode gives the same byte array.
+Otherwise, the endorsements may not all match and the transaction will either not be submitted or will be invalidated.</p>
+<p>JSON is often used as the data format to store data on the ledger, and is required if using CouchDB queries.</p>
+<p>JSON though is not a deterministic data format - the order of elements can change,
+whilst still representing the same data semantically. The challenge, therefore, is to be able to generate a consistent set of JSON.</p>
+</section>
+<section id="a-solution">
+<h3>A solution<a class="headerlink" href="#a-solution" title="Link to this heading">¶</a></h3>
+<p>Generate a consistent set of <code class="docutils literal notranslate"><span class="pre">JSON</span></code> across multiple languages.
+Each language have different features and libraries that you can use to convert an object to JSON.
+The best approach to achieve determinism across different languages is to choose a canonical way as a common guideline to format JSON.
+In order to get a consistent hash across languages you can format JSON in alphabetic order.</p>
+</section>
+<section id="golang">
+<h3>Golang<a class="headerlink" href="#golang" title="Link to this heading">¶</a></h3>
+<p>In Golang the <code class="docutils literal notranslate"><span class="pre">encoding/json</span></code> package is utilized to serialise a Struct Object into JSON.
+More specifically the <code class="docutils literal notranslate"><span class="pre">Marshal</span></code> function is used, the latter marshals maps in sorted key order and keeps structs in the order that the fields are declared.
+Since structs are marshaled in field declaration order, follow alphabetic order when defining a new structure.</p>
+</section>
+<section id="id3">
+<h3>Node.js<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>In Javascript, when serialising object into JSON, the function <code class="docutils literal notranslate"><span class="pre">JSON.stringify()</span></code> is commonly used.
+However, to achieve consistent results, a deterministic version of JSON.stringify() is needed; in this way it is possible to get a consistent hash from stringified results.
+<code class="docutils literal notranslate"><span class="pre">json-stringify-deterministic</span></code> is a good library to do so and can be used combined with <code class="docutils literal notranslate"><span class="pre">sort-keys-recursive</span></code> to attain alphabetic order too.
+<a class="reference external" href="https://www.npmjs.com/package/json-stringify-deterministic">Here</a> for a more in-depth tutorial.</p>
+</section>
+<section id="id4">
+<h3>Java<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Java provides several libraries to serialize an object into a JSON string. However not all of them provide consistency and ordering.
+The <code class="docutils literal notranslate"><span class="pre">Gson</span></code> library, for example, does not provide any consistency and should therefore be avoided for this application. On the other hand,
+the <code class="docutils literal notranslate"><span class="pre">Genson</span></code> library is a good fit for our purpose as it produces consistent JSON in alphabetic order.</p>
+<p>You can find a good exemplification of this practise on the <a class="reference external" href="https://github.com/hyperledger/fabric-samples/tree/main/asset-transfer-basic">asset-transfer-basic</a> chaincodes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is only one of the many approaches which we think can be effective.
+When serialising you can utilise various methods to achieve consistency; nevertheless,
+considering the different characteristics of the programming languages used in Fabric,
+the alphabetic approach represents an easy and efficient solution to the problem.
+In conclusion, feel free to employ a different method if it best suites your needs.
+P.S. Don’t forget to let us know in the comments if you used a different approach.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="peer-chaincode-devmode.html" class="btn btn-neutral float-right" title="Running chaincode in development mode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="config_update.html" class="btn btn-neutral" title="Updating a channel configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

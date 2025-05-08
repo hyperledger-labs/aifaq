@@ -1,0 +1,1008 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Private Data in Fabric &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Secured asset transfer in Fabric" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html" />
+    <link rel="prev" title="Running External Chaincode Builders" href="cc_basic.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/private_data_tutorial.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="test_network.html">Using the Fabric test network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="write_first_app.html">Running a Fabric Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cc_basic.html">Running External Chaincode Builders</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using Private Data in Fabric</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#asset-transfer-private-data-sample-use-case">Asset transfer private data sample use case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-a-collection-definition-json-file">Build a collection definition JSON file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-and-write-private-data-using-chaincode-apis">Read and Write private data using chaincode APIs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reading-collection-data">Reading collection data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#writing-private-data">Writing private data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#start-the-network">Start the network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-the-private-data-smart-contract-to-the-channel">Deploy the private data smart contract to the channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#register-identities">Register identities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-an-asset-in-private-data">Create an asset in private data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-the-private-data-as-an-authorized-peer">Query the private data as an authorized peer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-the-private-data-as-an-unauthorized-peer">Query the private data as an unauthorized peer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#switch-to-a-peer-in-org2">Switch to a peer in Org2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#query-private-data-org2-is-authorized-to">Query private data Org2 is authorized to</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#query-private-data-org2-is-not-authorized-to">Query private data Org2 is not authorized to</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#transfer-the-asset">Transfer the Asset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#purge-private-data">Purge Private Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-indexes-with-private-data">Using indexes with private data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clean-up">Clean up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-resources">Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_remove_org.html">Removing an Org from a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chaincode4ade.html">Writing Your First Chaincode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer-chaincode-devmode.html">Running chaincode in development mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Using Private Data in Fabric</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/private_data_tutorial.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-private-data-in-fabric">
+<h1>Using Private Data in Fabric<a class="headerlink" href="#using-private-data-in-fabric" title="Link to this heading">¶</a></h1>
+<p>This tutorial will demonstrate the use of Private Data Collections (PDC) to provide storage
+and retrieval of private data on the blockchain network for authorized peers
+of organizations. The collection is specified using a collection definition file containing the policies governing that collection.</p>
+<p>The information in this tutorial assumes knowledge of private data
+stores and their use cases. For more information, check out <a class="reference internal" href="private-data/private-data.html"><span class="doc">Private data</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These instructions use the new Fabric chaincode lifecycle introduced
+in the Fabric v2.0 release. If you would like to use the previous
+lifecycle model to use private data with chaincode, visit the v1.4
+version of the <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/release-1.4/private_data_tutorial.html">Using Private Data in Fabric tutorial</a>.</p>
+</div>
+<p>The tutorial will take you through the following steps to practice defining,
+configuring and using private data with Fabric:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#pd-use-case"><span class="std std-ref">Asset transfer private data sample use case</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-build-json"><span class="std std-ref">Build a collection definition JSON file</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-read-write-private-data"><span class="std std-ref">Read and Write private data using chaincode APIs</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-install-define-cc"><span class="std std-ref">Deploy the private data smart contract to the channel</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-register-identities"><span class="std std-ref">Register identities</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-store-private-data"><span class="std std-ref">Create an asset in private data</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-query-authorized"><span class="std std-ref">Query the private data as an authorized peer</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-query-unauthorized"><span class="std std-ref">Query the private data as an unauthorized peer</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-transfer-asset"><span class="std std-ref">Transfer the Asset</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-purge"><span class="std std-ref">Purge Private Data</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-indexes"><span class="std std-ref">Using indexes with private data</span></a></p></li>
+<li><p><a class="reference internal" href="#pd-ref-material"><span class="std std-ref">Additional resources</span></a></p></li>
+</ol>
+<p>This tutorial will deploy the <a class="reference external" href="https://github.com/hyperledger/fabric-samples/tree/main/asset-transfer-private-data/chaincode-go">asset transfer private data sample</a>
+to the Fabric test network to demonstrate how to create, deploy, and use a collection of
+private data.
+You should have completed the task <a class="reference internal" href="install.html"><span class="doc">Install Fabric and Fabric Samples</span></a>.</p>
+<section id="asset-transfer-private-data-sample-use-case">
+<span id="pd-use-case"></span><h2>Asset transfer private data sample use case<a class="headerlink" href="#asset-transfer-private-data-sample-use-case" title="Link to this heading">¶</a></h2>
+<p>This sample demonstrates the use of three private data collections, <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code>, <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code> to transfer an asset between Org1 and Org2, using following use case:</p>
+<p>A member of Org1 creates a new asset, henceforth referred as owner. The public details of the asset,
+including the identity of the owner, are stored in the private data collection named <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code>. The asset is also created with an appraised
+value supplied by the owner. The appraised value is used by each participant to agree to the transfer of the asset, and is only stored in owner organization’s collection. In our case, the initial appraisal value agreed by the owner is stored in the <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code>.</p>
+<p>To purchase the asset, the buyer needs to agree to the same appraised value as
+the asset owner. In this step, the buyer (a member of Org2) creates an agreement
+to trade and agree to an appraisal value using smart contract function <code class="docutils literal notranslate"><span class="pre">'AgreeToTransfer'</span></code>.
+This value is stored in <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code> collection. Now, the asset
+owner can transfer the asset to the buyer using smart contract function <code class="docutils literal notranslate"><span class="pre">'TransferAsset'</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">'TransferAsset'</span></code> function uses the hash on the channel ledger to
+confirm that the owner and the buyer have agreed to the same appraised value
+before transferring the asset.</p>
+<p>Before we go through the transfer scenario, we will discuss how organizations can use private data collections in Fabric.</p>
+</section>
+<section id="build-a-collection-definition-json-file">
+<span id="pd-build-json"></span><h2>Build a collection definition JSON file<a class="headerlink" href="#build-a-collection-definition-json-file" title="Link to this heading">¶</a></h2>
+<p>Before a set of organizations can transact using private data, all organizations
+on channel need to build a collection definition file that defines the private
+data collections associated with each chaincode. Data that is stored in a private
+data collection is only distributed to the peers of certain organizations instead
+of all members of the channel. The collection definition file describes all of the
+private data collections that organizations can read and write to from a chaincode.</p>
+<p>Each collection is defined by the following properties:</p>
+<ul class="simple" id="blocktolive">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: Name of the collection.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">policy</span></code>: Defines the organization peers allowed to persist the collection data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">requiredPeerCount</span></code>: Number of peers required to disseminate the private data as
+a condition of the endorsement of the chaincode</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxPeerCount</span></code>: For data redundancy purposes, the number of other peers
+that the current endorsing peer will attempt to distribute the data to.
+If an endorsing peer goes down, these other peers are available at commit time
+if there are requests to pull the private data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blockToLive</span></code>: For very sensitive information such as pricing or personal information,
+this value represents how long the data should live on the private database in terms
+of blocks. The data will live for this specified number of blocks on the private database
+and after that it will get purged, making this data obsolete from the network.
+To keep private data indefinitely, that is, to never purge private data, set
+the <code class="docutils literal notranslate"><span class="pre">blockToLive</span></code> property to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memberOnlyRead</span></code>: a value of <code class="docutils literal notranslate"><span class="pre">true</span></code> indicates that peers automatically
+enforce that only clients belonging to one of the collection member organizations
+are allowed read access to private data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memberOnlyWrite</span></code>: a value of <code class="docutils literal notranslate"><span class="pre">true</span></code> indicates that peers automatically
+enforce that only clients belonging to one of the collection member organizations
+are allowed write access to private data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">endorsementPolicy</span></code>: defines the endorsement policy that needs to be met in
+order to write to the private data collection. The collection level endorsement policy
+overrides to chaincode level policy. For more information on building a policy
+definition refer to the <a class="reference internal" href="endorsement-policies.html"><span class="doc">Endorsement policies</span></a> topic.</p></li>
+</ul>
+<p>The same collection definition file needs to be deployed by all organizations that
+use the chaincode, even if the organization does not belong to any collections. In
+addition to the collections that are explicitly defined in a collection file,
+each organization has access to an implicit collection on their peers that can only
+be read by their organization. For an example that uses implicit data collections,
+see the <a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html"><span class="doc">Secured asset transfer in Fabric</span></a>.</p>
+<p>The asset transfer private data example contains a <cite>collections_config.json</cite> file
+that defines three private data collection definitions: <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code>, <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// collections_config.json</span>
+
+<span class="p">[</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assetCollection&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;, &#39;Org2MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="mi">1000000</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Org1MSPPrivateCollection&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;endorsementPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="nt">&quot;signaturePolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;)&quot;</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Org2MSPPrivateCollection&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org2MSP.member&#39;)&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;requiredPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;maxPeerCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;blockToLive&quot;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;memberOnlyRead&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;memberOnlyWrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;endorsementPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="nt">&quot;signaturePolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OR(&#39;Org2MSP.member&#39;)&quot;</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">policy</span></code> property in the <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> definition specifies that both
+Org1 and Org2 can store the collection on their peers. The <code class="docutils literal notranslate"><span class="pre">memberOnlyRead</span></code>
+and <code class="docutils literal notranslate"><span class="pre">memberOnlyWrite</span></code> parameters are used to specify that only Org1 and
+Org2 clients can read and write to this collection.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> collection allows only peers of Org1 to have
+the private data in their private database, while the <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>
+collection can only be stored by the peers of Org2. The <code class="docutils literal notranslate"><span class="pre">endorsementPolicy</span></code> parameter
+is used to create a collection specific endorsement policy. Each update to
+<code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> or <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code> needs to be endorsed
+by the organization that stores the collection on their peers. We will see how
+these collections are used to transfer the asset in the course of the tutorial.</p>
+<p>This collection definition file is deployed when the chaincode definition is
+committed to the channel using the <a class="reference external" href="commands/peerlifecycle.html#peer-lifecycle-chaincode-commit">peer lifecycle chaincode commit command</a>.
+More details on this process are provided in Section 3 below.</p>
+</section>
+<section id="read-and-write-private-data-using-chaincode-apis">
+<span id="pd-read-write-private-data"></span><h2>Read and Write private data using chaincode APIs<a class="headerlink" href="#read-and-write-private-data-using-chaincode-apis" title="Link to this heading">¶</a></h2>
+<p>The next step in understanding how to privatize data on a channel is to build
+the data definition in the chaincode. The asset transfer private data sample divides
+the private data into three separate data definitions according to how the data will
+be accessed.</p>
+<div class="highlight-GO notranslate"><div class="highlight"><pre><span></span><span class="c1">// Peers in Org1 and Org2 will have this private data in a side database</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Asset</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="nx">Type</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;objectType&quot;`</span><span class="w"> </span><span class="c1">//Type is used to distinguish the various types of objects in state database</span>
+<span class="w">       </span><span class="nx">ID</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;assetID&quot;`</span>
+<span class="w">       </span><span class="nx">Color</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;color&quot;`</span>
+<span class="w">       </span><span class="nx">Size</span><span class="w">  </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;size&quot;`</span>
+<span class="w">       </span><span class="nx">Owner</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;owner&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// AssetPrivateDetails describes details that are private to owners</span>
+
+<span class="c1">// Only peers in Org1 will have this private data in a side database</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">AssetPrivateDetails</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="nx">ID</span><span class="w">             </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;assetID&quot;`</span>
+<span class="w">       </span><span class="nx">AppraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;appraisedValue&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// Only peers in Org2 will have this private data in a side database</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">AssetPrivateDetails</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="nx">ID</span><span class="w">             </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;assetID&quot;`</span>
+<span class="w">       </span><span class="nx">AppraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;appraisedValue&quot;`</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Specifically, access to the private data will be restricted as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">objectType,</span> <span class="pre">color,</span> <span class="pre">size,</span> <span class="pre">and</span> <span class="pre">owner</span></code> are stored in <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> and hence will be visible to members of the channel per the definition in the collection policy (Org1 and Org2).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AppraisedValue</span></code> of an asset is stored in collection <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> or <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code> , depending on the owner of the asset. The value is only accessible to the users who belong to the organization that can store the collection.</p></li>
+</ul>
+<p>All of the data that is created by the asset transfer private data sample smart
+contract is stored in PDC. The smart contract uses the Fabric chaincode API
+to read and write private data to private data collections using the <code class="docutils literal notranslate"><span class="pre">GetPrivateData()</span></code>
+and <code class="docutils literal notranslate"><span class="pre">PutPrivateData()</span></code> functions. You can find more information about those functions <a class="reference external" href="https://godoc.org/github.com/hyperledger/fabric-chaincode-go/shim#ChaincodeStub">here</a>.
+This private data is stored in private state db on the peer (separate from public state db), and
+is disseminated between authorized peers via gossip protocol.</p>
+<p>The following diagram illustrates the private data model used by the private data
+sample. Note that Org3 is only shown in the diagram to illustrate that if
+there were any other organizations on the channel, they would not have access to <em>any</em>
+of the private data collections that were defined in the configuration.</p>
+<img alt="_images/SideDB-org1-org2.png" src="_images/SideDB-org1-org2.png" />
+<section id="reading-collection-data">
+<h3>Reading collection data<a class="headerlink" href="#reading-collection-data" title="Link to this heading">¶</a></h3>
+<p>The smart contract uses the chaincode API <code class="docutils literal notranslate"><span class="pre">GetPrivateData()</span></code> to query private data in the
+database.  <code class="docutils literal notranslate"><span class="pre">GetPrivateData()</span></code> takes two arguments, the <strong>collection name</strong>
+and the data key. Recall the collection  <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> allows peers of
+Org1 and Org2 to have the private data in a side database, and the collection
+<code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> allows only peers of Org1 to have their
+private data in a side database and <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code> allows peers
+of Org2 to have their private data in a side database.
+For implementation details refer to the following two <a class="reference external" href="https://github.com/hyperledger/fabric-samples/blob/main/asset-transfer-private-data/chaincode-go/chaincode/asset_queries.go">asset transfer private data functions</a>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>ReadAsset</strong> for querying the values of the <code class="docutils literal notranslate"><span class="pre">assetID,</span> <span class="pre">color,</span> <span class="pre">size</span> <span class="pre">and</span> <span class="pre">owner</span></code> attributes.</p></li>
+<li><p><strong>ReadAssetPrivateDetails</strong> for querying the values of the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> attribute.</p></li>
+</ul>
+</div></blockquote>
+<p>When we issue the database queries using the peer commands later in this tutorial,
+we will call these two functions.</p>
+</section>
+<section id="writing-private-data">
+<h3>Writing private data<a class="headerlink" href="#writing-private-data" title="Link to this heading">¶</a></h3>
+<p>The smart contract uses the chaincode API <code class="docutils literal notranslate"><span class="pre">PutPrivateData()</span></code> to store the private data
+into the private database. The API also requires the name of the collection.
+Note that the asset transfer private data sample includes three different private data collections, but it is called
+twice in the chaincode (in this scenario acting as Org1).</p>
+<ol class="arabic simple">
+<li><p>Write the private data <code class="docutils literal notranslate"><span class="pre">assetID,</span> <span class="pre">color,</span> <span class="pre">size</span> <span class="pre">and</span> <span class="pre">owner</span></code> using the
+collection named <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code>.</p></li>
+<li><p>Write the private data <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> using the collection named
+<code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code>.</p></li>
+</ol>
+<p>If we were acting as Org2, we would replace <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> with
+<code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>.</p>
+<p>For example, in the following snippet of the <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> function,
+<code class="docutils literal notranslate"><span class="pre">PutPrivateData()</span></code> is called twice, once for each set of private data.</p>
+<div class="highlight-GO notranslate"><div class="highlight"><pre><span></span><span class="c1">// CreateAsset creates a new asset by placing the main asset details in the assetCollection</span>
+<span class="c1">// that can be read by both organizations. The appraisal value is stored in the owners org specific collection.</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">CreateAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// Get new asset from transient map</span>
+<span class="w">    </span><span class="nx">transientMap</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetTransient</span><span class="p">()</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;error getting transient: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Asset properties are private, therefore they get passed in transient field, instead of func args</span>
+<span class="w">    </span><span class="nx">transientAssetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">transientMap</span><span class="p">[</span><span class="s">&quot;asset_properties&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">//log error to stdout</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;asset not found in the transient map input&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">type</span><span class="w"> </span><span class="nx">assetTransientInput</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Type</span><span class="w">           </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;objectType&quot;`</span><span class="w"> </span><span class="c1">//Type is used to distinguish the various types of objects in state database</span>
+<span class="w">        </span><span class="nx">ID</span><span class="w">             </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;assetID&quot;`</span>
+<span class="w">        </span><span class="nx">Color</span><span class="w">          </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;color&quot;`</span>
+<span class="w">        </span><span class="nx">Size</span><span class="w">           </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;size&quot;`</span>
+<span class="w">        </span><span class="nx">AppraisedValue</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;appraisedValue&quot;`</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">assetInput</span><span class="w"> </span><span class="nx">assetTransientInput</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">transientAssetJSON</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">assetInput</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to unmarshal JSON: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">Type</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;objectType field must be a non-empty string&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;assetID field must be a non-empty string&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">Color</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;color field must be a non-empty string&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">Size</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;size field must be a positive integer&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">AppraisedValue</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;appraisedValue field must be a positive integer&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Check if asset already exists</span>
+<span class="w">    </span><span class="nx">assetAsBytes</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetPrivateData</span><span class="p">(</span><span class="nx">assetCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to get asset: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">assetAsBytes</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Asset already exists: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;this asset already exists: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Get ID of submitting client identity</span>
+<span class="w">    </span><span class="nx">clientID</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">submittingClientIdentity</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Verify that the client is submitting request to peer in their organization</span>
+<span class="w">    </span><span class="c1">// This is to ensure that a client from another org doesn&#39;t attempt to read or</span>
+<span class="w">    </span><span class="c1">// write private data from this peer.</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">verifyClientOrgMatchesPeerOrg</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;CreateAsset cannot be performed: Error %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Make submitting client the owner</span>
+<span class="w">    </span><span class="nx">asset</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Asset</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Type</span><span class="p">:</span><span class="w">  </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">ID</span><span class="p">:</span><span class="w">    </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Color</span><span class="p">:</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">Color</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Size</span><span class="p">:</span><span class="w">  </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">Size</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Owner</span><span class="p">:</span><span class="w"> </span><span class="nx">clientID</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">assetJSONasBytes</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to marshal asset into JSON: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Save asset to private data collection</span>
+<span class="w">    </span><span class="c1">// Typical logger, logs to stdout/file in the fabric managed docker container, running this chaincode</span>
+<span class="w">    </span><span class="c1">// Look for container name like dev-peer0.org1.example.com-{chaincodename_version}-xyz</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;CreateAsset Put: collection %v, ID %v, owner %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span><span class="w"> </span><span class="nx">clientID</span><span class="p">)</span>
+
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutPrivateData</span><span class="p">(</span><span class="nx">assetCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span><span class="w"> </span><span class="nx">assetJSONasBytes</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to put asset into private data collection: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Save asset details to collection visible to owning organization</span>
+<span class="w">    </span><span class="nx">assetPrivateDetails</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">AssetPrivateDetails</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ID</span><span class="p">:</span><span class="w">             </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">AppraisedValue</span><span class="p">:</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">AppraisedValue</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">assetPrivateDetailsAsBytes</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">assetPrivateDetails</span><span class="p">)</span><span class="w"> </span><span class="c1">// marshal asset details to JSON</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to marshal into JSON: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Get collection name for this organization.</span>
+<span class="w">    </span><span class="nx">orgCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">getCollectionName</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to infer private collection name for the org: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Put asset appraised value into owners org specific private data collection</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Put: collection %v, ID %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">orgCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">PutPrivateData</span><span class="p">(</span><span class="nx">orgCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetInput</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span><span class="w"> </span><span class="nx">assetPrivateDetailsAsBytes</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to put asset private details: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To summarize, the policy definition above for our <code class="docutils literal notranslate"><span class="pre">collections_config.json</span></code>
+allows all peers in Org1 and Org2 to store and transact
+with the asset transfer private data <code class="docutils literal notranslate"><span class="pre">assetID,</span> <span class="pre">color,</span> <span class="pre">size,</span> <span class="pre">owner</span></code> in their
+private database. But only peers in Org1 can store and transact with
+the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> key data in the Org1 collection <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> and only peers
+in Org2 can store and transact with the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> key data in the Org2 collection <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>.</p>
+<p>As an additional data privacy benefit, since a collection is being used,
+only the private data <em>hashes</em> go through orderer, not the private data itself,
+keeping private data confidential from orderer.</p>
+</section>
+</section>
+<section id="start-the-network">
+<h2>Start the network<a class="headerlink" href="#start-the-network" title="Link to this heading">¶</a></h2>
+<p>Now we are ready to step through some commands which demonstrate how to use
+private data.</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<p>Before installing, defining, and using the private data smart contract,
+we need to start the Fabric test network. For the sake of this tutorial, we want
+to operate from a known initial state. The following command will kill any active
+or stale Docker containers and remove previously generated artifacts.
+Therefore let’s run the following command to clean up any previous
+environments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>fabric-samples/test-network
+./network.sh<span class="w"> </span>down
+</pre></div>
+</div>
+<p>From the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> directory, you can use the following command to start
+up the Fabric test network with Certificate Authorities and CouchDB:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>up<span class="w"> </span>createChannel<span class="w"> </span>-ca<span class="w"> </span>-s<span class="w"> </span>couchdb
+</pre></div>
+</div>
+<p>This command will deploy a Fabric network consisting of a single channel named
+<code class="docutils literal notranslate"><span class="pre">mychannel</span></code> with two organizations (each maintaining one peer node), certificate authorities, and an
+ordering service while using CouchDB as the state database. Either LevelDB or
+CouchDB may be used with collections. CouchDB was chosen to demonstrate how to
+use indexes with private data.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For collections to work, it is important to have cross organizational
+gossip configured correctly. Refer to our documentation on <a class="reference internal" href="gossip.html"><span class="doc">Gossip data dissemination protocol</span></a>,
+paying particular attention to the section on “anchor peers”. Our tutorial
+does not focus on gossip given it is already configured in the test network,
+but when configuring a channel, the gossip anchors peers are critical to
+configure for collections to work properly.</p>
+</div>
+</section>
+<section id="deploy-the-private-data-smart-contract-to-the-channel">
+<span id="pd-install-define-cc"></span><h2>Deploy the private data smart contract to the channel<a class="headerlink" href="#deploy-the-private-data-smart-contract-to-the-channel" title="Link to this heading">¶</a></h2>
+<p>We can now use the test network script to deploy the smart contract to the channel.
+Run the following command from the test network directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCC<span class="w"> </span>-ccn<span class="w"> </span>private<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-private-data/chaincode-go/<span class="w"> </span>-ccl<span class="w"> </span>go<span class="w"> </span>-ccep<span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.peer&#39;,&#39;Org2MSP.peer&#39;)&quot;</span><span class="w"> </span>-cccg<span class="w"> </span>../asset-transfer-private-data/chaincode-go/collections_config.json
+</pre></div>
+</div>
+<p>Note that we need to pass the path to the private data collection definition file
+to the command. As part of deploying the chaincode to the channel, both organizations
+on the channel must pass identical private data collection definitions as part
+of the <a class="reference internal" href="chaincode_lifecycle.html"><span class="doc">Fabric chaincode lifecycle</span></a>. We are also deploying the smart contract
+with a chaincode level endorsement policy of <code class="docutils literal notranslate"><span class="pre">&quot;OR('Org1MSP.peer','Org2MSP.peer')&quot;</span></code>.
+This allows Org1 and Org2 to create an asset without receiving an endorsement from
+the other organization. You can see the steps required to deploy the chaincode
+printed in your logs after you issue the command above.</p>
+<p>When both organizations approve the chaincode definition using the
+<a class="reference external" href="commands/peerlifecycle.html#peer-lifecycle-chaincode-approveformyorg">peer lifecycle chaincode approveformyorg</a>
+command, the chaincode definition includes the path to the private data collection
+definition using the <code class="docutils literal notranslate"><span class="pre">--collections-config</span></code> flag. You can see the following <cite>approveformyorg</cite>
+command printed in your terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>lifecycle<span class="w"> </span>chaincode<span class="w"> </span>approveformyorg<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--channelID<span class="w"> </span>mychannel<span class="w"> </span>--name<span class="w"> </span>private<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span>--collections-config<span class="w"> </span>../asset-transfer-private-data/chaincode-go/collections_config.json<span class="w"> </span>--signature-policy<span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&quot;</span><span class="w"> </span>--package-id<span class="w"> </span><span class="nv">$CC_PACKAGE_ID</span><span class="w"> </span>--sequence<span class="w"> </span><span class="m">1</span><span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="nv">$ORDERER_CA</span>
+</pre></div>
+</div>
+<p>After channel members agree to the private data collection as part of the chaincode
+definition, the data collection is committed to the channel using the <a class="reference external" href="commands/peerlifecycle.html#peer-lifecycle-chaincode-commit">peer lifecycle chaincode commit</a>
+command. If you look for the commit command in your logs, you can see that it uses
+the same <code class="docutils literal notranslate"><span class="pre">--collections-config</span></code> flag to provide the path to the collection definition.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>lifecycle<span class="w"> </span>chaincode<span class="w"> </span>commit<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--channelID<span class="w"> </span>mychannel<span class="w"> </span>--name<span class="w"> </span>private<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.0<span class="w"> </span>--sequence<span class="w"> </span><span class="m">1</span><span class="w"> </span>--collections-config<span class="w"> </span>../asset-transfer-private-data/chaincode-go/collections_config.json<span class="w"> </span>--signature-policy<span class="w"> </span><span class="s2">&quot;OR(&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&quot;</span><span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="nv">$ORDERER_CA</span><span class="w"> </span>--peerAddresses<span class="w"> </span>localhost:7051<span class="w"> </span>--tlsRootCertFiles<span class="w"> </span><span class="nv">$ORG1_CA</span><span class="w"> </span>--peerAddresses<span class="w"> </span>localhost:9051<span class="w"> </span>--tlsRootCertFiles<span class="w"> </span><span class="nv">$ORG2_CA</span>
+</pre></div>
+</div>
+</section>
+<section id="register-identities">
+<span id="pd-register-identities"></span><h2>Register identities<a class="headerlink" href="#register-identities" title="Link to this heading">¶</a></h2>
+<p>The private data transfer smart contract supports ownership by individual identities that belong to the network. In our scenario, the owner of the asset will be a member of Org1, while the buyer will belong to Org2. To highlight the connection between the <code class="docutils literal notranslate"><span class="pre">GetClientIdentity().GetID()</span></code> API and the information within a user’s certificate, we will register two new identities using the Org1 and Org2 Certificate Authorities (CA’s), and then use the CA’s to generate each identity’s certificate and private key.</p>
+<p>First, we need to set the following environment variables to use the Fabric CA client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="nv">$PWD</span>/../config/
+</pre></div>
+</div>
+<p>We will use the Org1 CA to create the identity asset owner. Set the Fabric CA client home to the MSP of the Org1 CA admin (this identity was generated by the test network script):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CA_CLIENT_HOME</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/
+</pre></div>
+</div>
+<p>You can register a new owner client identity using the <cite>fabric-ca-client</cite> tool:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fabric-ca-client<span class="w"> </span>register<span class="w"> </span>--caname<span class="w"> </span>ca-org1<span class="w"> </span>--id.name<span class="w"> </span>owner<span class="w"> </span>--id.secret<span class="w"> </span>ownerpw<span class="w"> </span>--id.type<span class="w"> </span>client<span class="w"> </span>--tls.certfiles<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/fabric-ca/org1/tls-cert.pem&quot;</span>
+</pre></div>
+</div>
+<p>You can now generate the identity certificates and MSP folder by providing the enroll name and secret to the enroll command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fabric-ca-client<span class="w"> </span>enroll<span class="w"> </span>-u<span class="w"> </span>https://owner:ownerpw@localhost:7054<span class="w"> </span>--caname<span class="w"> </span>ca-org1<span class="w"> </span>-M<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org1.example.com/users/owner@org1.example.com/msp&quot;</span><span class="w"> </span>--tls.certfiles<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/fabric-ca/org1/tls-cert.pem&quot;</span>
+</pre></div>
+</div>
+<p>Run the command below to copy the Node OU configuration file into the owner identity MSP folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org1.example.com/msp/config.yaml&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org1.example.com/users/owner@org1.example.com/msp/config.yaml&quot;</span>
+</pre></div>
+</div>
+<p>We can now use the Org2 CA to create the buyer identity. Set the Fabric CA client home the Org2 CA admin:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CA_CLIENT_HOME</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/
+</pre></div>
+</div>
+<p>You can register a new owner client identity using the <cite>fabric-ca-client</cite> tool:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fabric-ca-client<span class="w"> </span>register<span class="w"> </span>--caname<span class="w"> </span>ca-org2<span class="w"> </span>--id.name<span class="w"> </span>buyer<span class="w"> </span>--id.secret<span class="w"> </span>buyerpw<span class="w"> </span>--id.type<span class="w"> </span>client<span class="w"> </span>--tls.certfiles<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/fabric-ca/org2/tls-cert.pem&quot;</span>
+</pre></div>
+</div>
+<p>We can now enroll to generate the identity MSP folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fabric-ca-client<span class="w"> </span>enroll<span class="w"> </span>-u<span class="w"> </span>https://buyer:buyerpw@localhost:8054<span class="w"> </span>--caname<span class="w"> </span>ca-org2<span class="w"> </span>-M<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org2.example.com/users/buyer@org2.example.com/msp&quot;</span><span class="w"> </span>--tls.certfiles<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/fabric-ca/org2/tls-cert.pem&quot;</span>
+</pre></div>
+</div>
+<p>Run the command below to copy the Node OU configuration file into the buyer identity MSP folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org2.example.com/msp/config.yaml&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org2.example.com/users/buyer@org2.example.com/msp/config.yaml&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="create-an-asset-in-private-data">
+<span id="pd-store-private-data"></span><h2>Create an asset in private data<a class="headerlink" href="#create-an-asset-in-private-data" title="Link to this heading">¶</a></h2>
+<p>Now that we have created the identity of the asset owner, we can invoke the
+private data smart contract to create a new asset. Copy and paste the following
+set of commands into your terminal in the <cite>test-network</cite> directory:</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/../bin:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FABRIC_CFG_PATH</span><span class="o">=</span><span class="nv">$PWD</span>/../config/
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org1MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/users/owner@org1.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:7051
+</pre></div>
+</div>
+<p>We will use the <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> function to create an asset that is stored in private
+data —  assetID <code class="docutils literal notranslate"><span class="pre">asset1</span></code> with a color <code class="docutils literal notranslate"><span class="pre">green</span></code>, size <code class="docutils literal notranslate"><span class="pre">20</span></code> and appraisedValue of <code class="docutils literal notranslate"><span class="pre">100</span></code>. Recall that private data <strong>appraisedValue</strong>
+will be stored separately from the private data <strong>assetID, color, size</strong>.
+For this reason, the <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> function calls the <code class="docutils literal notranslate"><span class="pre">PutPrivateData()</span></code> API
+twice to persist the private data, once for each collection. Also note that
+the private data is passed using the <code class="docutils literal notranslate"><span class="pre">--transient</span></code> flag. Inputs passed
+as transient data will not be persisted in the transaction in order to keep
+the data private. Transient data is passed as binary data and therefore when
+using terminal it must be base64 encoded. We use an environment variable
+to capture the base64 encoded value, and use <code class="docutils literal notranslate"><span class="pre">tr</span></code> command to strip off the
+problematic newline characters that linux base64 command adds.</p>
+<p>Run the following command to create the asset:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ASSET_PROPERTIES</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;{\&quot;objectType\&quot;:\&quot;asset\&quot;,\&quot;assetID\&quot;:\&quot;asset1\&quot;,\&quot;color\&quot;:\&quot;green\&quot;,\&quot;size\&quot;:20,\&quot;appraisedValue\&quot;:100}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="se">\\</span>n<span class="k">)</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>invoke<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;CreateAsset&quot;,&quot;Args&quot;:[]}&#39;</span><span class="w"> </span>--transient<span class="w"> </span><span class="s2">&quot;{\&quot;asset_properties\&quot;:\&quot;</span><span class="nv">$ASSET_PROPERTIES</span><span class="s2">\&quot;}&quot;</span>
+</pre></div>
+</div>
+<p>You should see results similar to:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>chaincodeCmd<span class="o">]</span><span class="w"> </span>chaincodeInvokeOrQuery-&gt;INFO<span class="w"> </span><span class="m">001</span><span class="w"> </span>Chaincode<span class="w"> </span>invoke<span class="w"> </span>successful.<span class="w"> </span>result:<span class="w"> </span>status:200
+</pre></div>
+</div>
+<p>Note that command above only targets the Org1 peer. The <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> transaction writes to two collections, <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> and <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> requires an endorsement from the Org1 peer in order to write to the collection, while the <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> inherits the endorsement policy of the chaincode, <code class="docutils literal notranslate"><span class="pre">&quot;OR('Org1MSP.peer','Org2MSP.peer')&quot;</span></code>.
+An endorsement from the Org1 peer can meet both endorsement policies and is able to create an asset without an endorsement from Org2.</p>
+</section>
+<section id="query-the-private-data-as-an-authorized-peer">
+<span id="pd-query-authorized"></span><h2>Query the private data as an authorized peer<a class="headerlink" href="#query-the-private-data-as-an-authorized-peer" title="Link to this heading">¶</a></h2>
+<p>Our collection definition allows all peers of Org1 and Org2
+to have the <code class="docutils literal notranslate"><span class="pre">assetID,</span> <span class="pre">color,</span> <span class="pre">size,</span> <span class="pre">and</span> <span class="pre">owner</span></code> private data in their side database,
+but only peers in Org1 can have Org1’s opinion of their <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> private data in their side
+database. As an authorized peer in Org1, we will query both sets of private data.</p>
+<p>The first <code class="docutils literal notranslate"><span class="pre">query</span></code> command calls the <code class="docutils literal notranslate"><span class="pre">ReadAsset</span></code> function which passes
+<code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> as an argument.</p>
+<div class="highlight-GO notranslate"><div class="highlight"><pre><span></span><span class="c1">// ReadAsset reads the information from collection</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">ReadAsset</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Asset</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">     </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;ReadAsset: collection %v, ID %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="p">)</span>
+<span class="w">     </span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetPrivateData</span><span class="p">(</span><span class="nx">assetCollection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="p">)</span><span class="w"> </span><span class="c1">//get the asset from chaincode state</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read asset: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="c1">//No Asset found, return empty response</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="nx">assetJSON</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v does not exist in collection %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="p">,</span><span class="w"> </span><span class="nx">assetCollection</span><span class="p">)</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="kd">var</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="o">*</span><span class="nx">Asset</span>
+<span class="w">     </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">assetJSON</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">asset</span><span class="p">)</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to unmarshal JSON: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="k">return</span><span class="w"> </span><span class="nx">asset</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+
+<span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The second <code class="docutils literal notranslate"><span class="pre">query</span></code> command calls the <code class="docutils literal notranslate"><span class="pre">ReadAssetPrivateDetails</span></code>
+function which passes <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateDetails</span></code> as an argument.</p>
+<div class="highlight-GO notranslate"><div class="highlight"><pre><span></span><span class="c1">// ReadAssetPrivateDetails reads the asset private details in organization specific collection</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SmartContract</span><span class="p">)</span><span class="w"> </span><span class="nx">ReadAssetPrivateDetails</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">contractapi</span><span class="p">.</span><span class="nx">TransactionContextInterface</span><span class="p">,</span><span class="w"> </span><span class="nx">collection</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">AssetPrivateDetails</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;ReadAssetPrivateDetails: collection %v, ID %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">collection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="p">)</span>
+<span class="w">     </span><span class="nx">assetDetailsJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">GetStub</span><span class="p">().</span><span class="nx">GetPrivateData</span><span class="p">(</span><span class="nx">collection</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="p">)</span><span class="w"> </span><span class="c1">// Get the asset from chaincode state</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read asset details: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="nx">assetDetailsJSON</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;AssetPrivateDetails for %v does not exist in collection %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetID</span><span class="p">,</span><span class="w"> </span><span class="nx">collection</span><span class="p">)</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="kd">var</span><span class="w"> </span><span class="nx">assetDetails</span><span class="w"> </span><span class="o">*</span><span class="nx">AssetPrivateDetails</span>
+<span class="w">     </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">assetDetailsJSON</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">assetDetails</span><span class="p">)</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to unmarshal JSON: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">     </span><span class="k">return</span><span class="w"> </span><span class="nx">assetDetails</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Now <span class="guilabel">Try it yourself</span></p>
+<p>We can read the main details of the asset that was created by using the <cite>ReadAsset</cite> function
+to query the <cite>assetCollection</cite> collection as Org1:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAsset&quot;,&quot;Args&quot;:[&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>When successful, the command will return the following result:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;objectType&quot;</span>:<span class="s2">&quot;asset&quot;</span>,<span class="s2">&quot;assetID&quot;</span>:<span class="s2">&quot;asset1&quot;</span>,<span class="s2">&quot;color&quot;</span>:<span class="s2">&quot;green&quot;</span>,<span class="s2">&quot;size&quot;</span>:20,<span class="s2">&quot;owner&quot;</span>:<span class="s2">&quot;x509::CN=appUser1,OU=admin,O=Hyperledger,ST=North Carolina,C=US::CN=ca.org1.example.com,O=org1.example.com,L=Durham,ST=North Carolina,C=US&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>The <cite>“owner”</cite> of the asset is the identity that created the asset by invoking the smart contract. The private data smart contract uses the <code class="docutils literal notranslate"><span class="pre">GetClientIdentity().GetID()</span></code> API to read the name and issuer of the identity certificate. You can see the name and issuer of the identity certificate, in the owner attribute.</p>
+<p>Query for the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> private data of <code class="docutils literal notranslate"><span class="pre">asset1</span></code> as a member of Org1.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org1MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>You should see the following result:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;assetID&quot;</span>:<span class="s2">&quot;asset1&quot;</span>,<span class="s2">&quot;appraisedValue&quot;</span>:100<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="query-the-private-data-as-an-unauthorized-peer">
+<span id="pd-query-unauthorized"></span><h2>Query the private data as an unauthorized peer<a class="headerlink" href="#query-the-private-data-as-an-unauthorized-peer" title="Link to this heading">¶</a></h2>
+<p>Now we will operate a user from Org2. Org2 has the asset transfer private data
+<code class="docutils literal notranslate"><span class="pre">assetID,</span> <span class="pre">color,</span> <span class="pre">size,</span> <span class="pre">owner</span></code> in its side database as defined in the <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code> policy, but does not store the
+asset <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> data for Org1. We will query for both sets of private data.</p>
+<section id="switch-to-a-peer-in-org2">
+<h3>Switch to a peer in Org2<a class="headerlink" href="#switch-to-a-peer-in-org2" title="Link to this heading">¶</a></h3>
+<p>Run the following commands to operate as an Org2 member and query the Org2 peer.</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org2MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/users/buyer@org2.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:9051
+</pre></div>
+</div>
+</section>
+<section id="query-private-data-org2-is-authorized-to">
+<h3>Query private data Org2 is authorized to<a class="headerlink" href="#query-private-data-org2-is-authorized-to" title="Link to this heading">¶</a></h3>
+<p>Peers in Org2 should have the first set of asset transfer private data (<code class="docutils literal notranslate"><span class="pre">assetID,</span>
+<span class="pre">color,</span> <span class="pre">size</span> <span class="pre">and</span> <span class="pre">owner</span></code>) in their side database and can access it using the
+<code class="docutils literal notranslate"><span class="pre">ReadAsset()</span></code> function which is called with the <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code>
+argument.</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAsset&quot;,&quot;Args&quot;:[&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>When successful, should see something similar to the following result:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;objectType&quot;</span><span class="p">:</span><span class="s2">&quot;asset&quot;</span><span class="p">,</span><span class="nt">&quot;assetID&quot;</span><span class="p">:</span><span class="s2">&quot;asset1&quot;</span><span class="p">,</span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;green&quot;</span><span class="p">,</span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span>
+<span class="nt">&quot;owner&quot;</span><span class="p">:</span><span class="s2">&quot;x509::CN=appUser1,OU=admin,O=Hyperledger,ST=North Carolina,C=US::CN=ca.org1.example.com,O=org1.example.com,L=Durham,ST=North Carolina,C=US&quot;</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="query-private-data-org2-is-not-authorized-to">
+<h3>Query private data Org2 is not authorized to<a class="headerlink" href="#query-private-data-org2-is-not-authorized-to" title="Link to this heading">¶</a></h3>
+<p>Because the asset was created by Org1, the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> associated with
+<code class="docutils literal notranslate"><span class="pre">asset1</span></code> is stored in the <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> collection. The value is
+not stored by peers in Org2. Run the following command to demonstrate that the
+asset’s <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> is not stored in the <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>
+on the Org2 peer:</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org2MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>The empty response shows that the asset1 private details do not exist in buyer
+(Org2) private collection.</p>
+<p>Nor can a user from Org2 read the Org1 private data collection:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org1MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">&quot;memberOnlyRead&quot;:</span> <span class="pre">true</span></code> in the collection configuration file, we
+specify that only clients from Org1 can read data from the collection. An Org2 client
+who tries to read the collection would only get the following response:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;endorsement failure during query&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;failed to read asset details: GET_STATE failed: transaction ID: d23e4bc0538c3abfb7a6bd4323fd5f52306e2723be56460fc6da0e5acaee6b23: tx creator does not have read access permission on privatedata in chaincodeName:private collectionName: Org1MSPPrivateCollection&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Users from Org2 will only be able to see the public hash of the private data.</p>
+</section>
+</section>
+<section id="transfer-the-asset">
+<span id="pd-transfer-asset"></span><h2>Transfer the Asset<a class="headerlink" href="#transfer-the-asset" title="Link to this heading">¶</a></h2>
+<p>Let’s see what it takes to transfer <code class="docutils literal notranslate"><span class="pre">asset1</span></code> to Org2. In this case, Org2 needs to agree
+to buy the asset from Org1, and they need to agree on the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code>. You may be wondering how they can
+agree if Org1 keeps their opinion of the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> in their private side database. For the answer
+to this, lets continue.</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<p>Switch back to the terminal with our peer CLI.</p>
+<p>To transfer an asset, the buyer (recipient) needs to agree to the same <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> as the asset owner, by calling chaincode function <code class="docutils literal notranslate"><span class="pre">AgreeToTransfer</span></code>. The agreed value will be stored in the <code class="docutils literal notranslate"><span class="pre">Org2MSPDetailsCollection</span></code> collection on the Org2 peer. Run the following commands to agree to the appraised value of 100 as Org2:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ASSET_VALUE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;{\&quot;assetID\&quot;:\&quot;asset1\&quot;,\&quot;appraisedValue\&quot;:100}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="se">\\</span>n<span class="k">)</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>invoke<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;AgreeToTransfer&quot;,&quot;Args&quot;:[]}&#39;</span><span class="w"> </span>--transient<span class="w"> </span><span class="s2">&quot;{\&quot;asset_value\&quot;:\&quot;</span><span class="nv">$ASSET_VALUE</span><span class="s2">\&quot;}&quot;</span>
+</pre></div>
+</div>
+<p>The buyer can now query the value they agreed to in the Org2 private data collection:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org2MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>The invoke will return the following value:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;assetID&quot;</span>:<span class="s2">&quot;asset1&quot;</span>,<span class="s2">&quot;appraisedValue&quot;</span>:100<span class="o">}</span>
+</pre></div>
+</div>
+<p>Now that buyer has agreed to buy the asset for the appraised value, the owner can transfer
+the asset to Org2. The asset needs to be transferred by the identity that owns the asset,
+so lets go acting as Org1:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org1MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/users/owner@org1.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:7051
+</pre></div>
+</div>
+<p>The owner from Org1 can read the data added by the <cite>AgreeToTransfer</cite> transaction to view the buyer identity:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadTransferAgreement&quot;,&quot;Args&quot;:[&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;assetID&quot;</span>:<span class="s2">&quot;asset1&quot;</span>,<span class="s2">&quot;buyerID&quot;</span>:<span class="s2">&quot;eDUwOTo6Q049YnV5ZXIsT1U9Y2xpZW50LE89SHlwZXJsZWRnZXIsU1Q9Tm9ydGggQ2Fyb2xpbmEsQz1VUzo6Q049Y2Eub3JnMi5leGFtcGxlLmNvbSxPPW9yZzIuZXhhbXBsZS5jb20sTD1IdXJzbGV5LFNUPUhhbXBzaGlyZSxDPVVL&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>We now have all we need to transfer the asset. The smart contract uses the
+<code class="docutils literal notranslate"><span class="pre">GetPrivateDataHash()</span></code> function to check that the hash of the asset appraisal
+value in <code class="docutils literal notranslate"><span class="pre">Org1MSPPrivateCollection</span></code> matches the hash of the appraisal value in the
+<code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>. If the hashes are the same, it confirms that the
+owner and the interested buyer have agreed to the same asset value. If the
+conditions are met, the transfer function will get the client ID of the buyer
+from the transfer agreement and make the buyer the new owner of the asset. The transfer
+function will also delete the asset appraisal value from the collection of the former owner,
+as well as remove the transfer agreement from the <code class="docutils literal notranslate"><span class="pre">assetCollection</span></code>.</p>
+<p>Run the following commands to transfer the asset. The owner needs to provide the
+assetID and the organization MSP ID of the buyer to the transfer transaction:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ASSET_OWNER</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;{\&quot;assetID\&quot;:\&quot;asset1\&quot;,\&quot;buyerMSP\&quot;:\&quot;Org2MSP\&quot;}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="se">\\</span>n<span class="k">)</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>invoke<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;TransferAsset&quot;,&quot;Args&quot;:[]}&#39;</span><span class="w"> </span>--transient<span class="w"> </span><span class="s2">&quot;{\&quot;asset_owner\&quot;:\&quot;</span><span class="nv">$ASSET_OWNER</span><span class="s2">\&quot;}&quot;</span><span class="w"> </span>--peerAddresses<span class="w"> </span>localhost:7051<span class="w"> </span>--tlsRootCertFiles<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt&quot;</span>
+</pre></div>
+</div>
+<p>You can query <code class="docutils literal notranslate"><span class="pre">asset1</span></code> to see the results of the transfer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAsset&quot;,&quot;Args&quot;:[&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>The results will show that the buyer identity now owns the asset:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;objectType&quot;</span>:<span class="s2">&quot;asset&quot;</span>,<span class="s2">&quot;assetID&quot;</span>:<span class="s2">&quot;asset1&quot;</span>,<span class="s2">&quot;color&quot;</span>:<span class="s2">&quot;green&quot;</span>,<span class="s2">&quot;size&quot;</span>:20,<span class="s2">&quot;owner&quot;</span>:<span class="s2">&quot;x509::CN=appUser2, OU=client + OU=org2 + OU=department1::CN=ca.org2.example.com, O=org2.example.com, L=Hursley, ST=Hampshire, C=UK&quot;</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>The <cite>“owner”</cite> of the asset now has the buyer identity.</p>
+<p>You can also confirm that transfer removed the private details from the Org1 collection:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org1MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>Your query will return empty result, since the asset private data is removed from the Org1 private data collection.</p>
+</section>
+<section id="purge-private-data">
+<span id="pd-purge"></span><h2>Purge Private Data<a class="headerlink" href="#purge-private-data" title="Link to this heading">¶</a></h2>
+<p>For use cases where private data only needs to be persisted for a short period of time,
+it is possible to “purge” the data after a certain set number of blocks, leaving
+behind only a hash of the data that serves as immutable evidence of the transaction.
+An organization could decide to purge private data if the data contained sensitive
+information that was used by another transaction, but is not longer needed, or
+if the data is being replicated into an off-chain database.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> data in our example contains a private agreement that
+the organization may want to expire after a certain period of time. Thus, it
+has a limited lifespan, and can be purged after existing unchanged on the
+blockchain for a designated number of blocks using the <code class="docutils literal notranslate"><span class="pre">blockToLive</span></code> property
+in the collection definition.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code> definition has a <code class="docutils literal notranslate"><span class="pre">blockToLive</span></code>
+property value of <code class="docutils literal notranslate"><span class="pre">3</span></code>, meaning this data will live on the side database for
+three blocks and then after that it will get purged. If we create additional
+blocks on the channel, the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> agreed to by Org2 will eventually
+get purged. We can create 3 new blocks to demonstrate:</p>
+<p><span class="guilabel">Try it yourself</span></p>
+<p>Run the following commands in your terminal to switch back to operating as member
+of Org2 and target the Org2 peer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_LOCALMSPID</span><span class="o">=</span>Org2MSP
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_TLS_ROOTCERT_FILE</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_MSPCONFIGPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/organizations/peerOrganizations/org2.example.com/users/buyer@org2.example.com/msp
+<span class="nb">export</span><span class="w"> </span><span class="nv">CORE_PEER_ADDRESS</span><span class="o">=</span>localhost:9051
+</pre></div>
+</div>
+<p>We can still query the <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> in the <code class="docutils literal notranslate"><span class="pre">Org2MSPPrivateCollection</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org2MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>You should see the value printed in your logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s2">&quot;assetID&quot;</span>:<span class="s2">&quot;asset1&quot;</span>,<span class="s2">&quot;appraisedValue&quot;</span>:100<span class="o">}</span>
+</pre></div>
+</div>
+<p>Since we need to keep track of how many blocks we are adding before the private data gets purged,
+open a new terminal window and run the following command to view the private data logs for
+the Org2 peer. Note the highest block number.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>logs<span class="w"> </span>peer0.org1.example.com<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-a<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;private|pvt|privdata&#39;</span>
+</pre></div>
+</div>
+<p>Now return to the terminal where we are acting as a member of Org2 and run the following
+commands to create three new assets. Each command will create a new block.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ASSET_PROPERTIES</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;{\&quot;objectType\&quot;:\&quot;asset\&quot;,\&quot;assetID\&quot;:\&quot;asset2\&quot;,\&quot;color\&quot;:\&quot;blue\&quot;,\&quot;size\&quot;:30,\&quot;appraisedValue\&quot;:100}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="se">\\</span>n<span class="k">)</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>invoke<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;CreateAsset&quot;,&quot;Args&quot;:[]}&#39;</span><span class="w"> </span>--transient<span class="w"> </span><span class="s2">&quot;{\&quot;asset_properties\&quot;:\&quot;</span><span class="nv">$ASSET_PROPERTIES</span><span class="s2">\&quot;}&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ASSET_PROPERTIES</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;{\&quot;objectType\&quot;:\&quot;asset\&quot;,\&quot;assetID\&quot;:\&quot;asset3\&quot;,\&quot;color\&quot;:\&quot;red\&quot;,\&quot;size\&quot;:25,\&quot;appraisedValue\&quot;:100}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="se">\\</span>n<span class="k">)</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>invoke<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;CreateAsset&quot;,&quot;Args&quot;:[]}&#39;</span><span class="w"> </span>--transient<span class="w"> </span><span class="s2">&quot;{\&quot;asset_properties\&quot;:\&quot;</span><span class="nv">$ASSET_PROPERTIES</span><span class="s2">\&quot;}&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ASSET_PROPERTIES</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;{\&quot;objectType\&quot;:\&quot;asset\&quot;,\&quot;assetID\&quot;:\&quot;asset4\&quot;,\&quot;color\&quot;:\&quot;orange\&quot;,\&quot;size\&quot;:15,\&quot;appraisedValue\&quot;:100}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="se">\\</span>n<span class="k">)</span>
+peer<span class="w"> </span>chaincode<span class="w"> </span>invoke<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;CreateAsset&quot;,&quot;Args&quot;:[]}&#39;</span><span class="w"> </span>--transient<span class="w"> </span><span class="s2">&quot;{\&quot;asset_properties\&quot;:\&quot;</span><span class="nv">$ASSET_PROPERTIES</span><span class="s2">\&quot;}&quot;</span>
+</pre></div>
+</div>
+<p>Return to the other terminal and run the following command to confirm that
+the new assets resulted in the creation of three new blocks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>logs<span class="w"> </span>peer0.org1.example.com<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-a<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;private|pvt|privdata&#39;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">appraisedValue</span></code> has now been purged from the <code class="docutils literal notranslate"><span class="pre">Org2MSPDetailsCollection</span></code>
+private data collection. Issue the query again from the Org2 terminal to see that
+the response is empty.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>peer<span class="w"> </span>chaincode<span class="w"> </span>query<span class="w"> </span>-o<span class="w"> </span>localhost:7050<span class="w"> </span>--ordererTLSHostnameOverride<span class="w"> </span>orderer.example.com<span class="w"> </span>--tls<span class="w"> </span>--cafile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="s2">/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem&quot;</span><span class="w"> </span>-C<span class="w"> </span>mychannel<span class="w"> </span>-n<span class="w"> </span>private<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;{&quot;function&quot;:&quot;ReadAssetPrivateDetails&quot;,&quot;Args&quot;:[&quot;Org2MSPPrivateCollection&quot;,&quot;asset1&quot;]}&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="using-indexes-with-private-data">
+<span id="pd-indexes"></span><h2>Using indexes with private data<a class="headerlink" href="#using-indexes-with-private-data" title="Link to this heading">¶</a></h2>
+<p>Indexes can also be applied to private data collections, by packaging indexes in
+the <code class="docutils literal notranslate"><span class="pre">META-INF/statedb/couchdb/collections/&lt;collection_name&gt;/indexes</span></code> directory
+alongside the chaincode. An example index is available <a class="reference external" href="https://github.com/hyperledger/fabric-samples/blob/main/asset-transfer-private-data/chaincode-go/META-INF/statedb/couchdb/collections/assetCollection/indexes/indexOwner.json">here</a> .</p>
+<p>For deployment of chaincode to production environments, it is recommended
+to define any indexes alongside chaincode so that the chaincode and supporting
+indexes are deployed automatically as a unit, once the chaincode has been
+installed on a peer and deployed on a channel. The associated indexes are
+automatically created upon chaincode deployment on the channel when
+the  <code class="docutils literal notranslate"><span class="pre">--collections-config</span></code> flag is specified pointing to the location of
+the collection JSON file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is not possible to create an index for use with an implicit private data collection.
+An implicit collection is based on the organizations name and is created automatically. The format of the name
+is <code class="docutils literal notranslate"><span class="pre">_implicit_org_&lt;OrgsMSPid&gt;</span></code></p>
+</div>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Link to this heading">¶</a></h2>
+<p>When you are finished using the private data smart contract, you can bring down the test
+network using <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> script.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>down
+</pre></div>
+</div>
+<p>This command will bring down the CAs, peers, and ordering node of the network
+that we created. Note that all of the data on the ledger will be lost.
+If you want to go through the tutorial again, you will start from a clean initial state.</p>
+</section>
+<section id="additional-resources">
+<span id="pd-ref-material"></span><h2>Additional resources<a class="headerlink" href="#additional-resources" title="Link to this heading">¶</a></h2>
+<p>For additional private data education, a video tutorial has been created.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The video uses the previous lifecycle model to install private data
+collections with chaincode.</p>
+</div>
+<br/><br/>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qyjDi93URJE" frameborder="0" allowfullscreen></iframe>
+<br/><br/></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html" class="btn btn-neutral float-right" title="Secured asset transfer in Fabric" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cc_basic.html" class="btn btn-neutral" title="Running External Chaincode Builders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

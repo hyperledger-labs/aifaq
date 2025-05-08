@@ -15,6 +15,7 @@ class Query(BaseModel):
 
 app = FastAPI()
 
+
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,

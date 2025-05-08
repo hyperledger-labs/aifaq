@@ -1,0 +1,1046 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running a Fabric Application &mdash; Hyperledger Fabric Docs main documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c3038dac" />
+      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a8da1a53"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/tabs.js?v=3030b3cb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="Deploying a smart contract to a channel" href="deploy_chaincode.html" /> 
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="hyperledger-fabric" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/write_first_app.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Hyperledger Fabric Docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+<br><img style="background-color: #fff; height: unset; width: unset;" alt="Hyperledger Fabric" src=_images/hyperledger_fabric_logo_color.png />
+<br>
+<a href="https://github.com/hyperledger/fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="GitHub" src="_static/images/github_button.png"/></a>
+&nbsp;<a href="https://stackoverflow.com/questions/tagged/hyperledger-fabric"><img style="padding: 0px; margin: auto auto auto auto;" alt="StackOverflow" src="_static/images/stackoverflow_button.png"/></a>
+&nbsp;<a href="https://discord.com/invite/hyperledger"><img style="padding: 0px; margin: auto auto auto auto;" alt="Discord" src="_static/images/discord_button.png"/></a>
+&nbsp;<a href="https://www.youtube.com/playlist?list=PL0MZ85B_96CH7wvtrRzV7SvtRY0sI0DEg"><img style="padding: 0px; margin: auto auto auto auto;" alt="Youtube Channel" src="_static/images/youtube_button.png"/></a>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatis.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html">What’s new in Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whatsnew.html#release-notes">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">Key Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started - Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="test_network.html">Using the Fabric test network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy_chaincode.html">Deploying a smart contract to a channel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Running a Fabric Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#before-you-begin">Before you begin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-up-the-blockchain-network">Set up the blockchain network</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#launch-the-blockchain-network">Launch the blockchain network</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deploy-the-smart-contract">Deploy the smart contract</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prepare-the-sample-application">Prepare the sample application</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-sample-application">Run the sample application</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#first-establish-a-grpc-connection-to-the-gateway">First, establish a gRPC connection to the Gateway</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#second-create-a-gateway-connection">Second, create a Gateway connection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#third-access-the-smart-contract-to-be-invoked">Third, access the smart contract to be invoked</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fourth-populate-the-ledger-with-sample-assets">Fourth, populate the ledger with sample assets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fifth-invoke-transaction-functions-to-read-and-write-assets">Fifth, invoke transaction functions to read and write assets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#clean-up">Clean up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cc_basic.html">Running External Chaincode Builders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_data_tutorial.html">Using Private Data in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secured_asset_transfer/secured_private_asset_transfer_tutorial.html">Secured asset transfer in Fabric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="couchdb_tutorial.html">Using CouchDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_channel/create_channel_overview.html">Creating a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_update_tutorial.html">Adding an Org to a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="channel_remove_org.html">Removing an Org from a Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_update.html">Updating a channel configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chaincode4ade.html">Writing Your First Chaincode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peer-chaincode-devmode.html">Running chaincode in development mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="videos.html">Videos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment_guide_overview.html">Deploying a production network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ops_guide.html">Operations Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading to the latest release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_ref.html">Commands Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fabric-FAQ.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributions Welcome!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="questions.html">Still Have Questions?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="status.html">Status</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Hyperledger Fabric Docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="getting_started_run_fabric.html">Getting Started - Run Fabric</a></li>
+      <li class="breadcrumb-item active">Running a Fabric Application</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/write_first_app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-a-fabric-application">
+<h1>Running a Fabric Application<a class="headerlink" href="#running-a-fabric-application" title="Link to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you’re not yet familiar with the fundamental architecture of a Fabric blockchain network, you may want to
+visit the <a class="reference internal" href="key_concepts.html"><span class="doc">Key Concepts</span></a> section prior to continuing.</p>
+<p>You should also be familiar with the Fabric Gateway service and how it relates to the application transaction
+flow, documented in the <a class="reference internal" href="gateway.html"><span class="doc">Fabric Gateway</span></a> section.</p>
+</div>
+<p>This tutorial provides an introduction to how Fabric applications interact with deployed blockchain networks. The
+tutorial uses sample programs built using the Fabric Gateway client API to invoke a smart contract, which queries
+and updates the ledger with the smart contract API – described in detail in <a class="reference internal" href="deploy_chaincode.html"><span class="doc">Deploying a smart contract to a channel</span></a>.</p>
+<p><strong>About Asset Transfer</strong></p>
+<p>The Asset Transfer (basic) sample demonstrates how to create, update, and query assets. It involves the following two
+components:</p>
+<blockquote>
+<div><p>1. <strong>Sample application:</strong> which makes calls to the blockchain network, invoking transactions
+implemented in the smart contract. The application is located in the following <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> directory:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>asset-transfer-basic/application-gateway-(typescript, go, java)
+</pre></div>
+</div>
+<p>2. <strong>Smart contract:</strong> which implements the transactions that interact with the
+ledger. The smart contract is located in the following <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> directory:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>asset-transfer-basic/chaincode-(typescript, go, java)
+</pre></div>
+</div>
+</div></blockquote>
+<p>This tutorial consists of two principle parts:</p>
+<blockquote>
+<div><p>1. <strong>Set up a blockchain network.</strong>
+Our application needs a blockchain network to interact with, so we will launch a basic network and deploy a smart
+contract for our application.</p>
+<img alt="_images/AppConceptsOverview.png" src="_images/AppConceptsOverview.png" />
+<p>2. <strong>Run the sample application to interact with the smart contract.</strong>
+Our application will use the assetTransfer smart contract to create, query, and update assets on the ledger. We will
+step through the code of the application and the transactions it invokes, including creating some initial assets,
+querying an asset, querying a range of assets, creating a new asset, and transferring an asset to a new owner.</p>
+</div></blockquote>
+<p>After completing this tutorial you should have a basic understanding of how Fabric applications and smart contracts
+work together to manage data on the distributed ledger of a blockchain network.</p>
+<section id="before-you-begin">
+<h2>Before you begin<a class="headerlink" href="#before-you-begin" title="Link to this heading">¶</a></h2>
+<p>Before you can run the sample application, you need to install Fabric Samples in your environment. Follow the
+instructions on <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started - Install</span></a> to install the required software.</p>
+<p>The sample application in this tutorial uses the Fabric Gateway client API. See the <a class="reference external" href="https://hyperledger.github.io/fabric-gateway/">documentation</a>
+for a up to date list of supported programming language runtimes and dependencies.</p>
+<p>Ensure you have a suitable version of your chosen runtime installed. For installation instructions, see:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://nodejs.dev/learn/how-to-install-nodejs">Node.js</a>.</p></li>
+<li><p><a class="reference external" href="https://go.dev/doc/install">Go</a>.</p></li>
+<li><p><a class="reference external" href="https://adoptium.net/">Java</a>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="set-up-the-blockchain-network">
+<h2>Set up the blockchain network<a class="headerlink" href="#set-up-the-blockchain-network" title="Link to this heading">¶</a></h2>
+<p>If you’ve already run through <a class="reference internal" href="test_network.html"><span class="doc">Using the Fabric test network</span></a> tutorial and have a network up and running, this tutorial will bring
+down your running network before bringing up a new one, to ensure you start with an empty ledger.</p>
+<section id="launch-the-blockchain-network">
+<h3>Launch the blockchain network<a class="headerlink" href="#launch-the-blockchain-network" title="Link to this heading">¶</a></h3>
+<p>Navigate to the <code class="docutils literal notranslate"><span class="pre">test-network</span></code> subdirectory within your local clone of the <code class="docutils literal notranslate"><span class="pre">fabric-samples</span></code> repository.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>fabric-samples/test-network
+</pre></div>
+</div>
+<p>If you already have a test network running, bring it down to ensure the environment is clean.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>down
+</pre></div>
+</div>
+<p>Launch the Fabric test network using the <code class="docutils literal notranslate"><span class="pre">network.sh</span></code> shell script.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>up<span class="w"> </span>createChannel<span class="w"> </span>-c<span class="w"> </span>mychannel<span class="w"> </span>-ca
+</pre></div>
+</div>
+<p>This command will deploy the Fabric test network with two peers, an ordering service, and three certificate authorities
+(Orderer, Org1, Org2). Instead of using the cryptogen tool, we bring up the test network using certificate authorities,
+hence the <code class="docutils literal notranslate"><span class="pre">-ca</span></code> flag. Additionally, the org admin user registration is bootstrapped when the certificate authority is
+started.</p>
+</section>
+<section id="deploy-the-smart-contract">
+<h3>Deploy the smart contract<a class="headerlink" href="#deploy-the-smart-contract" title="Link to this heading">¶</a></h3>
+<p>Next, let’s deploy the chaincode package containing the smart contract by calling the <code class="docutils literal notranslate"><span class="pre">./network.sh</span></code> script with the
+chaincode name and language options.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is not necessary to use the same programming language for the smart contract and client application.</p>
+</div>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-0-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-0-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCC<span class="w"> </span>-ccn<span class="w"> </span>basic<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-basic/chaincode-typescript/<span class="w"> </span>-ccl<span class="w"> </span>typescript
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCC<span class="w"> </span>-ccn<span class="w"> </span>basic<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-basic/chaincode-go/<span class="w"> </span>-ccl<span class="w"> </span>go
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>deployCC<span class="w"> </span>-ccn<span class="w"> </span>basic<span class="w"> </span>-ccp<span class="w"> </span>../asset-transfer-basic/chaincode-java/<span class="w"> </span>-ccl<span class="w"> </span>java
+</pre></div>
+</div>
+</div></div>
+<p>This script uses the chaincode lifecycle to package, install, query installed chaincode, approve chaincode for both
+Org1 and Org2, and finally commit the chaincode.</p>
+<p>If the chaincode package is successfully deployed, the end of the output in your terminal should look similar to below:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Committed chaincode definition for chaincode &#39;basic&#39; on channel &#39;mychannel&#39;:
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [Org1MSP: true, Org2MSP: true]
+Query chaincode definition successful on peer0.org2 on channel &#39;mychannel&#39;
+Chaincode initialization is not required
+</pre></div>
+</div>
+</section>
+<section id="prepare-the-sample-application">
+<h3>Prepare the sample application<a class="headerlink" href="#prepare-the-sample-application" title="Link to this heading">¶</a></h3>
+<p>Now, let’s prepare the sample <a class="reference external" href="https://github.com/hyperledger/fabric-samples/tree/main/asset-transfer-basic#readme">Asset Transfer application</a>
+that will be used to interact with the deployed smart contract.</p>
+<p>Open a new terminal, and navigate to the application directory. This directory contains a sample application developed
+using the Fabric Gateway client API.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-1-R28=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-1-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel group-tab" id="panel-1-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>asset-transfer-basic/application-gateway-typescript
+</pre></div>
+</div>
+<p>Run the following command to install the dependencies and build the application. It may take some time to complete:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>npm<span class="w"> </span>install
+</pre></div>
+</div>
+<p>This process installs the application dependencies defined in the application’s <code class="docutils literal notranslate"><span class="pre">package.json</span></code>. The most important
+of which is the <code class="docutils literal notranslate"><span class="pre">&#64;hyperledger/fabric-gateway</span></code> Node.js package; this provides the Fabric Gateway client API used
+to connect a Fabric Gateway and, using a specific client identity, to submit and evaluate transactions, and receive
+events.</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span></code> completes, everything is in place to run the application.</p>
+<p>Let’s take a look at the sample TypeScript application files we will be using in this tutorial. Run the following
+command to list the files in this directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls
+</pre></div>
+</div>
+<p>You should see the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>dist
+node_modules
+package-lock.json
+package.json
+src
+tsconfig.json
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> directory contains the client application source code. The JavaScript output generated from this source
+code during the install process is located in the <code class="docutils literal notranslate"><span class="pre">dist</span></code> directory, and can be ignored.</p>
+</div><div aria-labelledby="tab-1-R28=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>asset-transfer-basic/application-gateway-go
+</pre></div>
+</div>
+<p>The application dependencies are defined in the application’s <code class="docutils literal notranslate"><span class="pre">go.mod</span></code>. The most important of which is the
+<code class="docutils literal notranslate"><span class="pre">github.com/hyperledger/fabric-gateway</span></code> module; this provides the Fabric Gateway client API used to connect a
+Fabric Gateway and, using a specific client identity, to submit and evaluate transactions, and receive events.</p>
+<p>Let’s take a look at the sample Go application files we will be using in this tutorial. Run the following
+command to list the files in this directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls
+</pre></div>
+</div>
+<p>You should see the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>assetTransfer.go
+go.mod
+go.sum
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">assetTransfer.go</span></code> file contains the client application source code.</p>
+</div><div aria-labelledby="tab-1-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>asset-transfer-basic/application-gateway-java
+</pre></div>
+</div>
+<p>Run the following command to install the dependencies and build the application. It may take some time to complete:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./gradlew<span class="w"> </span>build
+</pre></div>
+</div>
+<p>This process installs the application dependencies defined in the application’s <code class="docutils literal notranslate"><span class="pre">build.gradle</span></code>. The most important
+of which is the <code class="docutils literal notranslate"><span class="pre">org.hyperledger.fabric:fabric-gateway</span></code> package; this provides the Fabric Gateway client API used
+to connect a Fabric Gateway and, using a specific client identity, to submit and evaluate transactions, and receive
+events.</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">./gradlew</span> <span class="pre">build</span></code> completes, everything is in place to run the application.</p>
+<p>Let’s take a look at the sample Java application files we will be using in this tutorial. Run the following
+command to list the files in this directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls
+</pre></div>
+</div>
+<p>You should see the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>build
+build.gradle
+gradle
+gradlew
+gradlew.bat
+settings.gradle
+src
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">src/main/java</span></code> directory contains the client application source code. The compiled Java class files generated
+from this source code during the build process is located in the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory, and can be ignored.</p>
+</div></div>
+</section>
+</section>
+<section id="run-the-sample-application">
+<h2>Run the sample application<a class="headerlink" href="#run-the-sample-application" title="Link to this heading">¶</a></h2>
+<p>When we started the Fabric test network earlier in this tutorial, several identities were created using the Certificate
+Authorities. These include a user identity for each of the organizations. The application will use the credentials
+of one of these user identities to transact with the blockchain network.</p>
+<p>Let’s run the application and then step through each of the interactions with the smart contract functions. From the
+<code class="docutils literal notranslate"><span class="pre">asset-transfer-basic/application-gateway-(typescript,</span> <span class="pre">go,</span> <span class="pre">java)</span></code> directory, run the following command:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-2-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-2-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-2-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>npm<span class="w"> </span>start
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>go<span class="w"> </span>run<span class="w"> </span>.
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./gradlew<span class="w"> </span>run
+</pre></div>
+</div>
+</div></div>
+<section id="first-establish-a-grpc-connection-to-the-gateway">
+<h3>First, establish a gRPC connection to the Gateway<a class="headerlink" href="#first-establish-a-grpc-connection-to-the-gateway" title="Link to this heading">¶</a></h3>
+<p>The client application establishes a <a class="reference external" href="https://grpc.io/">gRPC</a> connection to the Fabric Gateway service that it will
+use to transact with the blockchain network. To do this, it only requires the Fabric Gateway’s endpoint address and, if
+it is configured to use TLS, appropriate TLS certificates. In this sample, the gateway endpoint address is the address
+of a peer, which provides the Fabric Gateway service.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is significant overhead associated with establishing gRPC connections, so this connection should be
+retained by the application and used for all interactions with the Fabric Gateway.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In order to maintain security of any private data used in transactions, the application should connect to
+a Fabric Gateway belonging to the same organization as the client identity. If the client identity’s
+organization does not host any gateways, then a trusted gateway in another organization should be used.</p>
+</div>
+<p>The application creates a gRPC connection using the TLS certificate of the signing certificate authority so that the
+authenticity of the gateway’s TLS certificate can be verified.</p>
+<p>For a TLS connection to be successfully established, the endpoint address used by the client must match the address in
+the gateway’s TLS certificate. Since the client accesses the gateway’s Docker container at a <code class="docutils literal notranslate"><span class="pre">localhost</span></code> address, an
+override gRPC option is specified to force this endpoint address to be interpreted as the gateway’s configured hostname.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-3-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-3-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">peerEndpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;localhost:7051&#39;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">peerHostOverride</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;peer0.org1.example.com&#39;</span><span class="p">;</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">newGrpcConnection</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">Client</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">tlsRootCert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">tlsCertPath</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">tlsCredentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">credentials</span><span class="p">.</span><span class="nx">createSsl</span><span class="p">(</span><span class="nx">tlsRootCert</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">Client</span><span class="p">(</span><span class="nx">peerEndpoint</span><span class="p">,</span><span class="w"> </span><span class="nx">tlsCredentials</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s1">&#39;grpc.ssl_target_name_override&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">peerHostOverride</span><span class="p">,</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="nx">peerEndpoint</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;dns:///localhost:7051&quot;</span>
+<span class="w">    </span><span class="nx">peerHostOverride</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;peer0.org1.example.com&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">newGrpcConnection</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">ClientConn</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">certificatePEM</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">tlsCertPath</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read TLS certifcate file: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">certificate</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">identity</span><span class="p">.</span><span class="nx">CertificateFromPEM</span><span class="p">(</span><span class="nx">certificatePEM</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">certPool</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">x509</span><span class="p">.</span><span class="nx">NewCertPool</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">certPool</span><span class="p">.</span><span class="nx">AddCert</span><span class="p">(</span><span class="nx">certificate</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">transportCredentials</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">credentials</span><span class="p">.</span><span class="nx">NewClientTLSFromCert</span><span class="p">(</span><span class="nx">certPool</span><span class="p">,</span><span class="w"> </span><span class="nx">peerHostOverride</span><span class="p">)</span>
+
+<span class="w">    </span><span class="nx">connection</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">NewClient</span><span class="p">(</span><span class="nx">peerEndpoint</span><span class="p">,</span><span class="w"> </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">WithTransportCredentials</span><span class="p">(</span><span class="nx">transportCredentials</span><span class="p">))</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to create gRPC connection: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">connection</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">PEER_ENDPOINT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost:7051&quot;</span><span class="p">;</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">PEER_HOST_OVERRIDE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;peer0.org1.example.com&quot;</span><span class="p">;</span>
+
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">ManagedChannel</span><span class="w"> </span><span class="nf">newGrpcConnection</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TlsChannelCredentials</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="na">trustManager</span><span class="p">(</span><span class="n">TLS_CERT_PATH</span><span class="p">.</span><span class="na">toFile</span><span class="p">())</span>
+<span class="w">        </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Grpc</span><span class="p">.</span><span class="na">newChannelBuilder</span><span class="p">(</span><span class="n">PEER_ENDPOINT</span><span class="p">,</span><span class="w"> </span><span class="n">credentials</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">overrideAuthority</span><span class="p">(</span><span class="n">PEER_HOST_OVERRIDE</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="second-create-a-gateway-connection">
+<h3>Second, create a Gateway connection<a class="headerlink" href="#second-create-a-gateway-connection" title="Link to this heading">¶</a></h3>
+<p>The application then creates a <code class="docutils literal notranslate"><span class="pre">Gateway</span></code> connection, which it uses to access any of the <code class="docutils literal notranslate"><span class="pre">Networks</span></code> (analogous to
+channels) accessible to the Fabric Gateway, and subsequently smart <code class="docutils literal notranslate"><span class="pre">Contracts</span></code> deployed to those networks. A
+<code class="docutils literal notranslate"><span class="pre">Gateway</span></code> connection has three requirements:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>gRPC connection to the Fabric Gateway.</p></li>
+<li><p>Client identity used to transact with the network.</p></li>
+<li><p>Signing implementation used to generate digital signatures for the client identity.</p></li>
+</ol>
+</div></blockquote>
+<p>Additionally, it is good practice to specify the hash algorithm that will be used to generate the message digests
+passed to the signing implementation, instead of relying on the default value. Different signing implementations may
+have different hash algorithm requirements.</p>
+<p>The sample application uses the Org1 user’s X.509 certificate as the client identity, and a signing implementation
+based on that user’s private key.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-4-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-4-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-4-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">newGrpcConnection</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">gateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">connect</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">client</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">identity</span><span class="o">:</span><span class="w"> </span><span class="kt">await</span><span class="w"> </span><span class="nx">newIdentity</span><span class="p">(),</span>
+<span class="w">    </span><span class="nx">signer</span><span class="o">:</span><span class="w"> </span><span class="kt">await</span><span class="w"> </span><span class="nx">newSigner</span><span class="p">(),</span>
+<span class="w">    </span><span class="nx">hash</span><span class="o">:</span><span class="w"> </span><span class="kt">hash.sha256</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">newIdentity</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">Identity</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">promises</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">certPath</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">mspId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Org1MSP&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">credentials</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">newSigner</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">Signer</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">privateKeyPem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nx">promises</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">keyPath</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">privateKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createPrivateKey</span><span class="p">(</span><span class="nx">privateKeyPem</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">signers</span><span class="p">.</span><span class="nx">newPrivateKeySigner</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-4-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">clientConnection</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">newGrpcConnection</span><span class="p">()</span>
+<span class="w">      </span><span class="k">defer</span><span class="w"> </span><span class="nx">clientConnection</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="nx">gw</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">Connect</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">newIdentity</span><span class="p">(),</span>
+<span class="w">    </span><span class="nx">client</span><span class="p">.</span><span class="nx">WithSign</span><span class="p">(</span><span class="nx">newSign</span><span class="p">()),</span>
+<span class="w">    </span><span class="nx">client</span><span class="p">.</span><span class="nx">WithHash</span><span class="p">(</span><span class="nx">hash</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">client</span><span class="p">.</span><span class="nx">WithClientConnection</span><span class="p">(</span><span class="nx">clientConnection</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">newIdentity</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">identity</span><span class="p">.</span><span class="nx">X509Identity</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">certificatePEM</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">certPath</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read certificate file: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">certificate</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">identity</span><span class="p">.</span><span class="nx">CertificateFromPEM</span><span class="p">(</span><span class="nx">certificatePEM</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">identity</span><span class="p">.</span><span class="nx">NewX509Identity</span><span class="p">(</span><span class="s">&quot;Org1MSP&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">certificate</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">id</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">newSign</span><span class="p">()</span><span class="w"> </span><span class="nx">identity</span><span class="p">.</span><span class="nx">Sign</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">privateKeyPEM</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">readFirstFile</span><span class="p">(</span><span class="nx">keyPath</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to read private key file: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">privateKey</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">identity</span><span class="p">.</span><span class="nx">PrivateKeyFromPEM</span><span class="p">(</span><span class="nx">privateKeyPEM</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">sign</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">identity</span><span class="p">.</span><span class="nx">NewPrivateKeySign</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">sign</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-4-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newGrpcConnection</span><span class="p">();</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="n">gateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gateway</span><span class="p">.</span><span class="na">newInstance</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="na">identity</span><span class="p">(</span><span class="n">newIdentity</span><span class="p">())</span>
+<span class="w">    </span><span class="p">.</span><span class="na">signer</span><span class="p">(</span><span class="n">newSigner</span><span class="p">())</span>
+<span class="w">    </span><span class="p">.</span><span class="na">hash</span><span class="p">(</span><span class="n">Hash</span><span class="p">.</span><span class="na">SHA256</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">connection</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">connect</span><span class="p">();</span>
+
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Identity</span><span class="w"> </span><span class="nf">newIdentity</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">CertificateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="n">certReader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Files</span><span class="p">.</span><span class="na">newBufferedReader</span><span class="p">(</span><span class="n">CERT_PATH</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">certificate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Identities</span><span class="p">.</span><span class="na">readX509Certificate</span><span class="p">(</span><span class="n">certReader</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">X509Identity</span><span class="p">(</span><span class="s">&quot;Org1MSP&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">certificate</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Signer</span><span class="w"> </span><span class="nf">newSigner</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">InvalidKeyException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="n">keyReader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Files</span><span class="p">.</span><span class="na">newBufferedReader</span><span class="p">(</span><span class="n">KEY_PATH</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">privateKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Identities</span><span class="p">.</span><span class="na">readPrivateKey</span><span class="p">(</span><span class="n">keyReader</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Signers</span><span class="p">.</span><span class="na">newPrivateKeySigner</span><span class="p">(</span><span class="n">privateKey</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="third-access-the-smart-contract-to-be-invoked">
+<h3>Third, access the smart contract to be invoked<a class="headerlink" href="#third-access-the-smart-contract-to-be-invoked" title="Link to this heading">¶</a></h3>
+<p>The sample application uses the <code class="docutils literal notranslate"><span class="pre">Gateway</span></code> connection to get a reference to the <code class="docutils literal notranslate"><span class="pre">Network</span></code> and then the default
+<code class="docutils literal notranslate"><span class="pre">Contract</span></code> within a chaincode deployed on that network.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-5-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-5-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-5-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">network</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gateway</span><span class="p">.</span><span class="nx">getNetwork</span><span class="p">(</span><span class="nx">channelName</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">network</span><span class="p">.</span><span class="nx">getContract</span><span class="p">(</span><span class="nx">chaincodeName</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">network</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gw</span><span class="p">.</span><span class="nx">GetNetwork</span><span class="p">(</span><span class="nx">channelName</span><span class="p">)</span>
+<span class="nx">contract</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">network</span><span class="p">.</span><span class="nx">GetContract</span><span class="p">(</span><span class="nx">chaincodeName</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">network</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gateway</span><span class="p">.</span><span class="na">getNetwork</span><span class="p">(</span><span class="n">CHANNEL_NAME</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">network</span><span class="p">.</span><span class="na">getContract</span><span class="p">(</span><span class="n">CHAINCODE_NAME</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
+<p>When a chaincode package includes multiple smart contracts, you can provide both the name of the chaincode and the name
+of a specific smart contract as arguments to the <code class="docutils literal notranslate"><span class="pre">getContract()</span></code> call. For example:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-6-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-6-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-6-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-6-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-6-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-6-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-6-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-6-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">network</span><span class="p">.</span><span class="nx">getContract</span><span class="p">(</span><span class="nx">chaincodeName</span><span class="p">,</span><span class="w"> </span><span class="nx">smartContractName</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-6-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">contract</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">network</span><span class="p">.</span><span class="nx">GetContractWithName</span><span class="p">(</span><span class="nx">chaincodeName</span><span class="p">,</span><span class="w"> </span><span class="nx">smartContractName</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-6-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">network</span><span class="p">.</span><span class="na">getContract</span><span class="p">(</span><span class="n">CHAINCODE_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">SMART_CONTRACT_NAME</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="fourth-populate-the-ledger-with-sample-assets">
+<h3>Fourth, populate the ledger with sample assets<a class="headerlink" href="#fourth-populate-the-ledger-with-sample-assets" title="Link to this heading">¶</a></h3>
+<p>Immediately after initial deployment of the chaincode package, the ledger is empty. The application uses
+<code class="docutils literal notranslate"><span class="pre">submitTransaction()</span></code> to invoke the <code class="docutils literal notranslate"><span class="pre">InitLedger</span></code> transaction function, which populates the ledger with some sample
+assets. <code class="docutils literal notranslate"><span class="pre">submitTransaction()</span></code> will use the Fabric Gateway to:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Endorse the transaction proposal.</p></li>
+<li><p>Submit the endorsed transaction to the ordering service.</p></li>
+<li><p>Wait for the transaction to be committed, updating ledger state.</p></li>
+</ol>
+</div></blockquote>
+<p>Sample application <code class="docutils literal notranslate"><span class="pre">InitLedger</span></code> call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-7-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-7-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-7-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-7-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-7-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-7-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-7-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-7-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">submitTransaction</span><span class="p">(</span><span class="s1">&#39;InitLedger&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-7-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">SubmitTransaction</span><span class="p">(</span><span class="s">&quot;InitLedger&quot;</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to submit transaction: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-7-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">contract</span><span class="p">.</span><span class="na">submitTransaction</span><span class="p">(</span><span class="s">&quot;InitLedger&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="fifth-invoke-transaction-functions-to-read-and-write-assets">
+<h3>Fifth, invoke transaction functions to read and write assets<a class="headerlink" href="#fifth-invoke-transaction-functions-to-read-and-write-assets" title="Link to this heading">¶</a></h3>
+<p>Now the application is ready to execute business logic that queries, creates additional assets, and modifies assets on
+the ledger by invoking transactions functions on the smart contract.</p>
+<section id="query-all-assets">
+<h4>Query all assets<a class="headerlink" href="#query-all-assets" title="Link to this heading">¶</a></h4>
+<p>The application uses <code class="docutils literal notranslate"><span class="pre">evaluateTransaction()</span></code> to query the ledger by performing a read-only transaction invocation.
+<code class="docutils literal notranslate"><span class="pre">evaluateTransaction()</span></code> will use the Fabric Gateway to invoke the transaction function and return its result. The
+transaction is not sent to the ordering service and no ledger update occurs.</p>
+<p>Below, the sample application is just getting all the assets created in the previous step when we populated the ledger.</p>
+<p>Sample application <code class="docutils literal notranslate"><span class="pre">GetAllAssets</span></code> call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-8-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-8-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-8-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-8-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-8-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-8-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-8-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-8-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">resultBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">evaluateTransaction</span><span class="p">(</span><span class="s1">&#39;GetAllAssets&#39;</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">resultJson</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">utf8Decoder</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">resultBytes</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">resultJson</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** Result:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-8-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">evaluateResult</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">EvaluateTransaction</span><span class="p">(</span><span class="s">&quot;GetAllAssets&quot;</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to evaluate transaction: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">formatJSON</span><span class="p">(</span><span class="nx">evaluateResult</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;*** Result:%s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-8-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">contract</span><span class="p">.</span><span class="na">evaluateTransaction</span><span class="p">(</span><span class="s">&quot;GetAllAssets&quot;</span><span class="p">);</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Result: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prettyJson</span><span class="p">(</span><span class="n">result</span><span class="p">));</span>
+</pre></div>
+</div>
+</div></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Transaction function results are always returned as bytes since transaction functions can return any type of
+data. Often transaction functions return strings; or, as in the case above, a UTF-8 string of JSON data. The
+application is responsible for correctly interpreting the result bytes.</p>
+</div>
+<p>The terminal output should look like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*** Result: [
+  {
+    AppraisedValue: 300,
+    Color: &#39;blue&#39;,
+    ID: &#39;asset1&#39;,
+    Owner: &#39;Tomoko&#39;,
+    Size: 5,
+    docType: &#39;asset&#39;
+  },
+  {
+    AppraisedValue: 400,
+    Color: &#39;red&#39;,
+    ID: &#39;asset2&#39;,
+    Owner: &#39;Brad&#39;,
+    Size: 5,
+    docType: &#39;asset&#39;
+  },
+  {
+    AppraisedValue: 500,
+    Color: &#39;green&#39;,
+    ID: &#39;asset3&#39;,
+    Owner: &#39;Jin Soo&#39;,
+    Size: 10,
+    docType: &#39;asset&#39;
+  },
+  {
+    AppraisedValue: 600,
+    Color: &#39;yellow&#39;,
+    ID: &#39;asset4&#39;,
+    Owner: &#39;Max&#39;,
+    Size: 10,
+    docType: &#39;asset&#39;
+  },
+  {
+    AppraisedValue: 700,
+    Color: &#39;black&#39;,
+    ID: &#39;asset5&#39;,
+    Owner: &#39;Adriana&#39;,
+    Size: 15,
+    docType: &#39;asset&#39;
+  },
+  {
+    AppraisedValue: 800,
+    Color: &#39;white&#39;,
+    ID: &#39;asset6&#39;,
+    Owner: &#39;Michel&#39;,
+    Size: 15,
+    docType: &#39;asset&#39;
+  }
+]
+</pre></div>
+</div>
+</section>
+<section id="create-a-new-asset">
+<h4>Create a new asset<a class="headerlink" href="#create-a-new-asset" title="Link to this heading">¶</a></h4>
+<p>The sample application submits a transaction to create a new asset.</p>
+<p>Sample application <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-9-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-9-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-9-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-9-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-9-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-9-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-9-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-9-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">assetId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`asset</span><span class="si">${</span><span class="nb">String</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+
+<span class="k">await</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">submitTransaction</span><span class="p">(</span>
+<span class="w">    </span><span class="s1">&#39;CreateAsset&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">assetId</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;5&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;Tom&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;1300&#39;</span><span class="p">,</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-9-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">assetId</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;asset%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">now</span><span class="p">.</span><span class="nx">Unix</span><span class="p">()</span><span class="o">*</span><span class="mf">1e3</span><span class="o">+</span><span class="nb">int64</span><span class="p">(</span><span class="nx">now</span><span class="p">.</span><span class="nx">Nanosecond</span><span class="p">())</span><span class="o">/</span><span class="mf">1e6</span><span class="p">)</span>
+
+<span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">SubmitTransaction</span><span class="p">(</span><span class="s">&quot;CreateAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetId</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;yellow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Tom&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1300&quot;</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to submit transaction: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-9-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">assetId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;asset&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Instant</span><span class="p">.</span><span class="na">now</span><span class="p">().</span><span class="na">toEpochMilli</span><span class="p">();</span>
+
+<span class="n">contract</span><span class="p">.</span><span class="na">submitTransaction</span><span class="p">(</span><span class="s">&quot;CreateAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">assetId</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;yellow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Tom&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1300&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the application snippets above, it is important to note that the <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> transaction is submitted
+with the same type and number of arguments the chaincode is expecting, and in the correct sequence. In this
+case the correctly sequenced arguments are:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>assetId, &quot;yellow&quot;, &quot;5&quot;, &quot;Tom&quot;, &quot;1300&quot;
+</pre></div>
+</div>
+<p>The corresponding smart contract’s <code class="docutils literal notranslate"><span class="pre">CreateAsset</span></code> transaction function is expecting the following sequence
+of arguments that define the asset object:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ID, Color, Size, Owner, AppraisedValue
+</pre></div>
+</div>
+</div>
+</section>
+<section id="update-an-asset">
+<h4>Update an asset<a class="headerlink" href="#update-an-asset" title="Link to this heading">¶</a></h4>
+<p>The sample application submits a transaction to transfer ownership of the newly created asset. This time
+the transaction is invoked using <code class="docutils literal notranslate"><span class="pre">submitAsync()</span></code>, which returns after successfully submitting the endorsed
+transaction to the ordering service instead of waiting until the transaction is committed to the ledger. This allows
+the application to perform work using the transaction result while waiting for it to be committed.</p>
+<p>Sample application <code class="docutils literal notranslate"><span class="pre">TransferAsset</span></code> call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-10-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-10-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-10-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-10-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-10-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-10-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-10-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-10-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">commit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">submitAsync</span><span class="p">(</span><span class="s1">&#39;TransferAsset&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">arguments</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">assetId</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Saptha&#39;</span><span class="p">],</span>
+<span class="p">});</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">oldOwner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">utf8Decoder</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">commit</span><span class="p">.</span><span class="nx">getResult</span><span class="p">());</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`*** Successfully submitted transaction to transfer ownership from </span><span class="si">${</span><span class="nx">oldOwner</span><span class="si">}</span><span class="sb"> to Saptha`</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** Waiting for transaction commit&#39;</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">commit</span><span class="p">.</span><span class="nx">getStatus</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">status</span><span class="p">.</span><span class="nx">successful</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`Transaction </span><span class="si">${</span><span class="nx">status</span><span class="p">.</span><span class="nx">transactionId</span><span class="si">}</span><span class="sb"> failed to commit with status code </span><span class="si">${</span><span class="nb">String</span><span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">code</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** Transaction committed successfully&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-10-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-10-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">submitResult</span><span class="p">,</span><span class="w"> </span><span class="nx">commit</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">SubmitAsync</span><span class="p">(</span><span class="s">&quot;TransferAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">WithArguments</span><span class="p">(</span><span class="nx">assetId</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Mark&quot;</span><span class="p">))</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to submit transaction asynchronously: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;\n*** Successfully submitted transaction to transfer ownership from %s to Mark. \n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">submitResult</span><span class="p">))</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;*** Waiting for transaction commit.&quot;</span><span class="p">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="nx">commitStatus</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">commit</span><span class="p">.</span><span class="nx">Status</span><span class="p">();</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to get commit status: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">commitStatus</span><span class="p">.</span><span class="nx">Successful</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;transaction %s failed to commit with status: %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">commitStatus</span><span class="p">.</span><span class="nx">TransactionID</span><span class="p">,</span><span class="w"> </span><span class="nb">int32</span><span class="p">(</span><span class="nx">commitStatus</span><span class="p">.</span><span class="nx">Code</span><span class="p">)))</span>
+<span class="p">}</span>
+
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;*** Transaction committed successfully\n&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-10-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-10-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">commit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">contract</span><span class="p">.</span><span class="na">newProposal</span><span class="p">(</span><span class="s">&quot;TransferAsset&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">addArguments</span><span class="p">(</span><span class="n">assetId</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Saptha&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">build</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="na">endorse</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="na">submitAsync</span><span class="p">();</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">commit</span><span class="p">.</span><span class="na">getResult</span><span class="p">();</span>
+<span class="kd">var</span><span class="w"> </span><span class="n">oldOwner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">StandardCharsets</span><span class="p">.</span><span class="na">UTF_8</span><span class="p">);</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Successfully submitted transaction to transfer ownership from &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">oldOwner</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; to Saptha&quot;</span><span class="p">);</span>
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Waiting for transaction commit&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">commit</span><span class="p">.</span><span class="na">getStatus</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="na">isSuccessful</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&quot;Transaction &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="na">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">        </span><span class="s">&quot; failed to commit with status code &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="na">getCode</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Transaction committed successfully&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></div>
+<p>Terminal output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*** Successfully submitted transaction to transfer ownership from Tom to Saptha
+*** Waiting for transaction commit
+*** Transaction committed successfully
+</pre></div>
+</div>
+</section>
+<section id="query-the-updated-asset">
+<h4>Query the updated asset<a class="headerlink" href="#query-the-updated-asset" title="Link to this heading">¶</a></h4>
+<p>The sample application then evaluates a query for the transferred asset, showing that it was both created with the
+properties described, and then subsequently transferred to a new owner.</p>
+<p>Sample application <code class="docutils literal notranslate"><span class="pre">ReadAsset</span></code> call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-11-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-11-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-11-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-11-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-11-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-11-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-11-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-11-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">resultBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">evaluateTransaction</span><span class="p">(</span><span class="s1">&#39;ReadAsset&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetId</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">resultJson</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">utf8Decoder</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">resultBytes</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">resultJson</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** Result:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-11-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-11-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">evaluateResult</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">EvaluateTransaction</span><span class="p">(</span><span class="s">&quot;ReadAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">assetId</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to evaluate transaction: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">formatJSON</span><span class="p">(</span><span class="nx">evaluateResult</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;*** Result:%s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-11-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-11-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="n">evaluateResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">contract</span><span class="p">.</span><span class="na">evaluateTransaction</span><span class="p">(</span><span class="s">&quot;ReadAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">assetId</span><span class="p">);</span>
+
+<span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Result:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prettyJson</span><span class="p">(</span><span class="n">evaluateResult</span><span class="p">));</span>
+</pre></div>
+</div>
+</div></div>
+<p>Terminal output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*** Result: {
+    AppraisedValue: 1300,
+    Color: &#39;yellow&#39;,
+    ID: &#39;asset1639084597466&#39;,
+    Owner: &#39;Saptha&#39;,
+    Size: 5
+}
+</pre></div>
+</div>
+</section>
+<section id="handle-transaction-errors">
+<h4>Handle transaction errors<a class="headerlink" href="#handle-transaction-errors" title="Link to this heading">¶</a></h4>
+<p>The final part of the sequence demonstrates an error submitting a transaction. In this example, the application
+attempts to submit an <code class="docutils literal notranslate"><span class="pre">UpdateAsset</span></code> transaction but specifies an asset ID that does not exist. The transaction
+function returns an error response, and the <code class="docutils literal notranslate"><span class="pre">submitTransaction()</span></code> call fails.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">submitTransaction()</span></code> failure may generate several different types of error, indicating the point in the submit
+flow that the error occurred, and containing additional information to enable the application to respond appropriately.
+Consult the API documentation (<a class="reference external" href="https://hyperledger.github.io/fabric-gateway/main/api/node/interfaces/Contract.html#submitTransaction">Node.js</a>,
+<a class="reference external" href="https://pkg.go.dev/github.com/hyperledger/fabric-gateway/pkg/client#Contract.SubmitTransaction">Go</a>,
+<a class="reference external" href="https://hyperledger.github.io/fabric-gateway/main/api/java/org/hyperledger/fabric/client/Contract.html#submitTransaction(java.lang.String)">Java</a>)
+for details of the different error types that may be generated.</p>
+<p>Sample application failing <code class="docutils literal notranslate"><span class="pre">UpdateAsset</span></code> call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-12-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-12-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-12-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-12-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-12-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-12-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-12-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-12-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-ts notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">submitTransaction</span><span class="p">(</span>
+<span class="w">        </span><span class="s1">&#39;UpdateAsset&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="s1">&#39;asset70&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="s1">&#39;5&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="s1">&#39;Tomoko&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="s1">&#39;300&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;******** FAILED to return an error&#39;</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** Successfully caught the error: \n&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">error</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-12-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-12-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">contract</span><span class="p">.</span><span class="nx">SubmitTransaction</span><span class="p">(</span><span class="s">&quot;UpdateAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;asset70&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Tomoko&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;300&quot;</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="s">&quot;******** FAILED to return an error&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;*** Successfully caught the error:&quot;</span><span class="p">)</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">endorseErr</span><span class="w"> </span><span class="o">*</span><span class="nx">client</span><span class="p">.</span><span class="nx">EndorseError</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">submitErr</span><span class="w"> </span><span class="o">*</span><span class="nx">client</span><span class="p">.</span><span class="nx">SubmitError</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">commitStatusErr</span><span class="w"> </span><span class="o">*</span><span class="nx">client</span><span class="p">.</span><span class="nx">CommitStatusError</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">commitErr</span><span class="w"> </span><span class="o">*</span><span class="nx">client</span><span class="p">.</span><span class="nx">CommitError</span>
+
+<span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">As</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">endorseErr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Endorse error for transaction %s with gRPC status %v: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">endorseErr</span><span class="p">.</span><span class="nx">TransactionID</span><span class="p">,</span><span class="w"> </span><span class="nx">status</span><span class="p">.</span><span class="nx">Code</span><span class="p">(</span><span class="nx">endorseErr</span><span class="p">),</span><span class="w"> </span><span class="nx">endorseErr</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">As</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">submitErr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Submit error for transaction %s with gRPC status %v: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">submitErr</span><span class="p">.</span><span class="nx">TransactionID</span><span class="p">,</span><span class="w"> </span><span class="nx">status</span><span class="p">.</span><span class="nx">Code</span><span class="p">(</span><span class="nx">submitErr</span><span class="p">),</span><span class="w"> </span><span class="nx">submitErr</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">As</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">commitStatusErr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">Is</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">DeadlineExceeded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Timeout waiting for transaction %s commit status: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">commitStatusErr</span><span class="p">.</span><span class="nx">TransactionID</span><span class="p">,</span><span class="w"> </span><span class="nx">commitStatusErr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Error obtaining commit status for transaction %s with gRPC status %v: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">commitStatusErr</span><span class="p">.</span><span class="nx">TransactionID</span><span class="p">,</span><span class="w"> </span><span class="nx">status</span><span class="p">.</span><span class="nx">Code</span><span class="p">(</span><span class="nx">commitStatusErr</span><span class="p">),</span><span class="w"> </span><span class="nx">commitStatusErr</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">As</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">commitErr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Transaction %s failed to commit with status %d: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">commitErr</span><span class="p">.</span><span class="nx">TransactionID</span><span class="p">,</span><span class="w"> </span><span class="nb">int32</span><span class="p">(</span><span class="nx">commitErr</span><span class="p">.</span><span class="nx">Code</span><span class="p">),</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;unexpected error type %T: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="nx">statusErr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">status</span><span class="p">.</span><span class="nx">Convert</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+
+<span class="nx">details</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">statusErr</span><span class="p">.</span><span class="nx">Details</span><span class="p">()</span>
+<span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">details</span><span class="p">)</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error Details:&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">detail</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">details</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="nx">detail</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">detail</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="o">*</span><span class="nx">gateway</span><span class="p">.</span><span class="nx">ErrorDetail</span><span class="p">:</span>
+<span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;- address: %s; mspId: %s; message: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">detail</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span><span class="w"> </span><span class="nx">detail</span><span class="p">.</span><span class="nx">MspId</span><span class="p">,</span><span class="w"> </span><span class="nx">detail</span><span class="p">.</span><span class="nx">Message</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-12-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-12-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">contract</span><span class="p">.</span><span class="na">submitTransaction</span><span class="p">(</span><span class="s">&quot;UpdateAsset&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;asset70&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Tomoko&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;300&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;******** FAILED to return an error&quot;</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">EndorseException</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SubmitException</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CommitStatusException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Successfully caught the error:&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">);</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Transaction ID: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getTransactionId</span><span class="p">());</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">CommitException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;*** Successfully caught the error:&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">);</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Transaction ID: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getTransactionId</span><span class="p">());</span>
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Status code: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getCode</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></div>
+<p>Terminal Output (with stack traces removed for clarity):</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-13-VHlwZVNjcmlwdA==" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-13-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tab" tabindex="0">TypeScript</button><button aria-controls="panel-13-R28=" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-13-R28=" name="R28=" role="tab" tabindex="-1">Go</button><button aria-controls="panel-13-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-13-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-13-VHlwZVNjcmlwdA==" class="sphinx-tabs-panel code-tab group-tab" id="panel-13-VHlwZVNjcmlwdA==" name="VHlwZVNjcmlwdA==" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*** Successfully caught the error:
+EndorseError: 10 ABORTED: failed to endorse transaction, see attached details for more info
+    at ... {
+  code: 10,
+  details: [
+    {
+      address: &#39;peer0.org1.example.com:7051&#39;,
+      message: &#39;chaincode response 500, the asset asset70 does not exist&#39;,
+      mspId: &#39;Org1MSP&#39;
+    }
+  ],
+  cause: Error: 10 ABORTED: failed to endorse transaction, see attached details for more info
+      at ... {
+    code: 10,
+    details: &#39;failed to endorse transaction, see attached details for more info&#39;,
+    metadata: Metadata { internalRepr: [Map], options: {} }
+  },
+  transactionId: &#39;a92980d41eef1d6492d63acd5fbb6ef1db0f53252330ad28e548fedfdb9167fe&#39;
+}
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-13-R28=" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-13-R28=" name="R28=" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*** Successfully caught the error:
+Endorse error for transaction 0a0bf1af9c53e0621d6dc98217fb882e0c6d5e174dc1a45f5cb4e07580528347 with gRPC status Aborted: rpc error: code = Aborted desc = failed to endorse transaction, see attached details for more info
+Error Details:
+- address: peer0.org1.example.com:7051; mspId: Org1MSP; message: chaincode response 500, the asset asset70 does not exist
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-13-SmF2YQ==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-13-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*** Successfully caught the error:
+org.hyperledger.fabric.client.EndorseException: io.grpc.StatusRuntimeException: ABORTED: failed to endorse transaction, see attached details for more info
+        at ...
+Caused by: io.grpc.StatusRuntimeException: ABORTED: failed to endorse transaction, see attached details for more info
+        at ...
+Error details:
+    address: peer0.org1.example.com:7051; mspId: Org1MSP; message: chaincode response 500, the asset asset70 does not exist
+Transaction ID: 5dcc3576cbb851bfbd998f2413da7707761ad15911b7c7fba853e72ac1b3b002
+</pre></div>
+</div>
+</div></div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Endorse</span></code> error type indicates that failure occurred during endorsement, and the
+<a class="reference external" href="https://grpc.github.io/grpc/core/md_doc_statuscodes.html">gRPC status code</a> of <code class="docutils literal notranslate"><span class="pre">ABORTED</span></code> indicates that the
+application successfully invoked the Fabric Gateway but that a failure occurred during the endorsement process. A gRPC
+status code of <code class="docutils literal notranslate"><span class="pre">UNAVAILABLE</span></code> or <code class="docutils literal notranslate"><span class="pre">DEADLINE_EXCEEDED</span></code> would suggest that the Fabric Gateway was not reachable or a
+timely response was not received so retrying the operation might be appropriate.</p>
+</section>
+</section>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Link to this heading">¶</a></h2>
+<p>When you are finished using the asset-transfer sample, you can bring down the test network using the <code class="docutils literal notranslate"><span class="pre">network.sh</span></code>
+script.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./network.sh<span class="w"> </span>down
+</pre></div>
+</div>
+<p>This command will bring down the certificate authorities, peers, and ordering nodes of the blockchain network that we
+created. Note that all of the data on the ledger will be lost. If you want to go through the tutorial again, you will
+start from a clean initial state.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>You have now seen how to set up a blockchain network by launching the test network and deploying a smart contract. You
+have then run a client application, and examined the application code to understand how it uses the Fabric Gateway
+client API to query and update the ledger by connecting to a Fabric Gateway and invoking transaction functions on
+the deployed smart contract.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="deploy_chaincode.html" class="btn btn-neutral" title="Deploying a smart contract to a channel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Hyperledger 2020-2024.
+    <br>
+      <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

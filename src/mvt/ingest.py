@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 from utils import load_yaml_file
@@ -11,6 +10,8 @@ from langchain_community.document_loaders.recursive_url_loader import RecursiveU
 from langchain_community.document_loaders.merge import MergedDataLoader
 from langchain_community.document_loaders import ReadTheDocsLoader
 
+from tqdm import tqdm
+from langchain_core.callbacks import CallbackManager
 
 
 # Read config data
@@ -26,12 +27,21 @@ api_key = os.getenv("MISTRALAI_API_KEY")
 loader_web = RecursiveUrlLoader(url=config_data["wiki_url"])
 
 # load documents from ReadTheDocs documentation
-loader_rtdocs = ReadTheDocsLoader(path="./rtdocs", encoding="utf-8", patterns=("*.html"))
+loader_rtdocs = ReadTheDocsLoader(path="./rtdocs/rtdocsfiles", encoding="utf-8", patterns=("*.html") )
 
-# merge all the document sources
-loader= MergedDataLoader(loaders=[loader_rtdocs, loader_web])
+# merge all the document sources & show progress bar
+# loader= MergedDataLoader(loaders=[loader_rtdocs, loader_web])
 
 # Load data
+# docs = loader.load()
+class ProgressMergedDataLoader(MergedDataLoader):
+    def load(self):
+        docs = []
+        for loader in tqdm(self.loaders, desc="Loading documents"):
+            docs.extend(loader.load())
+        return docs
+
+loader = ProgressMergedDataLoader(loaders=[loader_rtdocs, loader_web])
 docs = loader.load()
 
 # Split text into chunks 
@@ -39,7 +49,13 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20
 documents = text_splitter.split_documents(docs)
 
 # Define the embedding model
+# embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=api_key)
+
+# Add progress bar for embeddings
 embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=api_key)
+
+
+
 
 # Create the vector store 
 vectordb = FAISS.from_documents(documents, embeddings)
