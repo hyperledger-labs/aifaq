@@ -10,7 +10,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders.recursive_url_loader import RecursiveUrlLoader
 from langchain_community.document_loaders.merge import MergedDataLoader
 from langchain_community.document_loaders import ReadTheDocsLoader
-
+from tqdm import tqdm
 
 
 # Read config data
@@ -28,8 +28,17 @@ loader_web = RecursiveUrlLoader(url=config_data["wiki_url"])
 # load documents from ReadTheDocs documentation
 loader_rtdocs = ReadTheDocsLoader(path="./rtdocs", encoding="utf-8", patterns=("*.html"))
 
+# change 2 -> progress bar
+
+class ProgressMergedDataLoader(MergedDataLoader):
+    def load(self):
+        docs = []
+        for loader in tqdm(self.loaders, desc="Loading documents"):
+            docs.extend(loader.load())
+        return docs
+
 # merge all the document sources
-loader= MergedDataLoader(loaders=[loader_rtdocs, loader_web])
+loader = ProgressMergedDataLoader(loaders=[loader_rtdocs, loader_web])
 
 # Load data
 docs = loader.load()
