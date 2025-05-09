@@ -11,3 +11,4 @@ beautifulsoup4
 transformers
 fastapi
 uvicorn
+tqdm>=4.66.0
