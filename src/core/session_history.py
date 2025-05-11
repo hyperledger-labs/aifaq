@@ -1,5 +1,5 @@
 import os
-from langchain.memory import SummaryBufferMemory
+from langchain.memory import ConversationSummaryBufferMemory
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_groq import ChatGroq
@@ -19,18 +19,21 @@ llm = ChatGroq(temperature=0, model_name="llama3-70b-8192")
 # Dictionary to hold memory per session
 store = {}
 
-def get_session_memory(session_id: str) -> SummaryBufferMemory:
+from langchain.memory import ConversationSummaryBufferMemory
+
+def get_session_memory(session_id: str) -> ConversationSummaryBufferMemory:
     if session_id not in store:
         # Creating a chat history instance
         chat_history = ChatMessageHistory()
 
-        # This is to Create summary buffer memory using Groq LLM
-        memory = SummaryBufferMemory(
+        # Create summary buffer memory using Groq LLM
+        memory = ConversationSummaryBufferMemory(
             llm=llm,
-            max_token_limit=1000,  # We can adjust this based on desired summary size
+            max_token_limit= 50,  # Adjust based on desired summary size
             memory_key="chat_history",
             return_messages=True,
-            chat_memory=chat_history
+            chat_memory=chat_history,
+            verbose = True
         )
 
         store[session_id] = memory
