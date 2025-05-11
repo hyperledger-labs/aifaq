@@ -4,6 +4,7 @@ langchain-huggingface
 langchain-core
 langchain-groq
 python-dotenv
+transformers
 sentence-transformers
 chromadb
 bitsandbytes
