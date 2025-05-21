@@ -2,22 +2,30 @@ import streamlit as st
 from menu import menu
 from database import create_connection, create_table, get_user, insert_user
 from homepage import gethomepage
+from auth0_component import login_button
 
 # Get markdown homepage
 st.markdown(body=gethomepage(), unsafe_allow_html=True)
 
-# Check if user is authenticated
-if not st.experimental_user.is_logged_in:
-    if st.button("Log in or Sign up"):
-        st.login("auth0")
-    st.stop()
+# Auth0 configuration
+AUTH0_CLIENT_ID = "efqtkHTVVQtsBIM86BGMf1VfyVtiyc01"
+AUTH0_DOMAIN = "dev-tz87kqmkwnpatla6.us.auth0.com"
+AUTH0_REDIRECT_URI = "http://localhost:8501"
 
-# Logout button
-if st.sidebar.button("Log out"):
-    st.logout()
-    st.session_state['user_type'] = None
-    st.session_state['username'] = None
-    st.stop()  
+user_info = login_button(AUTH0_CLIENT_ID, domain = AUTH0_DOMAIN)
+
+if user_info:
+    st.success(f"Welcome {user_info['name']}!")
+    st.write("🔐 You are logged in.")
+    st.write("📧 Email:", user_info['email'])
+    st.write("🆔 Sub:", user_info['sub'])
+
+    if st.sidebar.button("Log out"):
+        st.session_state.clear()
+        st.experimental_rerun()
+else:
+    st.warning("Please log in to continue.")
+
 
 # Initialize session state
 if "user_type" not in st.session_state:
