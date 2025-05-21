@@ -18,3 +18,4 @@ chardet
 sentence-transformers
 lxml
 Authlib
+streamlit-auth0-component
