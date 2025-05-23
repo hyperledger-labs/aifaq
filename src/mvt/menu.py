@@ -1,38 +1,45 @@
 import streamlit as st
 
-# This file contains the menu functions for the AIFAQ application.
-# It provides a navigation menu for authenticated users and a different menu for unauthenticated users.
-# The menu is displayed in the sidebar of the Streamlit application.
+def handle_logout():
+    """Handle logout action and state cleanup"""
+    if st.sidebar.button("Log out"):
+        st.session_state['user_type'] = None
+        st.session_state['username'] = None
+        st.session_state.pop('first_login', None)
+        st.logout()
+        st.switch_page("app.py")
+
 def authenticated_menu():
+    # Show logout button at the top of sidebar
+    handle_logout()
+    
     # Show a navigation menu for authenticated users
     st.sidebar.page_link("pages/chatbot.py", label="AIFAQ ChatBot")
     if st.session_state.user_type in ["admin"]:
         st.sidebar.page_link("pages/config_page_public.py", label="Config Public Page")
         st.sidebar.page_link("pages/config_page_private.py", label="Config Private Page")
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
+        st.sidebar.page_link("pages/user_management.py", label="User Management")
     st.sidebar.page_link("app.py", label="About")
 
-# This function is called when the user is not authenticated.
-# It shows a simplified navigation menu with only the About page.
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
     st.sidebar.page_link("app.py", label="About")
 
-# This function is called to display the menu based on the user's authentication status.
-# It checks if the user is logged in and shows the appropriate menu.
 def menu():
-    # Determine if a user is logged in or not, then show the correct
-    # navigation menu
+    # Check authentication status
     if "user_type" not in st.session_state or st.session_state.user_type is None:
         unauthenticated_menu()
         return
+
+    # Redirect to chatbot on first successful login
+    if "first_login" not in st.session_state:
+        st.session_state.first_login = True
+        st.switch_page("pages/chatbot.py")
+    
     authenticated_menu()
 
-# This function is called to redirect users to the main page if they are not logged in.
-# It checks the session state for the user's authentication status and calls the menu function.
 def menu_with_redirect():
-    # Redirect users to the main page if not logged in, otherwise continue to
-    # render the navigation menu
     if "user_type" not in st.session_state or st.session_state.user_type is None:
         st.switch_page("app.py")
     menu()

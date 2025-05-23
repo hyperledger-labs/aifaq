@@ -1,7 +1,7 @@
 import os
 from os.path import isfile, join
 from os import listdir
-from utils import load_yaml_file, bs4_extractor
+from utils import load_yaml_file, bs4_html_improved, extract_video_id, save_transcript
 from dotenv import load_dotenv, find_dotenv
 #from transformers import AutoTokenizer
 from langchain_community.vectorstores import FAISS
@@ -17,6 +17,7 @@ from langchain_community.document_loaders.generic import GenericLoader
 from langchain_community.document_loaders.parsers import PyPDFParser
 from langchain_community.document_loaders import ReadTheDocsLoader
 from langchain_community.document_loaders import BSHTMLLoader
+from langchain_openai import OpenAIEmbeddings
 
 # This function builds a knowledge base by loading various document types from specified directories.
 # It processes YouTube links, web URLs, PDF files, HTML files, and text files
@@ -25,9 +26,6 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
 
   # load environment variables
   load_dotenv(find_dotenv())
-
-  # get mistral api key
-  api_key = os.getenv("MISTRALAI_API_KEY")
 
   dataset_dir = datasetdir
 
@@ -43,12 +41,32 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
       with open(fpath, 'r', encoding='UTF-8') as file:
           while line := file.readline():
               url = line.rstrip()
+              # extract video id from url
+              id_video = extract_video_id(url)
+              try:
+                  out_path = os.path.join(folder_pth, "./transcripts")
+                  save_transcript(id_video, out_path)
+              except:
+                  print("Invalid url: " + url)
+
+
+  """
+  # read folder: files contain yt links
+  folder_pth = join(dataset_dir, config_data["yt_video_links"])
+  yt_files = [file for file in listdir(folder_pth) if isfile(join(folder_pth, file))]
+
+  # read each file in yt folder
+  for file in yt_files:
+      fpath = os.path.join(folder_pth, file)
+      with open(fpath, 'r', encoding='UTF-8') as file:
+          while line := file.readline():
+              url = line.rstrip()
               try:
                   loader = YoutubeLoader.from_youtube_url(url, add_video_info=False)
                   yt_list.append(loader)
               except:
                   print("Invalid url: " + url)
-
+    """
   web_list = []
 
   # read folder: files contain urls
@@ -62,7 +80,7 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
           while line := file.readline():
               url = line.rstrip()
               try:
-                  loader = RecursiveUrlLoader(url=url, extractor=bs4_extractor, prevent_outside=True)
+                  loader = RecursiveUrlLoader(url=url, extractor=bs4_html_improved, prevent_outside=True)
                   web_list.append(loader)
               except:
                   print("Invalid url: " + url)
@@ -109,21 +127,23 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
 
   # list of loaders
   loaders = []
+  
 
   for item in web_list:
       loaders.append(item)
-
-  for item in yt_list:
-      loaders.append(item)
-
+      
   for item in html_list:
       loaders.append(item)
-
+      
+  for item in yt_list:
+      loaders.append(item)
+  
   loaders.append(pdf_list)
 
   loaders.append(rtdocs_list)
 
   loaders.append(txt_list)
+
 
   # merge all the document sources
   loader= MergedDataLoader(loaders=loaders)
@@ -139,8 +159,15 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
   text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
   documents = text_splitter.split_documents(docs)
 
-  # Define the embedding model
-  embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=api_key)
+  # Get API keys
+  mistral_api_key = os.getenv("MISTRALAI_API_KEY")
+  openai_api_key = os.getenv("OPENAI_API_KEY")
+
+  # Select embeddings based on provider
+  if config_data["llm_provider"] == "mistral":
+    embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=mistral_api_key)
+  else:  # default to OpenAI
+    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
   if documents:
     # Create the vector store 

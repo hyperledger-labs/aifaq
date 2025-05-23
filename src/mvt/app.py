@@ -12,13 +12,6 @@ if not st.experimental_user.is_logged_in:
         st.login("auth0")
     st.stop()
 
-# Logout button
-if st.sidebar.button("Log out"):
-    st.logout()
-    st.session_state['user_type'] = None
-    st.session_state['username'] = None
-    st.stop()  
-
 # Initialize session state
 if "user_type" not in st.session_state:
     st.session_state.user_type = None
