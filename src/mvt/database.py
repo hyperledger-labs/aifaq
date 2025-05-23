@@ -1,4 +1,3 @@
-import streamlit as st
 import sqlite3
 
 # This script creates a SQLite database to store user information.

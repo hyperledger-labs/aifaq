@@ -2,7 +2,8 @@ from utils import load_yaml_file
 from main import get_ragchain
 import streamlit as st
 from menu import menu_with_redirect
-from chat_history import init_db, save_message, get_messages  # <-- new import
+from chat_history import init_db, save_message, get_messages
+from query_rewriting import query_rewriting_llm
 
 # Initialize DB
 init_db()
@@ -58,9 +59,13 @@ if prompt := st.chat_input():
     with st.chat_message("user"):
         st.write(prompt)
 
+    # Rewrite the query for better search
+    rewritten_query = query_rewriting_llm(prompt)
+
     with st.chat_message("assistant", avatar=logo_path):
         with st.spinner("Thinking..."):
-            response = rag_chain.invoke({"input": prompt})
+            #response = rag_chain.invoke({"input": prompt})
+            response = rag_chain.invoke({"input": rewritten_query})
             # save response in a text file
             print(response, file=open('responses.txt', 'a', encoding='utf-8'))
             st.markdown(response["answer"])

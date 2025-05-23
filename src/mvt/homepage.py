@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from utils import load_yaml_file
+
+# Read config data
+config_data = load_yaml_file("config.yaml")
+
 def gethomepage():
-    markdown_string = """
+    markdown_string = f"""
 <div style="text-align: center;">
-  <img src="https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true" alt="AIFAQ logo" style="height: 110px">
-  <h1>AI Lab Project powered by <em>Linux Foundation Decentralized Trust</em></h1>
+  <img src={config_data["logo_pth"]} alt="AIFAQ logo" style="height: 110px">
+  <h1>AI Agent powered by <em>Founder Institute</em></h1>
 </div>
 
 ## Try for free
