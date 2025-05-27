@@ -146,6 +146,22 @@ def bs4_html_improved(html):
     return '\n\n'.join(ex_data)
 
 
+def bs4_extract_linear_text(html):
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Remove non-visible content
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+
+    # Extract visible text with line breaks between elements
+    text = soup.get_text(separator='\n', strip=True)
+
+    # Clean up: remove empty lines and extra spaces
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    return '\n'.join(lines)
+
+
+
 def bs4_lxml(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
