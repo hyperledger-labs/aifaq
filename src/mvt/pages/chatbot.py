@@ -64,8 +64,9 @@ if prompt := st.chat_input():
 
     with st.chat_message("assistant", avatar=logo_path):
         with st.spinner("Thinking..."):
-            #response = rag_chain.invoke({"input": prompt})
-            response = rag_chain.invoke({"input": rewritten_query})
+            # Use rewritten query or original prompt based on config
+            query = rewritten_query if config_data.get("use_query_rewriting", True) else prompt
+            response = rag_chain.invoke({"input": query})
             # save response in a text file
             print(response, file=open('responses.txt', 'a', encoding='utf-8'))
             st.markdown(response["answer"])
