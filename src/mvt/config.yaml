@@ -1,0 +1,18 @@
+llm_provider: "mistral" # Options: "openai" or "mistral"
+model_name: "mistral-large-latest" # for OpenAI: "gpt-3.5-turbo" or "gpt-4", for Mistral: "mistral-medium" or "mistral-large-latest"
+embedding_model: "mistral-embed" # "text-embedding-ada-002" for OpenAI or "mistral-embed" for Mistral
+dataset_private_path: "./dataset/private"
+dataset_public_path: "./dataset/public"
+web_urls: "web_urls"
+yt_video_links: "yt_video_links"
+text_files: "text_files"
+pdf_files: "pdf_files"
+rtdocs_files: "rtdocs_files"
+html_files: "html_files"
+persist_directory: "faiss_index"
+host: "127.0.0.1"
+port: 8080
+system_prompt: "You are an assistant for question-answering tasks that are related to Linux Foundation Decentralized Trust former Hyperledger blockchain. Use the following pieces of retrieved context to answer the question. If you don't know the answer, say that you don't know."
+use_query_rewriting: false # Set to true to enable query rewriting
+query_rewriting_prompt: "You are an assistant helping to rewrite user queries to make them more specific and effective for searching documents. The context is the Linux Foundation Decentralized Trust former Hyperledger. Please rewrite the human query to be more specific, detailed, and optimized for document retrieval, considering the context mentioned."
+logo_pth: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/The_Founder_Institute_Logo.png/250px-The_Founder_Institute_Logo.png"
