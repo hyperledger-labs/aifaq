@@ -1,9 +1,7 @@
 import os
-import openai
 from utils import load_yaml_file
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
-from langchain_openai import ChatOpenAI
 
 def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"):
     """
@@ -32,6 +30,8 @@ def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"
             model=config_data["model_name"]
         )
     else:  # default to OpenAI
+        import openai
+        from langchain_openai import ChatOpenAI
         model = ChatOpenAI(
             openai_api_key=openai_api_key,
             model=config_data["model_name"],

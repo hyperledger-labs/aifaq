@@ -7,8 +7,6 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_mistralai.embeddings import MistralAIEmbeddings
-from langchain_openai import OpenAIEmbeddings
-from langchain_openai import ChatOpenAI
 #from langchain.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_core.documents import Document
 from typing import List
@@ -34,6 +32,8 @@ def get_ragchain(filter):
             model=config_data["model_name"]
         )
     else:  # default to OpenAI
+        from langchain_openai import ChatOpenAI
+        from langchain_openai import OpenAIEmbeddings
         embeddings = OpenAIEmbeddings(
             openai_api_key=openai_api_key
         )

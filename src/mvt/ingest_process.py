@@ -16,7 +16,6 @@ from langchain_community.document_loaders.generic import GenericLoader
 from langchain_community.document_loaders.parsers import PyPDFParser
 from langchain_community.document_loaders import ReadTheDocsLoader
 from langchain_community.document_loaders import BSHTMLLoader
-from langchain_openai import OpenAIEmbeddings
 
 # This function builds a knowledge base by loading various document types from specified directories.
 # It processes YouTube links, web URLs, PDF files, HTML files, and text files
@@ -158,6 +157,7 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
   if config_data["llm_provider"] == "mistral":
     embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=mistral_api_key)
   else:  # default to OpenAI
+    from langchain_openai import OpenAIEmbeddings
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
   if documents:
