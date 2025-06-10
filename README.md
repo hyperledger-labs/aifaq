@@ -24,8 +24,7 @@ The **Hyperledger Labs AIFAQ Prototype (Agents Branch)** is an open-source conve
 
 👉 Official Wiki Pages:
 
-* [Hyperledger Labs AIFAQ](https://labs.hyperledger.org/labs/aifaq.html)
-* [Hyperledger Labs Wiki](https://wiki.hyperledger.org/display/labs/AI+FAQ)
+* [Hyperledger Labs Wiki](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
 
 👉 Weekly Community Calls:
 
