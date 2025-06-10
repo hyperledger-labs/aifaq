@@ -55,12 +55,6 @@ Currently uses [Mistral Models](https://mistral.ai) (e.g., Mixtral-8x7B-v0.1). P
 
 ---
 
-## 🌐 Language Stats
-
-
-
----
-
 ## 📝 Setup (Agents Branch)
 
 ```bash
