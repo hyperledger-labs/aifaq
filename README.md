@@ -1,164 +1,136 @@
-# DEV Branch: Hyperledger Labs AIFAQ prototype
+# Hyperledger Labs AIFAQ Prototype (Agents Branch)
 
-The scope of this Hyperledger Labs project is to support the users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. We are implementing an open source conversational AI tool which replies to the questions related to specific context. This is a prototype which allows to create a chatbot running a RESTful API which requires GPU. Here the official Wiki pages: [Hyperledger Labs aifaq](https://labs.hyperledger.org/labs/aifaq.html) and [Hyperledger Labs wiki](https://wiki.hyperledger.org/display/labs/AI+FAQ). Please, read also the [Antitrust Policy and the Code of Conduct](https://wiki.hyperledger.org/pages/viewpage.action?pageId=41587043). Every Monday we have a public meeting and the invitation is on the Hyperledger Labs calendar: [[Hyperledger Labs] FAQ AI Lab calls](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
+![Hyperledger Labs](https://img.shields.io/badge/Hyperledger-Labs-blue?logo=hyperledger)
+![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-green.svg)
+![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg?logo=python)
 
-## Background
+[![GitHub Stars](https://img.shields.io/github/stars/hyperledger-labs/aifaq?style=social)](https://github.com/hyperledger-labs/aifaq/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/hyperledger-labs/aifaq?style=social)](https://github.com/hyperledger-labs/aifaq/network/members)
+[![Language Stats](https://img.shields.io/github/languages/top/hyperledger-labs/aifaq)](https://github.com/hyperledger-labs/aifaq)
+[![Issues](https://img.shields.io/github/issues/hyperledger-labs/aifaq)](https://github.com/hyperledger-labs/aifaq/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/hyperledger-labs/aifaq)](https://github.com/hyperledger-labs/aifaq/pulls)
 
-The system is an open source python project which implements an AI chatbot that replies to HTTP requests. The idea is to implement an open source framework/template, as example, for other communities/organizations/companies. Last results in open LLMs allow to have good performance using common HW resources.\
-Below the application architecture:
+![Language Stats](https://img.shields.io/github/languages/count/hyperledger-labs/aifaq)
+![Python](https://img.shields.io/badge/Python-85%25-blue?logo=python)
+![HTML](https://img.shields.io/badge/HTML-10%25-orange?logo=html5)
+![Other](https://img.shields.io/badge/Others-5%25-lightgrey?logo=github)
 
-<img src="./images/prototype_schema_v1.drawio.png" alt="LLM chatbot schema" width="750"/>
+---
 
-We use RAG (Retrieval Augmented Generation [arxiv.org](https://arxiv.org/abs/2312.10997)) for question answering use case. That technique aims to improve LLM answers by incorporating knowledge from external database (e.g. vector database).
+## 🚀 Overview
 
-The image depicts two workflow:
+The **Hyperledger Labs AIFAQ Prototype (Agents Branch)** is an open-source conversational AI tool that simplifies knowledge discovery within vast document repositories. Our mission: to **support users, developers, and communities by providing an intuitive conversational interface** that answers questions about specific contexts—no more wading through oceans of documents!
 
-1. The data ingestion workflow
-2. The chat workflow
+👉 Official Wiki Pages:
 
-During the ingestion phase, the system loads context documents and creates a vector database. For example, the document sources can be:
+* [Hyperledger Labs AIFAQ](https://labs.hyperledger.org/labs/aifaq.html)
+* [Hyperledger Labs Wiki](https://wiki.hyperledger.org/display/labs/AI+FAQ)
 
-- An online software guide (readthedocs template)
-- The GitHub issues and pull requests
+👉 Weekly Community Calls:
 
-In our case, they are the readthedocs guide and a wiki page.\
-After the first phase, the system is ready to reply to user questions.
+* Every Monday (public) — join via [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
 
-Currently, we use the open source [HuggingFace Zephyr-7b-beta](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta), and in the future we want to investigate other open source models.\
-The user can query the system using HTTP requests, but we want to supply UI samples, as external module.
+---
 
-## Open Source Version
+## 🧩 Features
 
-The software is under Apache 2.0 License (please check **LICENSE** and **NOTICE** files included). We use some 3rd party libraries: here is the [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html) and here is the information for ([Assembling LICENSE and NOTICE files](https://infra.apache.org/licensing-howto.html#mod-notice)).
+* Conversational AI for targeted question answering
+* Supports RAG (Retrieval Augmented Generation) for enhanced accuracy
+* Easy integration via API and UI samples
+* Extensible architecture for multi-agent support
 
-## Installation
+---
 
-<u>**This document does not contain commercial advertisement: all the tools/products/books/materials are generic and you have to consider those as examples!**</u>\
-This software needs GPU for the execution: if you do not have a local GPU you could use a Cloud GPU. There are several solutions to use Cloud GPU:
+## 🛠️ Architecture
 
-1. Cloud Provider (AWS, GCP, ...)
-2. On-Demand GPU Cloud (vast.ai, RunPod, ...)
-3. Cloud GPU IDE
+<img src="./images/architecture.png" alt="LLM chatbot architecture" width="750"/>
 
-Currently, I use a Cloud GPU IDE ([Lightning Studio](https://lightning.ai/studios)), after signup/login, create new Studio (project):
+**Workflows:**
 
-![New Studio Button](/images/new_studio.png)
+1. **Data Ingestion:** Load context documents → create vector DB (e.g., from ReadTheDocs or GitHub issues/PRs)
+2. **Chat Workflow:** Accept user queries → retrieve context → generate answer
 
-select the left solution:
+Currently uses [Mistral Models](https://mistral.ai) (e.g., Mixtral-8x7B-v0.1). Plans to evaluate other open-source models in the future.
 
-![Select Studio Code](/images/studio_code.png)
+---
 
-click on the **Start** button, and rename the new Studio:
+## 🌐 Language Stats
 
-![Rename Studio](/images/rename_studio.png)
 
-Then, and copy-paste the github api repo code:
 
-![Copy Paste Code](/images/copy_paste_code.png)
+---
 
-and create two folders:
+## 📝 Setup (Agents Branch)
 
-1. chromadb (it will contains vector database files)
-2. rtdocs (it will contains the ReadTheDocs documentation)
-
-That version works with Hyperledger fabric documents (Wiki and ReadTheDocs).
-
-## Usage
-
-### Download ReadTheDocs documentation
-
-Open a new terminal:
-
-![Open Terminal](/images/open_terminal.png)
-
-and download the documentation executing the command below:
-
-```console
-wget -r -A.html -P rtdocs https://hyperledger-fabric.readthedocs.io/en/release-2.5/
-
-```
-
-actually, after a minute we can interrupt (CTRL + C) because it starts to download previous versions:
-
-![Wget Command](/images/wget_rtdocs.png)
-
-Now, we can move into rtdocs folder and move the **release-2.5** content to **rtdocs**. We need to compress the content of the folder, moving there and use that command:
-
-![Compress files](/images/compress_files.png)
-
-and move the readthedocs.tar.gz to the parent directory (../):
-
-```console
-- mv readthedocs.tar.gz ..
-- cd ..
-```
-
-repeating the two commands until we are into rtdocs folder:
-
-![Move Command](/images/move_command.png)
-
-now remove hyperledger… folder and the content:
-
-![Compress files](/images/remove_command.png)
-
-uncompress the file here and remove compress file:
-
-```console
-- tar -xzvf rtdocs.tar.gz
-- rm rtdocs.tar.gz
-```
-
-### Install requirements
-
-Move to the parent folder and execute the command below:
-
-```console
+```bash
+git clone https://github.com/hyperledger-labs/aifaq.git
+cd aifaq
+git checkout agents
+python -m venv venv
+source venv/bin/activate
+cd src/mvt
 pip install -r requirements.txt
+python create_directories.py
 ```
 
-### Activate GPU
+### Environment Variables
 
-After the requirements installation we can switch to GPU before to execute the ingestion script:
+Edit your `.env` file:
 
-![Activate GPU](/images/activate_gpu.png)
-
-then select the L4 solution:
-
-![Select L4](/images/select_L4.png)
-
-and confirm (it takes some minutes).
-
-### Ingest step
-
-Run the ingest.py script:
-
-![Run Ingest](/images/run_ingest.png)
-
-it will create content in chromadb folder.
-
-### Run API
-
-Now, we can run the API and test it. So, run api.py script:
-
-![Run API](/images/run_api.png)
-
-and test it:
-
-```console
-curl --header "Content-Type: application/json" --request POST --data '{"text": "How to install Hyperledger fabric?"}' http://127.0.0.1:8080/query
+```env
+MISTRALAI_API_KEY=<required - get from https://auth.mistral.ai/ui/login>
+OPENAI_API_KEY=<optional>
+HF_TOKEN=<required - get from https://huggingface.co/settings/tokens>
 ```
+<img src="./images/mistral.png" alt="Mistral API Key" width="500" height="300"/>
+<img src="./images/access_token.png" alt="HF Access Token" width="500" height="300"/>
 
-below the result:
+👉 Visit [Mixtral-8x7B-v0.1 on HuggingFace](https://huggingface.co/mistralai/Mixtral-8x7B-v0.1) and request access.
+<img src="./images/hf_request.png" alt="HF Model Request" width="500" height="300"/>
 
-![Show results](/images/curl_results.png)
+### Launch
 
-## Current version notes
+```bash
+streamlit run app.py
+```
+<img src="./images/add_knowledge.png" alt="HF Access Token" width="500" height="300"/>
+<img src="./images/update_knowledge.png" alt="HF Access Token" width="500" height="300"/>
 
-That is a proof-of-concept: a list of future improvement below:
 
-1. This is the first version of the prototype and it will be installed on a GPU Cloud Server
-2. At the same time, we'd like to pass to the next step: the Hyperledger Incubation Stage
-3. We will investigate other open source models
-4. Evaluation of the system using standard metrics
-5. We would like to improve the system, some ideas are: fine-tuning, Advanced RAG, Decomposed LoRA
-6. Add "guardrails" which are a specific ways of controlling the output of a LLM, such as talking avoid specific topics, responding in a particular way to specific user requests, etc.
+🎉 Access the demo at: [http://3.225.169.87:8502/](http://3.225.169.87:8502/)
+<img src="./images/AIFAQ.png" alt="HF Access Token" width="500" height="300"/>
+
+---
+
+## 🌐 Open Source License
+
+* **License:** Apache 2.0 (see [`LICENSE`](./LICENSE) and [`NOTICE`](./NOTICE))
+* **3rd Party Libraries:** [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html)
+* **License Assembly:** [Assembling LICENSE and NOTICE](https://infra.apache.org/licensing-howto.html#mod-notice)
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please check our [CONTRIBUTING](./CONTRIBUTING.md) guidelines and [Antitrust Policy and Code of Conduct](https://lf-hyperledger.atlassian.net/wiki/spaces/HIRC/pages/19169404/Anti-trust+Policy+Notice+Code+of+Conduct).
+
+---
+
+## 📆 Join Us!
+
+Join our weekly public calls every Monday! See the [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings) for details.
+
+---
+
+## 📢 Stay Connected
+
+* [Slack Discussions](https://join.slack.com/t/aifaqworkspace/shared_invite/zt-337k74jsl-tvH_4ct3zLj99dvZaf9nZw)
+* [Hyperledger Labs Community](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
+* Official Website: [aifaq.pro](https://aifaq.pro)
+
+---
+
+## ⭐️ Star Graph
+
+![Star Graph](https://starchart.cc/hyperledger-labs/aifaq.svg)
