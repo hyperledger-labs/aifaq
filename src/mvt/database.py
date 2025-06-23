@@ -61,3 +61,62 @@ def get_user(conn, email):
     except sqlite3.Error as e:
         print(f"Error during user loading data: {e}")
         return None
+
+def create_prompts_table(conn):
+    """Create a table to store system and query rewriting prompts"""
+    try:
+        sql = '''CREATE TABLE IF NOT EXISTS prompts (
+                    id integer PRIMARY KEY,
+                    prompt_type text NOT NULL,
+                    prompt_value text NOT NULL,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );'''
+        conn.cursor().execute(sql)
+        conn.commit()
+    except sqlite3.Error as e:
+        print(e)
+
+def save_prompt(conn, prompt_type, prompt_value):
+    """Save or update a prompt in the database"""
+    try:
+        # Check if prompt already exists
+        cur = conn.cursor()
+        cur.execute("SELECT id FROM prompts WHERE prompt_type = ?", (prompt_type,))
+        existing = cur.fetchone()
+        
+        if existing:
+            # Update existing prompt
+            sql = '''UPDATE prompts SET prompt_value = ?, updated_at = CURRENT_TIMESTAMP 
+                     WHERE prompt_type = ?'''
+            cur.execute(sql, (prompt_value, prompt_type))
+        else:
+            # Insert new prompt
+            sql = '''INSERT INTO prompts(prompt_type, prompt_value) VALUES(?,?)'''
+            cur.execute(sql, (prompt_type, prompt_value))
+        
+        conn.commit()
+        return True
+    except sqlite3.Error as e:
+        print(f"Error saving prompt: {e}")
+        return False
+
+def get_prompt(conn, prompt_type):
+    """Retrieve a specific prompt from the database"""
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT prompt_value FROM prompts WHERE prompt_type = ?", (prompt_type,))
+        result = cur.fetchone()
+        return result[0] if result else None
+    except sqlite3.Error as e:
+        print(f"Error retrieving prompt: {e}")
+        return None
+
+def get_all_prompts(conn):
+    """Retrieve all prompts from the database"""
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT prompt_type, prompt_value, updated_at FROM prompts ORDER BY prompt_type")
+        return cur.fetchall()
+    except sqlite3.Error as e:
+        print(f"Error retrieving prompts: {e}")
+        return []

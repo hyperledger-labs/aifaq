@@ -1,5 +1,5 @@
 import os
-from utils import load_yaml_file
+from utils import load_yaml_file_with_db_prompts
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
 
@@ -15,8 +15,8 @@ def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"
     - La query riscritta in modo più specifico.
     """
 
-    # Read config data
-    config_data = load_yaml_file("config.yaml")
+    # Read config data with database prompt overrides
+    config_data = load_yaml_file_with_db_prompts("config.yaml")
     load_dotenv(find_dotenv())
 
     # Get API keys

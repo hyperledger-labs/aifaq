@@ -14,6 +14,32 @@ def load_yaml_file(path):
         data = yaml.load(f, Loader=yaml.FullLoader)
     return data
 
+def load_yaml_file_with_db_prompts(path):
+    """Load YAML file and override prompts with database values if available"""
+    with open(path, 'r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    
+    # Try to load prompts from database
+    try:
+        from database import create_connection, get_prompt
+        conn = create_connection()
+        if conn:
+            # Get prompts from database
+            db_system_prompt = get_prompt(conn, "system_prompt")
+            db_query_rewriting_prompt = get_prompt(conn, "query_rewriting_prompt")
+            
+            # Override config values if database values exist
+            if db_system_prompt:
+                data["system_prompt"] = db_system_prompt
+            if db_query_rewriting_prompt:
+                data["query_rewriting_prompt"] = db_query_rewriting_prompt
+            
+            conn.close()
+    except Exception as e:
+        # If database loading fails, use config defaults
+        print(f"Warning: Could not load prompts from database: {e}")
+    
+    return data
 
 
 # This function extracts text from HTML while preserving context relationships.
