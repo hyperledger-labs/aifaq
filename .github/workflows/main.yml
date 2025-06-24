@@ -1,14 +1,13 @@
 name: CI
-
 on:
   push:
     branches:
       - main
       - dev
+      - agents
   pull_request:
     branches:
       - "**"
-
 jobs:
   format-frontend:
     name: 'Format Frontend'
@@ -16,40 +15,58 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
+        
+      - name: Check if Frontend Directory Exists
+        id: check_frontend_dir
+        run: |
+          if [ -d "src/frontend" ]; then
+            echo "frontend_dir_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "frontend_dir_exists=false" >> $GITHUB_OUTPUT
+          fi
+        
       - name: Prettify code
+        if: steps.check_frontend_dir.outputs.frontend_dir_exists == 'true'
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write src/frontend/**/*.{ts,tsx}
-
+          
       - name: Post Formatting Check
         run: git diff --exit-code
-
+        
   format-core:
     name: 'Format Core'
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         python-version: [3.12]
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
+        
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
+          
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install black
-
+          
+      - name: Check if Core Directory Exists
+        id: check_core_dir
+        run: |
+          if [ -d "src/core" ]; then
+            echo "core_dir_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "core_dir_exists=false" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Format Backend
+        if: steps.check_core_dir.outputs.core_dir_exists == 'true'
         run: |
           black src/core
-
+          
       - name: Post Formatting Check
         run: git diff --exit-code
