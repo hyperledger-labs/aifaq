@@ -47,7 +47,7 @@ def get_ragchain(filter):
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 
     # Define a retriever interface
-    retriever = docsearch.as_retriever(search_kwargs={"k": 5, "filter": filter})
+    retriever = docsearch.as_retriever(search_kwargs={"k": config_data["nr_retrieved_documents"], "filter": filter})
 
     # read prompt string from config file
     prompt_str = config_data["system_prompt"]
