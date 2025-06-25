@@ -21,6 +21,7 @@ def authenticated_menu():
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
         st.sidebar.page_link("pages/prompt_management.py", label="Prompt Management")
         st.sidebar.page_link("pages/user_management.py", label="User Management")
+        st.sidebar.page_link("pages/admin_responses.py", label="Admin Responses")
     st.sidebar.page_link("app.py", label="About")
 
 def unauthenticated_menu():
