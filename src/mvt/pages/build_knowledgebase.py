@@ -18,4 +18,4 @@ if st.button("Update Knowledge Base"):
   if msg_out > 0:
      st.write(f"Error nr {msg_out}!")
   else:
-     st.write(f"Done!")
+     st.write(f"Done! Database updated successfully.")
