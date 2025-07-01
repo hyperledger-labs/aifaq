@@ -22,7 +22,9 @@ def authenticated_menu():
         st.sidebar.page_link("pages/prompt_management.py", label="Prompt Management")
         st.sidebar.page_link("pages/user_management.py", label="User Management")
         st.sidebar.page_link("pages/admin_responses.py", label="Admin Responses")
-    st.sidebar.page_link("app.py", label="About")
+        st.sidebar.page_link("pages/admin_feedback.py", label="User Feedback (Admin)")
+        st.sidebar.page_link("pages/feedback.py", label="Feedback")
+        st.sidebar.page_link("app.py", label="About")
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
