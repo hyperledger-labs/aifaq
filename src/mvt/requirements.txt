@@ -18,3 +18,7 @@ chardet
 sentence-transformers
 lxml
 Authlib
+langchain-openai
+langchain-core
+openai
+pyyaml
