@@ -43,6 +43,16 @@ def get_ragchain(filter):
             temperature=0.7
         )
     
+    # Check if vector database exists
+    persist_dir = config_data["persist_directory"]
+    index_path = os.path.join(persist_dir, "index.faiss")
+    
+    if not os.path.exists(index_path):
+        raise FileNotFoundError(
+            f"Vector database not found at {index_path}. "
+            "Please run 'python ingest.py' first to create the knowledge base."
+        )
+
     # Load local vector db
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 

@@ -31,7 +31,24 @@ if st.session_state.user_type in ['guest']:
     filter = {"access": {"$eq": "public"}}
 
 
-rag_chain = get_ragchain(filter)
+try:
+    rag_chain = get_ragchain(filter)
+except FileNotFoundError as e:
+    st.error("⚠️ Knowledge base not initialized!")
+    st.info("""
+    The AI FAQ system needs to be set up first. Please:
+    
+    1. Add your documents/links to the Config public/private page first.
+    2. Then update the knowledge base from Build Knowledge Base page.
+    3. Then open this page again.
+    
+    Or contact an administrator to set up the knowledge base.
+    """)
+    st.stop()
+except Exception as e:
+    st.error(f"Error initializing the system: {str(e)}")
+    st.stop()
+
 username = st.session_state.username
 
 # -------------------------------
