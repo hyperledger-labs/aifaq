@@ -1,8 +1,10 @@
 import streamlit as st
 import os
 import re
+import json
 from menu import menu_with_redirect
 from utils import load_yaml_file_with_db_prompts
+from database import create_connection, get_all_document_response_links, get_documents_for_response, get_response, get_all_responses_with_documents, migrate_text_file_to_database
 
 # Redirect to app.py if not logged in, otherwise show the navigation menu
 menu_with_redirect()
@@ -15,8 +17,49 @@ if st.session_state.user_type not in ["admin"]:
 st.markdown("# Admin Responses")
 st.markdown("View previously asked user questions, AI-generated answers, and source documents.")
 
-def parse_responses_file():
-    """Parse the responses.txt file and return a list of question-answer pairs with context"""
+def get_responses_from_database():
+    """Get responses from database instead of parsing text file"""
+    conn = create_connection()
+    if not conn:
+        return []
+    
+    try:
+        responses = []
+        db_responses = get_all_responses_with_documents(conn)
+        
+        for db_response in db_responses:
+            # Convert database format to expected format
+            context_docs = []
+            for doc in db_response.get('documents', []):
+                try:
+                    metadata_dict = json.loads(doc['metadata']) if doc['metadata'] else {}
+                except:
+                    metadata_dict = {}
+                
+                context_docs.append({
+                    'id': doc['source'],
+                    'metadata': metadata_dict,
+                    'page_content': metadata_dict.get('content', 'No content available'),
+                    'source': doc['source']
+                })
+            
+            responses.append({
+                'input': db_response['question'],
+                'answer': db_response['answer'],
+                'context': context_docs,
+                'created_at': db_response['created_at']
+            })
+        
+        return responses
+        
+    except Exception as e:
+        st.error(f"Error loading responses from database: {e}")
+        return []
+    finally:
+        conn.close()
+
+def get_responses_fallback():
+    """Fallback to parse responses from text file if database is empty"""
     responses_file = "responses.txt"
     if not os.path.exists(responses_file):
         return []
@@ -90,6 +133,10 @@ def display_source_document(doc, index):
     
     # Display content
     content = doc.get('page_content', '')
+    if not content or content == 'No content available':
+        # Try to get content from metadata if not in page_content
+        content = doc.get('metadata', {}).get('content', 'No content available')
+    
     st.markdown("**Content:**")
     st.text(content)
     
@@ -97,18 +144,95 @@ def display_source_document(doc, index):
     st.markdown("**Metadata:**")
     metadata = doc.get('metadata', {})
     
+    # Show source prominently
+    source = doc.get('source', metadata.get('source', 'Unknown'))
+    st.write(f"- **Source:** {source}")
+    
+    # Show other metadata excluding content and source
     for key, value in metadata.items():
-        st.write(f"- **{key.title()}:** {value}")
+        if key not in ['content', 'source']:
+            st.write(f"- **{key.title()}:** {value}")
+    
+    # Show database info if available
+    if 'id' in doc and doc['id'] != source:
+        st.write(f"- **Document ID:** {doc['id']}")
 
 # Load and display responses
 config_data = load_yaml_file_with_db_prompts("config.yaml")
 k_value = config_data.get("nr_retrieved_documents")
 print(k_value)
 
-responses = parse_responses_file()
+# Try to get responses from database first, fallback to text file
+responses = get_responses_from_database()
+if not responses:
+    # Try to migrate from text file if database is empty
+    conn = create_connection()
+    if conn:
+        migrated_count = migrate_text_file_to_database(conn)
+        conn.close()
+        if migrated_count > 0:
+            st.success(f"Migrated {migrated_count} responses from text file to database!")
+            responses = get_responses_from_database()  # Try again after migration
+    
+    if not responses:
+        st.info("No responses found in database, falling back to text file...")
+        responses = get_responses_fallback()
 
+# Add a utility section for admins
+if responses and st.session_state.user_type == "admin":
+    with st.sidebar:
+        st.markdown("### 🛠️ Admin Utilities")
+        
+        # Check if text file exists and offer migration
+        if os.path.exists("responses.txt"):
+            st.info("responses.txt file detected")
+            if st.button("🔄 Re-run Migration"):
+                conn = create_connection()
+                if conn:
+                    migrated_count = migrate_text_file_to_database(conn)
+                    conn.close()
+                    if migrated_count > 0:
+                        st.success(f"Migrated {migrated_count} additional responses!")
+                        st.rerun()
+                    else:
+                        st.info("No new responses to migrate")
+            
+            # Option to backup and remove text file after successful migration
+            db_responses = get_responses_from_database()
+            if db_responses:
+                if st.button("🗑️ Archive responses.txt", help="Move responses.txt to responses_backup.txt"):
+                    try:
+                        import shutil
+                        shutil.move("responses.txt", "responses_backup.txt")
+                        st.success("Text file archived successfully!")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error archiving file: {e}")
+        
+        # Database stats
+        conn = create_connection()
+        if conn:
+            try:
+                cur = conn.cursor()
+                cur.execute("SELECT COUNT(*) FROM responses")
+                response_count = cur.fetchone()[0]
+                cur.execute("SELECT COUNT(*) FROM documents") 
+                document_count = cur.fetchone()[0]
+                cur.execute("SELECT COUNT(*) FROM docs_response")
+                link_count = cur.fetchone()[0]
+                
+                st.markdown("### 📈 Database Stats")
+                st.write(f"Responses: {response_count}")
+                st.write(f"Documents: {document_count}")
+                st.write(f"Links: {link_count}")
+            except Exception as e:
+                st.error(f"Error getting stats: {e}")
+            finally:
+                conn.close()
+                
 if responses:
-    st.markdown(f"### Overview ({len(responses)} responses found)")
+    source_info = "📊 **Database**" if get_responses_from_database() else "📄 **Text File**"
+    st.markdown(f"### Overview ({len(responses)} responses found) - Source: {source_info}")
     
     # Search functionality
     search_term = st.text_input("Search questions or answers:", placeholder="Enter search term...")
