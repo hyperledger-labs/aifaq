@@ -7,10 +7,18 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_mistralai.embeddings import MistralAIEmbeddings
-#from langchain.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_core.documents import Document
 from typing import List
 
+def load_prompt_from_file(file_path):
+    """Load a prompt template from a file."""
+    try:
+        with open(file_path, 'r') as file:
+            prompt_text = file.read().strip()
+        return prompt_text
+    except Exception as e:
+        print(f"Error loading prompt from {file_path}: {e}")
+        return None
 
 def get_ragchain(filter):
     # Read config data with database prompt overrides
@@ -42,15 +50,19 @@ def get_ragchain(filter):
             model=config_data["model_name"],
             temperature=0.7
         )
-    
+   
     # Load local vector db
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 
     # Define a retriever interface
     retriever = docsearch.as_retriever(search_kwargs={"k": config_data["nr_retrieved_documents"], "filter": filter})
 
-    # read prompt string from config file
-    prompt_str = config_data["system_prompt"]
+    # Load system prompt from file or use the one in config
+    prompt_path = config_data.get("prompts", {}).get("system_prompt")
+    if prompt_path and os.path.exists(prompt_path):
+        prompt_str = load_prompt_from_file(prompt_path)
+    else:
+        prompt_str = config_data["system_prompt"]
 
     # Answer question
     qa_system_prompt = (
@@ -65,6 +77,7 @@ def get_ragchain(filter):
             ("user", "{input}"),
         ]
     )
+    
     question_answer_chain = create_stuff_documents_chain(model, qa_prompt)
 
     rag_chain = create_retrieval_chain(retriever, question_answer_chain)  
