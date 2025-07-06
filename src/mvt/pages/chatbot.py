@@ -1,4 +1,4 @@
-from utils import load_yaml_file
+from utils import load_yaml_file_with_db_prompts
 from main import get_ragchain
 import streamlit as st
 from menu import menu_with_redirect
@@ -23,7 +23,7 @@ st.markdown("# AIFAQ")
 
 config_path = "./config.yaml"
 logo_path = "https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true"
-config_data = load_yaml_file(config_path)
+config_data = load_yaml_file_with_db_prompts(config_path)
 
 # filter public document in case of guest user
 filter = None
