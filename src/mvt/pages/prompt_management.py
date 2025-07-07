@@ -1,6 +1,6 @@
 import streamlit as st
 import yaml
-from utils import load_yaml_file
+from utils import load_yaml_file, load_yaml_file_with_db_prompts
 from database import create_connection, create_prompts_table, save_prompt, get_prompt
 from menu import menu_with_redirect
 
@@ -87,7 +87,12 @@ def load_prompts_from_db():
 
 # Initialize session state for prompts if not already set
 if "current_prompts" not in st.session_state:
-    st.session_state.current_prompts = load_prompts_from_db()
+    # Use the utility function that loads from database with config fallback
+    config_data = load_yaml_file_with_db_prompts("config.yaml")
+    st.session_state.current_prompts = {
+        "system_prompt": config_data.get("system_prompt", ""),
+        "query_rewriting_prompt": config_data.get("query_rewriting_prompt", "")
+    }
 
 # Create columns for better layout
 col1, col2 = st.columns([3, 1])
