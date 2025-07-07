@@ -120,3 +120,43 @@ def get_all_prompts(conn):
     except sqlite3.Error as e:
         print(f"Error retrieving prompts: {e}")
         return []
+
+def create_feedback_table(conn):
+    """Create a table to store user feedback on chatbot responses"""
+    try:
+        sql = '''CREATE TABLE IF NOT EXISTS feedback (
+                    id INTEGER PRIMARY KEY,
+                    username TEXT NOT NULL,
+                    msg_idx INTEGER,
+                    feedback_type TEXT,
+                    response_snippet TEXT,
+                    reason TEXT,
+                    timestamp TEXT
+                );'''
+        conn.cursor().execute(sql)
+        conn.commit()
+    except sqlite3.Error as e:
+        print(e)
+
+def insert_feedback(conn, username, msg_idx, feedback_type, response_snippet, reason, timestamp):
+    """Insert a feedback entry into the feedback table"""
+    try:
+        sql = '''INSERT INTO feedback (username, msg_idx, feedback_type, response_snippet, reason, timestamp)
+                 VALUES (?, ?, ?, ?, ?, ?)'''
+        cur = conn.cursor()
+        cur.execute(sql, (username, msg_idx, feedback_type, response_snippet, reason, timestamp))
+        conn.commit()
+        return cur.lastrowid
+    except sqlite3.Error as e:
+        print(f"Error inserting feedback: {e}")
+        return None
+
+def get_all_feedback(conn):
+    """Retrieve all feedback entries from the feedback table"""
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT id, username, msg_idx, feedback_type, response_snippet, reason, timestamp FROM feedback ORDER BY timestamp DESC")
+        return cur.fetchall()
+    except sqlite3.Error as e:
+        print(f"Error retrieving feedback: {e}")
+        return []

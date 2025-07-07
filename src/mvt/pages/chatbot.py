@@ -6,18 +6,14 @@ from chat_history import init_db, save_message, get_messages
 from query_rewriting import query_rewriting_llm
 
 def save_feedback(username, msg_idx, feedback_type, response_snippet, reason=None):
-    import os
     import datetime
-    feedback_file = "feedback.txt"
-    # Only keep a short snippet for privacy
+    from database import create_connection, create_feedback_table, insert_feedback
+    conn = create_connection()
+    create_feedback_table(conn)
     snippet = response_snippet[:100].replace('\n', ' ').replace('\r', ' ')
     timestamp = datetime.datetime.now().isoformat()
-    line = f"{timestamp}\t{username}\t{msg_idx}\t{feedback_type}\t{snippet}"
-    if reason:
-        line += f"\t{reason}"
-    line += "\n"
-    with open(feedback_file, "a", encoding="utf-8") as f:
-        f.write(line)
+    insert_feedback(conn, username, msg_idx, feedback_type, snippet, reason, timestamp)
+    conn.close()
 
 # Initialize DB
 init_db()
