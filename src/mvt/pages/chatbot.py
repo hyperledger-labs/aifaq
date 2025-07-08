@@ -148,13 +148,10 @@ if prompt := st.chat_input():
     with st.chat_message("user"):
         st.write(prompt)
 
-    # Rewrite the query for better search
-    rewritten_query = query_rewriting_llm(prompt)
-
     with st.chat_message("assistant", avatar=logo_path):
         with st.spinner("Thinking..."):
             # Use rewritten query or original prompt based on config
-            query = rewritten_query if config_data.get("use_query_rewriting", True) else prompt
+            query = query_rewriting_llm(prompt) if config_data.get("use_query_rewriting", True) else prompt
             response = rag_chain.invoke({"input": query})
             
             # Save response to database instead of text file

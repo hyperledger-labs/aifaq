@@ -24,20 +24,20 @@ The **Hyperledger Labs AIFAQ Prototype (Agents Branch)** is an open-source conve
 
 👉 Official Wiki Pages:
 
-* [Hyperledger Labs Wiki](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
+- [Hyperledger Labs Wiki](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
 
 👉 Weekly Community Calls:
 
-* Every Monday (public) — join via [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
+- Every Monday (public) — join via [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
 
 ---
 
 ## 🧩 Features
 
-* Conversational AI for targeted question answering
-* Supports RAG (Retrieval Augmented Generation) for enhanced accuracy
-* Easy integration via API and UI samples
-* Extensible architecture for multi-agent support
+- Conversational AI for targeted question answering
+- Supports RAG (Retrieval Augmented Generation) for enhanced accuracy
+- Easy integration via API and UI samples
+- Extensible architecture for multi-agent support
 
 ---
 
@@ -76,6 +76,7 @@ MISTRALAI_API_KEY=<required - get from https://auth.mistral.ai/ui/login>
 OPENAI_API_KEY=<optional>
 HF_TOKEN=<required - get from https://huggingface.co/settings/tokens>
 ```
+
 <img src="./images/mistral.png" alt="Mistral API Key" width="500" height="300"/>
 <img src="./images/access_token.png" alt="HF Access Token" width="500" height="300"/>
 
@@ -87,9 +88,9 @@ HF_TOKEN=<required - get from https://huggingface.co/settings/tokens>
 ```bash
 streamlit run app.py
 ```
+
 <img src="./images/add_knowledge.png" alt="HF Access Token" width="500" height="300"/>
 <img src="./images/update_knowledge.png" alt="HF Access Token" width="500" height="300"/>
-
 
 🎉 Access the demo at: [http://3.225.169.87:8502/](http://3.225.169.87:8502/)
 <img src="./images/AIFAQ.png" alt="HF Access Token" width="500" height="300"/>
@@ -98,15 +99,15 @@ streamlit run app.py
 
 ## 🌐 Open Source License
 
-* **License:** Apache 2.0 (see [`LICENSE`](./LICENSE) and [`NOTICE`](./NOTICE))
-* **3rd Party Libraries:** [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html)
-* **License Assembly:** [Assembling LICENSE and NOTICE](https://infra.apache.org/licensing-howto.html#mod-notice)
+- **License:** Apache 2.0 (see [`LICENSE`](./LICENSE) and [`NOTICE`](./docs/NOTICE))
+- **3rd Party Libraries:** [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html)
+- **License Assembly:** [Assembling LICENSE and NOTICE](https://infra.apache.org/licensing-howto.html#mod-notice)
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please check our [CONTRIBUTING](./CONTRIBUTING.md) guidelines and [Antitrust Policy and Code of Conduct](https://lf-hyperledger.atlassian.net/wiki/spaces/HIRC/pages/19169404/Anti-trust+Policy+Notice+Code+of+Conduct).
+We welcome contributions! Please check our [CONTRIBUTING](./docs/CONTRIBUTING.md) guidelines and [Antitrust Policy and Code of Conduct](https://lf-hyperledger.atlassian.net/wiki/spaces/HIRC/pages/19169404/Anti-trust+Policy+Notice+Code+of+Conduct).
 
 ---
 
@@ -118,9 +119,9 @@ Join our weekly public calls every Monday! See the [Hyperledger Labs Calendar](h
 
 ## 📢 Stay Connected
 
-* [Slack Discussions](https://join.slack.com/t/aifaqworkspace/shared_invite/zt-337k74jsl-tvH_4ct3zLj99dvZaf9nZw)
-* [Hyperledger Labs Community](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
-* Official Website: [aifaq.pro](https://aifaq.pro)
+- [Slack Discussions](https://join.slack.com/t/aifaqworkspace/shared_invite/zt-337k74jsl-tvH_4ct3zLj99dvZaf9nZw)
+- [Hyperledger Labs Community](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
+- Official Website: [aifaq.pro](https://aifaq.pro)
 
 ---
 
