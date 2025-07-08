@@ -135,7 +135,12 @@ def create_feedback_table(conn):
                     response_snippet TEXT,
                     reason TEXT,
                     timestamp TEXT
-# ==================== ADDITIONAL FUNCTIONS FOR OTHER TABLES ====================
+                );'''
+        # ==================== ADDITIONAL FUNCTIONS FOR OTHER TABLES ====================
+        conn.cursor().execute(sql)
+        conn.commit()
+    except sqlite3.Error as e:
+        print(e)
 
 def create_response_table(conn):
     """Create a table to store responses"""
