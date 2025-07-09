@@ -1,5 +1,5 @@
 import yaml
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString, Tag
 import re
 from urllib.parse import urlparse, parse_qs
 import os
@@ -192,6 +192,42 @@ def bs4_lxml(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
     return re.sub(r"\n\n+", "\n\n", soup.text).strip()
 
+# Tags that we want to skip in the final text extraction
+SKIP_TAGS = {"script", "style", "noscript", "header", "footer", "nav", "form"}
+
+# Regex to compress spaces and empty lines
+SPACE_RE = re.compile(r"[ \t]+")
+BLANK_RE = re.compile(r"\n{3,}")
+
+def visible_text_nodes(el: Tag | NavigableString):
+    """
+    Returns only visible text nodes (filters script/style, comments, etc.)
+    """
+    if isinstance(el, NavigableString):
+        # Avoid comments and extra spaces
+        if el.parent.name not in SKIP_TAGS:
+            txt = el.strip()
+            if txt:
+                yield txt
+    elif el.name not in SKIP_TAGS:
+        for child in el.contents:
+            yield from visible_text_nodes(child)
+
+def bs4_lxml_improved(html: str) -> str:
+    # Convert HTML to string
+    soup = BeautifulSoup(html, "lxml")
+
+    # Removes unwanted elements completely (optional but useful)
+    for tag in soup.find_all(SKIP_TAGS):
+        tag.decompose()
+
+    raw_lines = list(visible_text_nodes(soup.body or soup))
+    joined = "\n".join(raw_lines)
+
+    # Normalizes spaces and empty lines
+    joined = SPACE_RE.sub(" ", joined)
+    joined = BLANK_RE.sub("\n\n", joined.strip())
+    return joined + "\n"
 
 
 def convert_youtube_short_to_full(short_url):

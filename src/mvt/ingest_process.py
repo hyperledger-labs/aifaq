@@ -2,7 +2,7 @@ import os
 import time
 from os.path import isfile, join
 from os import listdir
-from utils import load_yaml_file, bs4_extract_linear_text, extract_video_id, save_transcript
+from utils import load_yaml_file, bs4_extract_linear_text, extract_video_id, save_transcript, bs4_lxml_improved
 from dotenv import load_dotenv, find_dotenv
 from langchain_community.vectorstores import FAISS
 from langchain_mistralai.embeddings import MistralAIEmbeddings
@@ -125,8 +125,9 @@ def process_web_urls_with_retry(dataset_dir, config_data, max_retries=3, retry_d
                         
                         loader = RecursiveUrlLoader(
                             url=url, 
-                            extractor=bs4_extract_linear_text, 
-                            prevent_outside=True
+                            extractor=bs4_lxml_improved, 
+                            prevent_outside=True,
+                            max_depth=1
                         )
                         # Test the loader by trying to load one document
                         test_docs = loader.load()
