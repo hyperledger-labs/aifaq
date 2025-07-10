@@ -250,7 +250,7 @@ if responses:
     st.markdown("---")
     
     # Display each response
-    for i, response in enumerate(reversed(display_responses)):
+    for i, response in enumerate(display_responses):
         question = response.get('input', 'No question found')
         answer = response.get('answer', 'No answer found')
         context = response.get('context', [])
