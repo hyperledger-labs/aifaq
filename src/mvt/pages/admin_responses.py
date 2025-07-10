@@ -160,7 +160,6 @@ def display_source_document(doc, index):
 # Load and display responses
 config_data = load_yaml_file_with_db_prompts("config.yaml")
 k_value = config_data.get("nr_retrieved_documents")
-print(k_value)
 
 # Try to get responses from database first, fallback to text file
 responses = get_responses_from_database()
