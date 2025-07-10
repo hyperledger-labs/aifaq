@@ -450,12 +450,13 @@ def get_all_responses_with_documents(conn):
     try:
         cur = conn.cursor()
         sql = '''SELECT r.id, r.question, r.answer, r.created_at, r.id_user,
-                        GROUP_CONCAT(d.id || '|||' || d.source || '|||' || COALESCE(d.metadata, '')) as documents
+                 GROUP_CONCAT(d.id || '|||' || d.source || '|||' || COALESCE(d.metadata, ''), '###') as documents
                  FROM responses r
                  LEFT JOIN docs_response dr ON r.id = dr.id_response
                  LEFT JOIN documents d ON dr.id_document = d.id
                  GROUP BY r.id, r.question, r.answer, r.created_at, r.id_user
                  ORDER BY r.created_at DESC'''
+        
         cur.execute(sql)
         results = cur.fetchall()
         
@@ -466,12 +467,17 @@ def get_all_responses_with_documents(conn):
             documents = []
             
             if documents_str:
-                doc_parts = documents_str.split(',')
+                # Split by the separator used in GROUP_CONCAT
+                doc_parts = documents_str.split('###')
                 for doc_part in doc_parts:
-                    if '|||' in doc_part:
+                    doc_part = doc_part.strip()
+                    if doc_part and '|||' in doc_part:
                         parts = doc_part.split('|||')
                         if len(parts) >= 3:
-                            doc_id, source, metadata = parts[0], parts[1], parts[2]
+                            doc_id = parts[0].strip()
+                            source = parts[1].strip()
+                            metadata = parts[2].strip() if parts[2] else ''
+                            
                             documents.append({
                                 'id': doc_id,
                                 'source': source,
@@ -488,6 +494,7 @@ def get_all_responses_with_documents(conn):
             })
         
         return processed_results
+        
     except sqlite3.Error as e:
         print(f"Error retrieving responses with documents: {e}")
         return []
