@@ -19,9 +19,8 @@ if st.session_state.user_type not in ["admin"]:
 st.markdown("# Admin Responses")
 st.markdown("View previously asked user questions, AI-generated answers, and source documents.")
 
-@st.cache_data(ttl=300)  # Cache for 5 minutes
 def get_responses_from_database():
-    """Get responses from database with caching"""
+    """Get responses from database without caching for latest data"""
     conn = create_connection()
     if not conn:
         return []
@@ -60,6 +59,28 @@ def get_responses_from_database():
     except Exception as e:
         st.error(f"Error loading responses from database: {e}")
         return []
+    finally:
+        conn.close()
+
+def get_database_stats():
+    """Get current database statistics"""
+    conn = create_connection()
+    if not conn:
+        return None, None, None
+    
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM responses")
+        response_count = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM documents")
+        document_count = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM docs_response")
+        link_count = cur.fetchone()[0]
+        
+        return response_count, document_count, link_count
+    except Exception as e:
+        st.error(f"Error getting database stats: {e}")
+        return None, None, None
     finally:
         conn.close()
 
@@ -166,25 +187,19 @@ k_value = config_data.get("nr_retrieved_documents")
 with st.sidebar:
     st.markdown("### 🛠️ Admin Utilities")
     
-    # Database stats
-    conn = create_connection()
-    if conn:
-        try:
-            cur = conn.cursor()
-            cur.execute("SELECT COUNT(*) FROM responses")
-            response_count = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM documents")
-            document_count = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM docs_response")
-            link_count = cur.fetchone()[0]
-            
-            st.metric("Responses", response_count)
-            st.metric("Documents", document_count)
-            st.metric("Links", link_count)
-        except Exception as e:
-            st.error(f"Error getting stats: {e}")
-        finally:
-            conn.close()
+    # Add refresh button
+    if st.button("🔄 Refresh Data", help="Refresh all data from database"):
+        st.rerun()
+    
+    # Database stats with latest values
+    response_count, document_count, link_count = get_database_stats()
+    
+    if response_count is not None:
+        st.metric("Responses", response_count)
+        st.metric("Documents", document_count)
+        st.metric("Links", link_count)
+    else:
+        st.error("Unable to fetch database statistics")
     
     # Migration utilities
     if os.path.exists("responses.txt"):
@@ -199,7 +214,6 @@ with st.sidebar:
                     conn.close()
                     if migrated_count > 0:
                         st.success(f"Migrated {migrated_count} responses!")
-                        st.cache_data.clear()  # Clear cache
                         st.rerun()
                     else:
                         st.info("No new responses to migrate")
@@ -216,7 +230,7 @@ with st.sidebar:
 # Main content
 st.markdown("---")
 
-# Try to get responses from database first, fallback to text file
+# Always fetch fresh data from database
 responses = get_responses_from_database()
 if not responses:
     # Try to migrate from text file if database is empty
@@ -226,7 +240,6 @@ if not responses:
         conn.close()
         if migrated_count > 0:
             st.success(f"✅ Migrated {migrated_count} responses from text file to database!")
-            st.cache_data.clear()
             responses = get_responses_from_database()
     
     if not responses:
@@ -234,10 +247,18 @@ if not responses:
         responses = get_responses_fallback()
 
 if responses:
-    # Header with source info
+    # Header with source info and timestamp
     source_info = "Database" if get_responses_from_database() else "Text File"
-    st.markdown(f"### 📊 {len(responses)} Responses (Source: {source_info})")
+    current_time = st.empty()
+    current_time.markdown(f"### 📊 {len(responses)} Responses (Source: {source_info}) - Last updated: {st.session_state.get('last_update', 'Just now')}")
     
+    # Auto-refresh option
+    auto_refresh = st.checkbox("🔄 Auto-refresh every 30 seconds", value=False)
+    if auto_refresh:
+        import time
+        time.sleep(30)
+        st.rerun()
+
     # Search functionality
     search_term = st.text_input("🔍 Search", placeholder="Search questions or answers...")
     
