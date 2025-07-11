@@ -167,25 +167,23 @@ if prompt := st.chat_input():
                     # Insert response to database
                     response_id = insert_response(conn, response["answer"], query, user_id)
                     
-                    # Process and save source documents
+                                        # Process and save source documents
                     if response_id and "context" in response:
                         for doc in response["context"]:
-                            # Extract source from document metadata
+                            # Extract source from document metadata or use page content
                             source = ""
                             if hasattr(doc, 'metadata') and doc.metadata:
                                 source = doc.metadata.get('source', '')
-                            elif hasattr(doc, 'page_content'):
-                                source = f"content_{hash(doc.page_content) % 10000}"
+                            
+                            # If no source in metadata, use page content as source
+                            if not source and hasattr(doc, 'page_content'):
+                                source = f"content_{abs(hash(doc.page_content)) % 10000}"
                             
                             if source:
-                                # Check if document already exists
-                                existing_doc = get_document_by_source(conn, source)
-                                if existing_doc:
-                                    doc_id = existing_doc[0]
-                                else:
-                                    # Insert new document with metadata as JSON
-                                    metadata_json = json.dumps(doc.metadata if hasattr(doc, 'metadata') and doc.metadata else {})
-                                    doc_id = insert_document(conn, source, metadata_json)
+                                # Always insert new document (allow duplicates)
+                                page_content = doc.page_content if hasattr(doc, 'page_content') else ""
+                                metadata_json = json.dumps(doc.metadata if hasattr(doc, 'metadata') and doc.metadata else {})
+                                doc_id = insert_document(conn, page_content, metadata_json)
                                 
                                 # Link document to response
                                 if doc_id:
