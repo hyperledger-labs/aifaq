@@ -38,15 +38,14 @@ def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"
             temperature=0.7
         )
 
-    query_rewriting_prompt = config_data["query_rewriting_prompt"]
+    # Read query rewriting prompt from config
+    with open(config_data["query_rewriting_prompt"], "r") as f:
+        query_rewriting_prompt = f.read().strip()
 
     messages = [
         ("system", query_rewriting_prompt),
         ("human", user_query),
     ]
 
-    print(messages)
-
     response = model.invoke(messages)
-    print(response.content)
     return response.content
