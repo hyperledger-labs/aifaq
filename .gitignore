@@ -80,3 +80,5 @@ logs/
 _build/
 _static/
 _templates/
+
+config.yaml
