@@ -1,5 +1,5 @@
 import os
-from utils import load_yaml_file_with_db_prompts, get_system_prompt
+from utils import load_yaml_file_with_db_prompts, get_prompt_from_file
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_community.vectorstores import FAISS
@@ -60,7 +60,7 @@ def get_ragchain(filter):
     retriever = docsearch.as_retriever(search_kwargs={"k": config_data["nr_retrieved_documents"], "filter": filter})
 
     # read prompt string from config file
-    prompt_str = get_system_prompt(config_data["system_prompt"])
+    prompt_str = get_prompt_from_file(config_data["system_prompt"])
 
     # Answer question
     qa_system_prompt = (

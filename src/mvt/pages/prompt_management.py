@@ -1,6 +1,6 @@
 import streamlit as st
 import yaml
-from utils import load_yaml_file, load_yaml_file_with_db_prompts
+from utils import load_yaml_file, load_yaml_file_with_db_prompts, get_prompt_from_file
 from database import create_connection, create_prompts_table, save_prompt, get_prompt
 from menu import menu_with_redirect
 
@@ -31,8 +31,8 @@ def load_default_prompts():
     try:
         config_data = load_yaml_file("config.yaml")
         return {
-            "system_prompt": config_data.get("system_prompt", ""),
-            "query_rewriting_prompt": config_data.get("query_rewriting_prompt", "")
+            "system_prompt": get_prompt_from_file(config_data.get("system_prompt", "")),
+            "query_rewriting_prompt": get_prompt_from_file(config_data.get("query_rewriting_prompt", ""))
         }
     except Exception as e:
         st.error(f"Error loading config file: {e}")
@@ -90,8 +90,8 @@ if "current_prompts" not in st.session_state:
     # Use the utility function that loads from database with config fallback
     config_data = load_yaml_file_with_db_prompts("config.yaml")
     st.session_state.current_prompts = {
-        "system_prompt": config_data.get("system_prompt", ""),
-        "query_rewriting_prompt": config_data.get("query_rewriting_prompt", "")
+        "system_prompt": get_prompt_from_file(config_data.get("system_prompt", "")),
+        "query_rewriting_prompt": get_prompt_from_file(config_data.get("query_rewriting_prompt", ""))
     }
 
 # Create columns for better layout

@@ -42,9 +42,11 @@ def load_yaml_file_with_db_prompts(path):
     return data
 
 # This function returns the system prompt from the file specified in the config.
-def get_system_prompt(prompt_file: str):
+def get_prompt_from_file(prompt_file: str):
     with open(prompt_file, "r") as f:
         return f.read().strip()
+
+
 
 # This function extracts text from HTML while preserving context relationships.
 def bs4_html(html):
