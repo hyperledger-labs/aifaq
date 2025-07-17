@@ -1,0 +1,32 @@
+# Virtual environment
+.venv/
+venv/
+
+# Temporary files and folders
+__pycache__/
+*.log
+
+# Config and data
+.env
+*.yaml
+*.yml
+users.db
+
+# Streamlit
+.streamlit/
+streamlit.log
+streamlit_error.log
+
+# FAISS database
+faiss_index_fi/
+vectordb.txt
+
+# Local dataset
+dataset/
+
+# Editor e sistema
+.DS_Store
+.idea/
+.vscode/
+
+responses.txt
