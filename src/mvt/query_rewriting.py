@@ -1,5 +1,5 @@
 import os
-from utils import load_yaml_file_with_db_prompts
+from utils import load_yaml_file_with_db_prompts, get_prompt_from_file
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
 
@@ -38,15 +38,13 @@ def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"
             temperature=0.7
         )
 
-    query_rewriting_prompt = config_data["query_rewriting_prompt"]
+    # Read query rewriting prompt from config
+    query_rewriting_prompt = get_prompt_from_file(config_data["query_rewriting_prompt"])
 
     messages = [
         ("system", query_rewriting_prompt),
         ("human", user_query),
     ]
 
-    print(messages)
-
     response = model.invoke(messages)
-    print(response.content)
     return response.content

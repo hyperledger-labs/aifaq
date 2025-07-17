@@ -82,7 +82,8 @@ user_chat = st.session_state.user_messages[username]
 for idx, message in enumerate(user_chat):
     with st.chat_message(message["role"], avatar=logo_path if message["role"] == "assistant" else None):
         st.write(message["content"])
-        if message["role"] == "assistant":
+        # Only show feedback for assistant messages that are not the initial greeting
+        if message["role"] == "assistant" and not (idx == 0 and message["content"] == "How may I help you?"):
             feedback_key = f"feedback_{username}_{idx}"
             if feedback_key not in st.session_state:
                 col1, col2, col3 = st.columns([0.08, 0.08, 0.84])

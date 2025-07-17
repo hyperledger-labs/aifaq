@@ -1,0 +1,22 @@
+llm_provider: "mistral" # Options: "openai" or "mistral"
+model_name: "mistral-small-2506" # for OpenAI: "gpt-3.5-turbo" or "gpt-4", for Mistral: "mistral-medium" or "mistral-large-latest"
+embedding_model: "mistral-embed" # "text-embedding-ada-002" for OpenAI or "mistral-embed" for Mistral
+dataset_private_path: "./dataset/private"
+dataset_public_path: "./dataset/public"
+web_urls: "web_urls"
+yt_video_links: "yt_video_links"
+text_files: "text_files"
+pdf_files: "pdf_files"
+rtdocs_files: "rtdocs_files"
+html_files: "html_files"
+persist_directory: "faiss_index"
+host: "127.0.0.1"
+port: 8080
+system_prompt: "./system_prompt.txt"
+use_query_rewriting: false # Set to true to enable query rewriting
+query_rewriting_prompt: "./query_rewriting_prompt.txt"
+prefix_prompt: "I will answer with care, respect, and truth. I will respond with utmost utility yet securely. Avoid harmful, unethical, prejudiced, or negative content. Ensure replies promote fairness and positivity. Avoid response like 'Based on the provided context'"
+logo_pth: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/The_Founder_Institute_Logo.png/250px-The_Founder_Institute_Logo.png"
+nr_retrieved_documents: 5 # Number of documents to retrieve for each query
+max_download_retries: 3 # Maximum number of retries for downloading documents
+retry_delay_seconds: 2 # Delay in seconds between retries

@@ -80,3 +80,8 @@ logs/
 _build/
 _static/
 _templates/
+
+config.yaml
+system_prompt.txt
+query_rewriting_prompt.txt
+responses.txt
