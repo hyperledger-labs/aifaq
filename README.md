@@ -85,8 +85,47 @@ HF_TOKEN=<required - get from https://huggingface.co/settings/tokens>
 
 ### Launch
 
+The application supports two modes of operation:
+
+#### Production Mode (Default)
 ```bash
 streamlit run app.py
+```
+
+**Note:** Production mode requires authentication credentials to be configured in `.streamlit/secrets.toml`. If credentials are not configured, the application will show an error message with options to either:
+- Switch to development mode
+- Configure the required credentials
+
+#### Development Mode
+```bash
+streamlit run app.py dev
+```
+
+**Note:** Development mode provides full functionality without authentication requirements, making it ideal for testing and development.
+
+### Authentication Configuration (Production Mode)
+
+For production mode, you need to configure authentication credentials in `.streamlit/secrets.toml`:
+
+```toml
+# For Auth0 authentication
+[auth.auth0]
+domain = "your-domain.auth0.com"
+client_id = "your-client-id"
+client_secret = "your-client-secret"
+server_metadata_url = "https://your-domain.auth0.com/.well-known/openid_configuration"
+client_kwargs = { "prompt" = "login"}
+
+# OR for Google OAuth
+[auth.google]
+client_id = "your-google-client-id"
+client_secret = "your-google-client-secret"
+server_metadata_url = "https://accounts.google.com/.well-known/openid_configuration"
+
+# General auth settings
+[auth]
+redirect_uri = "your-redirect-uri"
+cookie_secret = "your-cookie-secret"
 ```
 
 <img src="./images/add_knowledge.png" alt="HF Access Token" width="500" height="300"/>
