@@ -4,7 +4,7 @@ import re
 import json
 import shutil
 from menu import menu_with_redirect
-from utils import load_yaml_file_with_db_prompts
+from utils import load_yaml_file_with_db_prompts, escape_markdown
 from database import create_connection, get_all_responses_with_documents, migrate_text_file_to_database
 
 # Redirect to app.py if not logged in, otherwise show the navigation menu
@@ -299,7 +299,7 @@ if responses:
             
             # Answer
             st.markdown("**🤖 Answer:**")
-            st.markdown(answer)
+            st.markdown(escape_markdown(answer))
             
             # Source documents
             if context:

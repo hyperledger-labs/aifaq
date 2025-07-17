@@ -303,3 +303,20 @@ def save_transcript(video_id, output_folder):
         
     except Exception as e:
         print(f"Error reading transcript: {e}")
+
+
+# Markdown escape function to prevent special characters from being interpreted as markdown
+MARKDOWN_ESCAPE_RE = re.compile(r'([\\`*_{}\[\]()#+\-!$])')
+
+def escape_markdown(text: str) -> str:
+    """
+    Escape special markdown characters to prevent them from being interpreted as markdown syntax.
+    This is particularly useful for currency symbols like $ that Streamlit interprets as math mode.
+    
+    Args:
+        text (str): The text to escape
+        
+    Returns:
+        str: The text with markdown special characters escaped
+    """
+    return MARKDOWN_ESCAPE_RE.sub(r'\\\1', text)

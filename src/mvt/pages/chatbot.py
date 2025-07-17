@@ -1,4 +1,4 @@
-from utils import load_yaml_file_with_db_prompts
+from utils import load_yaml_file_with_db_prompts, escape_markdown
 from main import get_ragchain
 import streamlit as st
 from menu import menu_with_redirect
@@ -81,7 +81,7 @@ user_chat = st.session_state.user_messages[username]
 # -------------------------------
 for idx, message in enumerate(user_chat):
     with st.chat_message(message["role"], avatar=logo_path if message["role"] == "assistant" else None):
-        st.write(message["content"])
+        st.markdown(escape_markdown(message["content"]))
         # Only show feedback for assistant messages that are not the initial greeting
         if message["role"] == "assistant" and not (idx == 0 and message["content"] == "How may I help you?"):
             feedback_key = f"feedback_{username}_{idx}"
@@ -147,7 +147,7 @@ if prompt := st.chat_input():
     save_message(username, "user", prompt)
 
     with st.chat_message("user"):
-        st.write(prompt)
+        st.markdown(escape_markdown(prompt))
 
     with st.chat_message("assistant", avatar=logo_path):
         with st.spinner("Thinking..."):
@@ -197,7 +197,7 @@ if prompt := st.chat_input():
             
             # Keep text file backup for now (can be removed later)
             print(response, file=open('responses.txt', 'a', encoding='utf-8'))
-            st.markdown(response["answer"])
+            st.markdown(escape_markdown(response["answer"]))
 
         reply_msg = {"role": "assistant", "content": response["answer"]}
         user_chat.append(reply_msg)
