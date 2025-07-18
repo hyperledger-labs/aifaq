@@ -1,4 +1,4 @@
-from utils import load_yaml_file
+from utils import load_yaml_file, escape_markdown
 from main import get_ragchain
 import streamlit as st
 from menu import menu_with_redirect
@@ -46,7 +46,8 @@ user_chat = st.session_state.user_messages[username]
 # -------------------------------
 for message in user_chat:
     with st.chat_message(message["role"], avatar=logo_path if message["role"] == "assistant" else None):
-        st.write(message["content"])
+        #st.write(message["content"])
+        st.markdown(escape_markdown(message["content"]))
 
 # -------------------------------
 # Handle user input
@@ -67,7 +68,8 @@ if prompt := st.chat_input():
             response = rag_chain.invoke({"input": query})
             # save response in a text file
             print(response, file=open('responses.txt', 'a', encoding='utf-8'))
-            st.markdown(response["answer"])
+            # Display the response escaping markdown special characters
+            st.markdown(escape_markdown(response["answer"]))
 
         reply_msg = {"role": "assistant", "content": response["answer"]}
         user_chat.append(reply_msg)
