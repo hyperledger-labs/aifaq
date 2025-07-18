@@ -269,3 +269,7 @@ def save_transcript(video_id, output_folder):
         
     except Exception as e:
         print(f"Error reading transcript: {e}")
+
+# Function to escape markdown special characters
+def escape_markdown(text: str) -> str:
+    return re.sub(r'([\\`*_{}\[\]()#+\-!$])', r'\\\1', text)

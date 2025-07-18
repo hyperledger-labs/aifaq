@@ -23,6 +23,7 @@ vectordb.txt
 
 # Local dataset
 dataset/
+dataset*/
 
 # Editor e sistema
 .DS_Store
@@ -30,5 +31,5 @@ dataset/
 .vscode/
 
 responses.txt
-vectordb.txt
 secrets.toml
+users.db

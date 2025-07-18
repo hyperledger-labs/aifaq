@@ -7,7 +7,7 @@ from homepage import gethomepage
 st.markdown(body=gethomepage(), unsafe_allow_html=True)
 
 # Check if user is authenticated
-if not st.experimental_user.is_logged_in:
+if not st.user.is_logged_in:
     if st.button("Log in or Sign up"):
         st.login("auth0")
     st.stop()
@@ -19,22 +19,22 @@ if "username" not in st.session_state:
     st.session_state.username = None
 
 # Only access user info if available
-if hasattr(st.experimental_user, "email"):
+if hasattr(st.user, "email"):
     conn = create_connection()
     if conn is not None:
         create_table(conn)
 
         # Check if user exists
-        user_data = get_user(conn, st.experimental_user.email)
+        user_data = get_user(conn, st.user.email)
         if user_data is not None:
             st.session_state['user_type'] = user_data[3]
             st.session_state['username'] = user_data[1]
         else:
             user_type = 'guest'
-            username = st.experimental_user.email
+            username = st.user.email
             st.session_state['user_type'] = user_type
             st.session_state['username'] = username
-            insert_user(conn, username, st.experimental_user.email, user_type)
+            insert_user(conn, username, st.user.email, user_type)
 
 # Show menu
 menu()
