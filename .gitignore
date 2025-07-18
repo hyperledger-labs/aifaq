@@ -30,3 +30,5 @@ dataset/
 .vscode/
 
 responses.txt
+vectordb.txt
+secrets.toml
