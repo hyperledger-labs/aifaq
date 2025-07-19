@@ -19,7 +19,7 @@
 ---
 ## 🚀 Overview
 
-sdfsfs
+The **Hyperledger Labs AIFAQ Prototype** is an open-source conversational AI tool designed to answer questions from technical documentation, FAQs, and internal knowledge bases with high accuracy and context awareness. This implementation of AIFAQ integrates deeply with **Snowflake**, providing secure multi-user support, persistent chat history, and access to powerful LLMs like OpenAI, Anthropic, and Snowflake Cortex.
 
 👉 Official Wiki Pages:
 
@@ -30,4 +30,16 @@ sdfsfs
 - Every Monday (public) — join via [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
 
 ---
+## Features
+
+- User Authentication: Secure, multi-user access with isolated document and chat histories
+- LLM Integration: Seamless access to Cortex, OpenAI, and Anthropic models via Snowflake external functions
+- Multi-Document Support: Upload and query multiple documents per session
+- Persistent Chat History: Retrieve and continue conversations across sessions
+- Streamlit UI: Intuitive document upload and chat interface
+
+---
+## 🛠️ Architecture
+
+<img src="" alt="LLM chatbot architecture" width="750"/>
 
