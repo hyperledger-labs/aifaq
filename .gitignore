@@ -18,7 +18,7 @@ streamlit.log
 streamlit_error.log
 
 # FAISS database
-faiss_index_fi/
+faiss_index*/
 vectordb.txt
 
 # Local dataset
