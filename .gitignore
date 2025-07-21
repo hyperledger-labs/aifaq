@@ -33,3 +33,4 @@ dataset*/
 responses.txt
 secrets.toml
 users.db
+homepage.py
