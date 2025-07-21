@@ -1,164 +1,166 @@
-# DEV Branch: Hyperledger Labs AIFAQ prototype
+# Snowflake Branch: Hyperledger Labs AIFAQ prototype
 
-The scope of this Hyperledger Labs project is to support the users (users, developer, etc.) to their work, avoiding to wade through oceans of documents to find information they are looking for. We are implementing an open source conversational AI tool which replies to the questions related to specific context. This is a prototype which allows to create a chatbot running a RESTful API which requires GPU. Here the official Wiki pages: [Hyperledger Labs aifaq](https://labs.hyperledger.org/labs/aifaq.html) and [Hyperledger Labs wiki](https://wiki.hyperledger.org/display/labs/AI+FAQ). Please, read also the [Antitrust Policy and the Code of Conduct](https://wiki.hyperledger.org/pages/viewpage.action?pageId=41587043). Every Monday we have a public meeting and the invitation is on the Hyperledger Labs calendar: [[Hyperledger Labs] FAQ AI Lab calls](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
+![Hyperledger Labs](https://img.shields.io/badge/Hyperledger-Labs-blue?logo=hyperledger)
+![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-green.svg)
+![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg?logo=python)
 
-## Background
+[![GitHub Stars](https://img.shields.io/github/stars/hyperledger-labs/aifaq?style=social)](https://github.com/hyperledger-labs/aifaq/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/hyperledger-labs/aifaq?style=social)](https://github.com/hyperledger-labs/aifaq/network/members)
+[![Language Stats](https://img.shields.io/github/languages/top/hyperledger-labs/aifaq)](https://github.com/hyperledger-labs/aifaq)
+[![Issues](https://img.shields.io/github/issues/hyperledger-labs/aifaq)](https://github.com/hyperledger-labs/aifaq/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/hyperledger-labs/aifaq)](https://github.com/hyperledger-labs/aifaq/pulls)
 
-The system is an open source python project which implements an AI chatbot that replies to HTTP requests. The idea is to implement an open source framework/template, as example, for other communities/organizations/companies. Last results in open LLMs allow to have good performance using common HW resources.\
-Below the application architecture:
+![Language Stats](https://img.shields.io/github/languages/count/hyperledger-labs/aifaq)
+![Python](https://img.shields.io/badge/Python-85%25-blue?logo=python)
+![HTML](https://img.shields.io/badge/HTML-10%25-orange?logo=html5)
+![Other](https://img.shields.io/badge/Others-5%25-lightgrey?logo=github)
 
-<img src="./images/prototype_schema_v1.drawio.png" alt="LLM chatbot schema" width="750"/>
+---
+## 🚀 Overview
 
-We use RAG (Retrieval Augmented Generation [arxiv.org](https://arxiv.org/abs/2312.10997)) for question answering use case. That technique aims to improve LLM answers by incorporating knowledge from external database (e.g. vector database).
+The **Hyperledger Labs AIFAQ Prototype** is an open-source conversational AI tool designed to answer questions from technical documentation, FAQs, and internal knowledge bases with high accuracy and context awareness. This implementation of AIFAQ integrates deeply with **Snowflake**, providing secure multi-user support, persistent chat history, and access to powerful LLMs like OpenAI, Anthropic, and Snowflake Cortex.
 
-The image depicts two workflow:
+👉 Official Wiki Pages:
 
-1. The data ingestion workflow
-2. The chat workflow
+- [Hyperledger Labs Wiki](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
 
-During the ingestion phase, the system loads context documents and creates a vector database. For example, the document sources can be:
+👉 Weekly Community Calls:
 
-- An online software guide (readthedocs template)
-- The GitHub issues and pull requests
+- Every Monday (public) — join via [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings).
 
-In our case, they are the readthedocs guide and a wiki page.\
-After the first phase, the system is ready to reply to user questions.
+---
+## Features
 
-Currently, we use the open source [HuggingFace Zephyr-7b-beta](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta), and in the future we want to investigate other open source models.\
-The user can query the system using HTTP requests, but we want to supply UI samples, as external module.
+- User Authentication: Secure, multi-user access with isolated document and chat histories
+- LLM Integration: Seamless access to Cortex, OpenAI, and Anthropic models via Snowflake external functions
+- Multi-Document Support: Upload and query multiple documents per session
+- Persistent Chat History: Retrieve and continue conversations across sessions
+- Streamlit UI: Intuitive document upload and chat interface
 
-## Open Source Version
+---
+## 🛠️ Architecture
 
-The software is under Apache 2.0 License (please check **LICENSE** and **NOTICE** files included). We use some 3rd party libraries: here is the [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html) and here is the information for ([Assembling LICENSE and NOTICE files](https://infra.apache.org/licensing-howto.html#mod-notice)).
+![Snowflake integration architecture](./images/snowflake-architecture.png)
 
-## Installation
+1. Flexible Document Ingestion: AIFAQ supports various source formats (PDFs, HTML, YouTube transcripts, etc.) ingested into Snowflake via external tables, raw storage, and pipelines using tools like Snowpipe and Lambda-based metadata extractors.
+2. Preprocessing & Embedding: Documents are chunked using Snowpark UDFs and embedded using LLM-based models. Embedding vectors are stored in Snowflake, forming the searchable knowledge base alongside metadata.
+3. Access Control & Governance: Fine-grained access is enforced through Snowflake's role-based permissions, row-level security, and data masking policies to protect sensitive content.
+4. LLM Query Augmentation & Retrieval: User queries are augmented with context by retrieving relevant chunks from the vector database (via Cortex Vector Search or SQL API), then sent to external LLMs (OpenAI, Anthropic) for response generation.
+5. Automation & Monitoring: Updates to documents automatically re-trigger embedding pipelines using Snowflake Streams and Tasks, while monitoring tools like Snoopy and event notifications ensure system observability and orchestration.
 
-<u>**This document does not contain commercial advertisement: all the tools/products/books/materials are generic and you have to consider those as examples!**</u>\
-This software needs GPU for the execution: if you do not have a local GPU you could use a Cloud GPU. There are several solutions to use Cloud GPU:
+---
+## 📝 Setup Instructions (Snowflake Branch)
+Follow these steps to configure your Snowflake environment using the provided `setup.sql` script.
 
-1. Cloud Provider (AWS, GCP, ...)
-2. On-Demand GPU Cloud (vast.ai, RunPod, ...)
-3. Cloud GPU IDE
-
-Currently, I use a Cloud GPU IDE ([Lightning Studio](https://lightning.ai/studios)), after signup/login, create new Studio (project):
-
-![New Studio Button](/images/new_studio.png)
-
-select the left solution:
-
-![Select Studio Code](/images/studio_code.png)
-
-click on the **Start** button, and rename the new Studio:
-
-![Rename Studio](/images/rename_studio.png)
-
-Then, and copy-paste the github api repo code:
-
-![Copy Paste Code](/images/copy_paste_code.png)
-
-and create two folders:
-
-1. chromadb (it will contains vector database files)
-2. rtdocs (it will contains the ReadTheDocs documentation)
-
-That version works with Hyperledger fabric documents (Wiki and ReadTheDocs).
-
-## Usage
-
-### Download ReadTheDocs documentation
-
-Open a new terminal:
-
-![Open Terminal](/images/open_terminal.png)
-
-and download the documentation executing the command below:
-
-```console
-wget -r -A.html -P rtdocs https://hyperledger-fabric.readthedocs.io/en/release-2.5/
+1. Set up a role for the chatbot and grant access to required resources:
 
 ```
+CREATE OR REPLACE ROLE chatbot_user;
 
-actually, after a minute we can interrupt (CTRL + C) because it starts to download previous versions:
+GRANT USAGE ON WAREHOUSE compute_wh TO ROLE chatbot_user;
+GRANT USAGE ON DATABASE llm_chatbot TO ROLE chatbot_user;
 
-![Wget Command](/images/wget_rtdocs.png)
+```
+2. Initialize the database and schema for storing documents and chat data:
 
-Now, we can move into rtdocs folder and move the **release-2.5** content to **rtdocs**. We need to compress the content of the folder, moving there and use that command:
+```
+CREATE OR REPLACE DATABASE llm_chatbot;
+CREATE OR REPLACE SCHEMA chatbot;
+USE SCHEMA llm_chatbot.chatbot;
 
-![Compress files](/images/compress_files.png)
+```
+3. Create two core tables, one for document chunks and another for chat history:
 
-and move the readthedocs.tar.gz to the parent directory (../):
+```
+CREATE OR REPLACE TABLE documents (
+  user_id STRING,
+  doc_id STRING,
+  doc_name STRING,
+  chunk_id STRING,
+  chunk_text STRING,
+  embedding VECTOR(FLOAT, 1536)
+);
 
-```console
-- mv readthedocs.tar.gz ..
-- cd ..
+CREATE OR REPLACE TABLE chat_history (
+  user_id STRING,
+  session_id STRING,
+  doc_id STRING,
+  turn INT,
+  user_input STRING,
+  bot_response STRING,
+  timestamp TIMESTAMP
+);
+```
+4. External Function – OpenAI: Create an external function to call OpenAI's API:
+
+```
+CREATE OR REPLACE EXTERNAL FUNCTION openai_complete(prompt STRING)
+RETURNS STRING
+API_INTEGRATION = my_api_integration
+HEADERS = (
+  "Authorization" = 'Bearer <OPENAI_API_KEY>',
+  "Content-Type" = 'application/json'
+)
+URL = 'https://api.openai.com/v1/completions'
+POST_BODY = '{
+  "model": "gpt-3.5-turbo-instruct",
+  "prompt": "' || prompt || '",
+  "max_tokens": 200
+}';
+
+```
+> Replace <OPENAI_API_KEY> with your actual OpenAI API key.
+
+5. External Function – Anthropic: Similarly, set up a function to call Anthropic's Claude model:
+
+```
+CREATE OR REPLACE EXTERNAL FUNCTION anthropic_complete(prompt STRING)
+RETURNS STRING
+API_INTEGRATION = my_api_integration
+HEADERS = (
+  "x-api-key" = '<ANTHROPIC_API_KEY>',
+  "Content-Type" = 'application/json'
+)
+URL = 'https://api.anthropic.com/v1/complete'
+POST_BODY = '{
+  "model": "claude-3-opus-20240229",
+  "prompt": "Human: ' || prompt || '\nAssistant:",
+  "max_tokens": 200
+}';
+
+```
+> Replace <ANTHROPIC_API_KEY> with your actual key.
+
+6. Deploy the chatbot interface using the Streamlit app stored in your project:
+
+```
+CREATE OR REPLACE STREAMLIT chatbot_ui
+FROM '/chatbot_app'
+MAIN_FILE = '/app.py';
 ```
 
-repeating the two commands until we are into rtdocs folder:
+--- 
 
-![Move Command](/images/move_command.png)
+## 🌐 Open Source License
 
-now remove hyperledger… folder and the content:
+- **License:** Apache 2.0 (see [`LICENSE`](./LICENSE) and [`NOTICE`](./docs/NOTICE))
+- **3rd Party Libraries:** [ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html)
+- **License Assembly:** [Assembling LICENSE and NOTICE](https://infra.apache.org/licensing-howto.html#mod-notice)
 
-![Compress files](/images/remove_command.png)
 
-uncompress the file here and remove compress file:
+## 🤝 Contributing
 
-```console
-- tar -xzvf rtdocs.tar.gz
-- rm rtdocs.tar.gz
-```
+We welcome contributions! Please check our [CONTRIBUTING](./docs/CONTRIBUTING.md) guidelines and [Antitrust Policy and Code of Conduct](https://lf-hyperledger.atlassian.net/wiki/spaces/HIRC/pages/19169404/Anti-trust+Policy+Notice+Code+of+Conduct).
 
-### Install requirements
 
-Move to the parent folder and execute the command below:
+## 📆 Join Us!
 
-```console
-pip install -r requirements.txt
-```
+Join our weekly public calls every Monday! See the [Hyperledger Labs Calendar](https://wiki.hyperledger.org/display/HYP/Calendar+of+Public+Meetings) for details.
 
-### Activate GPU
 
-After the requirements installation we can switch to GPU before to execute the ingestion script:
+## 📢 Stay Connected
 
-![Activate GPU](/images/activate_gpu.png)
-
-then select the L4 solution:
-
-![Select L4](/images/select_L4.png)
-
-and confirm (it takes some minutes).
-
-### Ingest step
-
-Run the ingest.py script:
-
-![Run Ingest](/images/run_ingest.png)
-
-it will create content in chromadb folder.
-
-### Run API
-
-Now, we can run the API and test it. So, run api.py script:
-
-![Run API](/images/run_api.png)
-
-and test it:
-
-```console
-curl --header "Content-Type: application/json" --request POST --data '{"text": "How to install Hyperledger fabric?"}' http://127.0.0.1:8080/query
-```
-
-below the result:
-
-![Show results](/images/curl_results.png)
-
-## Current version notes
-
-That is a proof-of-concept: a list of future improvement below:
-
-1. This is the first version of the prototype and it will be installed on a GPU Cloud Server
-2. At the same time, we'd like to pass to the next step: the Hyperledger Incubation Stage
-3. We will investigate other open source models
-4. Evaluation of the system using standard metrics
-5. We would like to improve the system, some ideas are: fine-tuning, Advanced RAG, Decomposed LoRA
-6. Add "guardrails" which are a specific ways of controlling the output of a LLM, such as talking avoid specific topics, responding in a particular way to specific user requests, etc.
+- [Slack Discussions](https://join.slack.com/t/aifaqworkspace/shared_invite/zt-337k74jsl-tvH_4ct3zLj99dvZaf9nZw)
+- [Hyperledger Labs Community](https://lf-hyperledger.atlassian.net/wiki/spaces/labs/pages/20290949/AI+FAQ+2025)
+- Official Website: [aifaq.pro](https://aifaq.pro)
