@@ -1,0 +1,19 @@
+llm_provider: "" # Options: "openai" or "mistral"
+model_name: "" # for OpenAI: "gpt-3.5-turbo" or "gpt-4", or "gpt-4-turbo", for Mistral: "mistral-medium" or "mistral-large-latest" or "mistral-small-2506"
+embedding_model: "" # "text-embedding-ada-002" or "text-embedding-3-small" for OpenAI or "mistral-embed" for Mistral
+use_query_rewriting: false # enable or disable query rewriting
+dataset_private_path: "./dataset/private"
+dataset_public_path: "./dataset/public"
+web_urls: "web_urls"
+yt_video_links: "yt_video_links"
+text_files: "text_files"
+pdf_files: "pdf_files"
+rtdocs_files: "rtdocs_files"
+html_files: "html_files"
+persist_directory: "faiss_index"
+host: "127.0.0.1"
+port: 8080
+system_prompt: ""
+query_rewriting_prompt: ""
+logo_pth: ""
+company_name: ""
