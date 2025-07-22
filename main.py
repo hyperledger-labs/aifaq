@@ -35,7 +35,8 @@ def get_ragchain(filter):
         )
     else:  # default to OpenAI
         embeddings = OpenAIEmbeddings(
-            openai_api_key=openai_api_key
+            openai_api_key=openai_api_key,
+            model=config_data["embedding_model"]
         )
         model = ChatOpenAI(
             openai_api_key=openai_api_key,
