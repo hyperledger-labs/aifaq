@@ -1,4 +1,8 @@
 import streamlit as st
+from utils import load_yaml_file
+
+# Read config data
+config_data = load_yaml_file("config.yaml")
 
 def handle_logout():
     """Handle logout action and state cleanup"""
@@ -14,7 +18,8 @@ def authenticated_menu():
     handle_logout()
     
     # Show a navigation menu for authenticated users
-    st.sidebar.page_link("pages/chatbot.py", label="AIFAQ ChatBot")
+    chatbot_label = config_data["company_name"] + " ChatBot"
+    st.sidebar.page_link("pages/chatbot.py", label=chatbot_label)
     if st.session_state.user_type in ["admin"]:
         st.sidebar.page_link("pages/config_page_public.py", label="Config Public Page")
         st.sidebar.page_link("pages/config_page_private.py", label="Config Private Page")

@@ -157,7 +157,7 @@ def get_vectordb(owner: str, access: str, datasetdir: str):
   if config_data["llm_provider"] == "mistral":
     embeddings = MistralAIEmbeddings(model=config_data["embedding_model"], mistral_api_key=mistral_api_key)
   else:  # default to OpenAI
-    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key, model=config_data["embedding_model"])
 
   if documents:
     # Create the vector store 

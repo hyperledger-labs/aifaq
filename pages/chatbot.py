@@ -11,11 +11,13 @@ init_db()
 # Redirect to app.py if not logged in
 menu_with_redirect()
 
-st.markdown("# AIFAQ")
-
 config_path = "./config.yaml"
 logo_path = "https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true"
 config_data = load_yaml_file(config_path)
+
+title = config_data["company_name"]
+title = "# " + title if title else "# AIFAQ"
+st.markdown(title)
 
 # filter public document in case of guest user
 filter = None
