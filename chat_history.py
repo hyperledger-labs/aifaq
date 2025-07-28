@@ -1,4 +1,5 @@
 import sqlite3
+import streamlit as st
 
 DB_FILE = "users.db"
 
@@ -12,26 +13,58 @@ def init_db():
                 username TEXT NOT NULL,
                 role TEXT NOT NULL,
                 content TEXT NOT NULL,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                feedback INTEGER DEFAULT NULL
             )
         ''')
+        
+        cursor = conn.execute("PRAGMA table_info(messages)")
+        existing_columns = [col[1] for col in cursor.fetchall()]
+
+        if "feedback" not in existing_columns:
+            conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')
+
         conn.commit()
 
 # create a table to store user information
 def save_message(username, role, content):
     with sqlite3.connect(DB_FILE) as conn:
-        conn.execute(
+        cursor = conn.execute(
             'INSERT INTO messages (username, role, content) VALUES (?, ?, ?)',
             (username, role, content)
         )
         conn.commit()
+        return cursor.lastrowid  # <- Restituisce l'ID generato dall'autoincrement
+
 
 # retrieve chat history for a specific user
 # and return it as a list of dictionaries
 def get_messages(username):
     with sqlite3.connect(DB_FILE) as conn:
         cursor = conn.execute(
-            'SELECT role, content FROM messages WHERE username = ? ORDER BY timestamp ASC',
+            'SELECT id, role, content, feedback FROM messages WHERE username = ? ORDER BY timestamp ASC',
             (username,)
         )
-        return [{"role": row[0], "content": row[1]} for row in cursor.fetchall()]
+        return [{"id": row[0], "role": row[1], "content": row[2], "feedback": row[3]} for row in cursor.fetchall()] 
+
+def update_feedback(message_id, feedback):
+    print(f"Updating feedback for message ID {message_id} to {feedback}")
+    with sqlite3.connect(DB_FILE) as conn:
+        conn.execute(
+            'UPDATE messages SET feedback = ? WHERE id = ?',
+            (feedback, message_id)
+        )
+        conn.commit()
+
+def on_feedback_change(message_id, fb_key):
+    feedback = st.session_state[fb_key]
+    update_feedback(message_id, feedback)
+
+def get_feedback(message_id):
+    with sqlite3.connect(DB_FILE) as conn:
+        cursor = conn.execute(
+            'SELECT feedback FROM messages WHERE id = ?',
+            (message_id,)
+        )
+        row = cursor.fetchone()
+        return row[0] if row else None

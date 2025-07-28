@@ -2,7 +2,7 @@ from utils import load_yaml_file, escape_markdown
 from main import get_ragchain
 import streamlit as st
 from menu import menu_with_redirect
-from chat_history import init_db, save_message, get_messages
+from chat_history import init_db, save_message, get_messages, on_feedback_change
 from query_rewriting import query_rewriting_llm
 
 # Initialize DB
@@ -37,42 +37,61 @@ if "user_messages" not in st.session_state:
 if username not in st.session_state.user_messages:
     messages = get_messages(username)
     if not messages:
-        messages = [{"role": "assistant", "content": "How may I help you?"}]
-        save_message(username, "assistant", "How may I help you?")
+        # create initial message if no history exists
+        msg_id = save_message(username, "assistant", "How may I help you?")
+        messages = [{"id": msg_id, "role": "assistant", "content": "How may I help you?", "feedback": None}]
     st.session_state.user_messages[username] = messages
 
 user_chat = st.session_state.user_messages[username]
+
+# fragment allows to reder only the messages without reloading the whole page
+@st.fragment
+def render_message(message):
+    with st.chat_message(message["role"], avatar=logo_path if message["role"] == "assistant" else None):
+        st.markdown(escape_markdown(message["content"]))
+        
+        # Feedback only for assistant messages
+        if message["role"] == "assistant":
+            message_id = message.get("id")
+
+            if message_id is not None:
+                fb_key = f"feedback_{message_id}"
+
+            if fb_key not in st.session_state:
+                st.session_state[fb_key] = message.get("feedback", None)
+
+            feedback_val = st.feedback(
+                "thumbs",
+                key=fb_key,
+                disabled=st.session_state.get(fb_key) is not None, # Disable if feedback already given
+                on_change=on_feedback_change,
+                args=(message_id, fb_key)
+            )
 
 # -------------------------------
 # Display chat messages
 # -------------------------------
 for message in user_chat:
-    with st.chat_message(message["role"], avatar=logo_path if message["role"] == "assistant" else None):
-        #st.write(message["content"])
-        st.markdown(escape_markdown(message["content"]))
+    render_message(message)
 
 # -------------------------------
 # Handle user input
 # -------------------------------
 if prompt := st.chat_input():
-    msg = {"role": "user", "content": prompt}
+    msg_id = save_message(username, "user", prompt)
+    msg = {"id": msg_id, "role": "user", "content": prompt, "feedback": None}
     user_chat.append(msg)
-    save_message(username, "user", prompt)
 
     with st.chat_message("user"):
         st.write(prompt)
 
+    with st.spinner("Thinking..."):
+        query = query_rewriting_llm(prompt) if config_data.get("use_query_rewriting", True) else prompt
+        response = rag_chain.invoke({"input": query})
+        print(response, file=open('responses.txt', 'a', encoding='utf-8'))
 
-    with st.chat_message("assistant", avatar=logo_path):
-        with st.spinner("Thinking..."):
-            # Use rewritten query or original prompt based on config
-            query = query_rewriting_llm(prompt) if config_data.get("use_query_rewriting", True) else prompt
-            response = rag_chain.invoke({"input": query})
-            # save response in a text file
-            print(response, file=open('responses.txt', 'a', encoding='utf-8'))
-            # Display the response escaping markdown special characters
-            st.markdown(escape_markdown(response["answer"]))
+    reply_id = save_message(username, "assistant", response["answer"])
+    reply_msg = {"id": reply_id, "role": "assistant", "content": response["answer"], "feedback": None}
+    user_chat.append(reply_msg)
+    render_message(reply_msg) # render the last message to show the feedback button
 
-        reply_msg = {"role": "assistant", "content": response["answer"]}
-        user_chat.append(reply_msg)
-        save_message(username, "assistant", response["answer"])
