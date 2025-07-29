@@ -61,7 +61,7 @@ def render_message(message):
                 st.session_state[fb_key] = message.get("feedback", None)
 
             feedback_val = st.feedback(
-                "thumbs",
+                config_data["feedback_options"],
                 key=fb_key,
                 disabled=st.session_state.get(fb_key) is not None, # Disable if feedback already given
                 on_change=on_feedback_change,
