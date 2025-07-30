@@ -24,7 +24,6 @@ filter = None
 if st.session_state.user_type in ['guest']:
     filter = {"access": {"$eq": "public"}}
 
-
 rag_chain = get_ragchain(filter)
 username = st.session_state.username
 
@@ -34,13 +33,12 @@ username = st.session_state.username
 if "user_messages" not in st.session_state:
     st.session_state.user_messages = {}
 
-if username not in st.session_state.user_messages:
-    messages = get_messages(username)
-    if not messages:
-        # create initial message if no history exists
-        msg_id = save_message(username, "assistant", "How may I help you?")
-        messages = [{"id": msg_id, "role": "assistant", "content": "How may I help you?", "feedback": None}]
-    st.session_state.user_messages[username] = messages
+messages = get_messages(username)
+if not messages:
+    # create initial message if no history exists
+    msg_id = save_message(username, "assistant", "How may I help you?")
+    messages = [{"id": msg_id, "role": "assistant", "content": "How may I help you?", "feedback": None}]
+st.session_state.user_messages[username] = messages
 
 user_chat = st.session_state.user_messages[username]
 
@@ -60,7 +58,7 @@ def render_message(message):
             if fb_key not in st.session_state:
                 st.session_state[fb_key] = message.get("feedback", None)
 
-            feedback_val = st.feedback(
+            st.feedback(
                 config_data["feedback_options"],
                 key=fb_key,
                 disabled=st.session_state.get(fb_key) is not None, # Disable if feedback already given

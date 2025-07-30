@@ -48,7 +48,6 @@ def get_messages(username):
         return [{"id": row[0], "role": row[1], "content": row[2], "feedback": row[3]} for row in cursor.fetchall()] 
 
 def update_feedback(message_id, feedback):
-    print(f"Updating feedback for message ID {message_id} to {feedback}")
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute(
             'UPDATE messages SET feedback = ? WHERE id = ?',
