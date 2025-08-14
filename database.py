@@ -1,4 +1,8 @@
 import sqlite3
+from utils import load_yaml_file
+
+# Read config data
+config_data = load_yaml_file("config.yaml")
 
 # This script creates a SQLite database to store user information.
 # It includes functions to create a connection to the database, create a table for users,
@@ -6,22 +10,31 @@ import sqlite3
 def create_connection():
     conn = None
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(config_data["dbpath"])
     except sqlite3.Error as e:
         print(e)
     return conn
 
 def create_table(conn):
     try:
-        sql = '''CREATE TABLE IF NOT EXISTS users (
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS users (
                     id integer PRIMARY KEY,
                     username text NOT NULL UNIQUE,
                     email text NOT NULL UNIQUE,
                     type text DEFAULT 'guest',
                     user_group text,
-                    email_verified integer DEFAULT 0
-                );'''
-        conn.cursor().execute(sql)
+                    email_verified integer DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                );''')
+
+        cursor = conn.execute("PRAGMA table_info(users)")
+        existing_columns = [col[1] for col in cursor.fetchall()]
+
+        if "created_at" not in existing_columns:
+            conn.execute('ALTER TABLE users ADD COLUMN created_at DATETIME DEFAULT now')
+        
+        conn.commit()
     except sqlite3.Error as e:
         print(e)
 

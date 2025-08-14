@@ -6,7 +6,7 @@ def get_all_users(conn):
     """Retrieve all users from database"""
     try:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM users")
+        cur.execute("SELECT id,username,email,type,user_group,email_verified FROM users")
         return cur.fetchall()
     except Exception as e:
         st.error(f"Error fetching users: {str(e)}")

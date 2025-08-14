@@ -1,7 +1,11 @@
 import sqlite3
 import streamlit as st
+from utils import load_yaml_file
 
-DB_FILE = "users.db"
+# Read config data
+config_data = load_yaml_file("config.yaml")
+
+DB_FILE = config_data["dbpath"]
 
 # create a SQLite database to store chat history
 # and user information
@@ -23,6 +27,16 @@ def init_db():
 
         if "feedback" not in existing_columns:
             conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')
+        
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS analytics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                sql_query TEXT NULL,
+                options TEXT NULL,
+                notes TEXT NULL
+            )
+        ''')
 
         conn.commit()
 
@@ -67,3 +81,5 @@ def get_feedback(message_id):
         )
         row = cursor.fetchone()
         return row[0] if row else None
+
+
