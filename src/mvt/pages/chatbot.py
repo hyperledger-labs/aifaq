@@ -4,8 +4,9 @@ import streamlit as st
 from menu import menu_with_redirect
 from chat_history import init_db, save_message, get_messages
 from query_rewriting import query_rewriting_llm
-from database import create_connection, create_all_tables, insert_response, insert_document, link_document_response, get_document_by_source, get_user
+from web_utils import Apputils
 import json
+from database import create_connection, create_all_tables, insert_response, insert_document, link_document_response, get_user
 
 def save_feedback(username, msg_idx, feedback_type, response_snippet, reason=None):
     import datetime
@@ -43,7 +44,7 @@ if st.session_state.user_type in ['guest']:
 
 try:
     rag_chain = get_ragchain(filter)
-except FileNotFoundError as e:
+except FileNotFoundError:
     st.error("⚠️ Knowledge base not initialized!")
     st.info("""
     The AI FAQ system needs to be set up first. Please:
@@ -153,7 +154,40 @@ if prompt := st.chat_input():
         with st.spinner("Thinking..."):
             # Use rewritten query or original prompt based on config
             query = query_rewriting_llm(prompt) if config_data.get("use_query_rewriting", True) else prompt
-            response = rag_chain.invoke({"input": query})
+
+            # Try a lightweight function-calling step to decide if a web-search is needed.
+            # If the LLM requests a web-search function, execute it and re-run the RAG chain with the results.
+            try:
+                func_messages = [
+                    {"role": "system", "content": "Decide whether a web search is required to better answer the user's query. If so, call an appropriate web search function with the best query string."},
+                    {"role": "user", "content": query}
+                ]
+                func_resp = Apputils.ask_llm_function_caller(
+                    gpt_model=config_data.get('model_name'),
+                    temperature=config_data.get('temperature', 0.0),
+                    messages=func_messages,
+                    function_json_list=Apputils.wrap_functions()
+                )
+
+                # If model requested a tool call, execute it and augment the query
+                if hasattr(func_resp.choices[0].message, 'tool_calls') and func_resp.choices[0].message.tool_calls:
+                    web_results = Apputils.execute_json_function(func_resp)
+                    # Format web results into a short text blob for the RAG chain
+                    def _fmt(r):
+                        title = r.get('title') or r.get('text') or ''
+                        url = r.get('href') or r.get('url') or r.get('link') or ''
+                        snippet = r.get('body') or r.get('snippet') or r.get('text') or r.get('description') or ''
+                        return f"- {title}\n  {url}\n  {snippet}\n"
+
+                    web_text = "\n".join([_fmt(r) for r in web_results]) if isinstance(web_results, list) else str(web_results)
+                    augmented_query = f"{query}\n\nWeb search results (from live web):\n{web_text}\nPlease incorporate these results into your answer and prioritize them along with the knowledge base."
+                    response = rag_chain.invoke({"input": augmented_query})
+                else:
+                    response = rag_chain.invoke({"input": query})
+            except Exception as e:
+                # On any error in the function-call step, fall back to the normal RAG invocation
+                print(f"Web-search function-calling step failed: {e}")
+                response = rag_chain.invoke({"input": query})
             
             # Save response to database instead of text file
             conn = create_connection()
