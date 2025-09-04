@@ -28,11 +28,11 @@ def get_sql_query(question: str) -> str:
     )
     sql_query = response.choices[0].message.content
     sql_query = sql_query.replace("```sql", "").replace("```", "").strip()
-    
+
     return sql_query
 
 def run_sql_query(sql_query: str) -> pd.DataFrame:
-    """Run SQL query on SQLite DB and return results as DataFrame."""
+    # Run SQL query on SQLite DB and return results as DataFrame.
     conn = sqlite3.connect(config_data["dbpath"])
     try:
         df = pd.read_sql(sql_query, conn)
@@ -48,18 +48,22 @@ def load_analytics():
     try:
         cursor = conn.execute("""
             SELECT
-                title || ' - ' || options AS value,
-                id AS key
-            FROM
-                analytics
-            ORDER BY
-                id;
+                id,
+                title,
+                sql_query,
+                options
+            FROM analytics
+            ORDER BY id;
         """)
-         # Convert rows to a list of dictionaries
-        options = [
-            {"value": row[0], "key": row[1]}
-            for row in cursor.fetchall()
-        ]
+        options = []
+        for row in cursor.fetchall():
+            option_list = [opt.strip() for opt in row[3].split(",") if opt.strip()]
+            options.append({
+                "key": row[0],
+                "title": row[1],
+                "sql_query": row[2],
+                "options": option_list
+            })
     except Exception as e:
         st.error(f"Error loading analytics options: {e}")
         options = []
