@@ -41,7 +41,7 @@ def create_table(conn):
 # This function creates a new user in the database.
 # It takes a connection object, username, email, and type as parameters.
 def insert_user(conn, username, email, type):
-    sql = '''INSERT INTO users(username, email, type) VALUES(?,?,?)'''
+    sql = '''INSERT INTO users(username, email, type, created_at) VALUES(?,?,?,CURRENT_TIMESTAMP)'''
     cur = conn.cursor()
     cur.execute(sql, (username, email, type))
     conn.commit()
