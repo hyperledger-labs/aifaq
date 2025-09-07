@@ -22,7 +22,7 @@ Here the [Official GitHub Repository](https://github.com/hyperledger-labs/aifaq)
 
 ## Links and Resources
 
-AIFAQ Inc. [website](https://aifaqpro.wordpress.com/)
+AIFAQ Inc. [website]({config_data["landing_page"]})
 
 ---
 

@@ -29,7 +29,7 @@ def show_charts(sql_query, granularity, start_date, end_date):
             sql_query,
             count=1
         )
-    
+
     # Run query
     df = run_sql_query(sql_query)
 
