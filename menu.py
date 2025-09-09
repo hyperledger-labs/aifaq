@@ -25,6 +25,7 @@ def authenticated_menu():
         st.sidebar.page_link("pages/config_page_private.py", label="Config Private Page")
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
         st.sidebar.page_link("pages/user_management.py", label="User Management")
+        st.sidebar.page_link("pages/analytics.py", label="Analytics")
     st.sidebar.page_link("app.py", label="About")
 
 def unauthenticated_menu():
