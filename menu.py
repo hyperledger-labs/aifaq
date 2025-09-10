@@ -27,6 +27,11 @@ def authenticated_menu():
         st.sidebar.page_link("pages/user_management.py", label="User Management")
         st.sidebar.page_link("pages/analytics.py", label="Analytics")
     st.sidebar.page_link("app.py", label="About")
+    st.sidebar.markdown(
+        f"[Contact us]({config_data['contact_page']})",
+        unsafe_allow_html=True
+    )
+ 
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
