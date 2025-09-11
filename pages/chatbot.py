@@ -1,15 +1,18 @@
 from utils import load_yaml_file, escape_markdown
 from main import get_ragchain
 import streamlit as st
-from menu import menu_with_redirect
+from menu import menu, unauthenticated_menu
 from chat_history import init_db, save_message, get_messages, on_feedback_change
 from query_rewriting import query_rewriting_llm
 
 # Initialize DB
 init_db()
 
-# Redirect to app.py if not logged in
-menu_with_redirect()
+# Gestione del menu basata sullo stato di autenticazione
+if st.user.is_logged_in:
+    menu()
+else:
+    unauthenticated_menu()
 
 config_path = "./config.yaml"
 logo_path = "https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true"
@@ -27,20 +30,35 @@ if st.session_state.user_type in ['guest']:
 rag_chain = get_ragchain(filter)
 username = st.session_state.username
 
-# -------------------------------
-# Load user chat history from DB
-# -------------------------------
+def create_initial_message(username: str):
+    """Crea e salva il messaggio iniziale di benvenuto."""
+    msg_id = save_message(username, "assistant", "How may I help you?")
+    return [{
+        "id": msg_id,
+        "role": "assistant",
+        "content": "How may I help you?",
+        "feedback": None
+    }]
+
+# Load user chat history or initialize it
 if "user_messages" not in st.session_state:
     st.session_state.user_messages = {}
 
-messages = get_messages(username)
-if not messages:
-    # create initial message if no history exists
-    msg_id = save_message(username, "assistant", "How may I help you?")
-    messages = [{"id": msg_id, "role": "assistant", "content": "How may I help you?", "feedback": None}]
-st.session_state.user_messages[username] = messages
+if st.session_state.user_type in ['guest']:
+    # Do not load from DB for guest users
+    messages = st.session_state.user_messages.get(username, [])
+    if not messages:
+        messages = create_initial_message(username)
+else:
+    # Normal users → load from DB
+    messages = get_messages(username)
+    if not messages:
+        messages = create_initial_message(username)
 
+# Update session state
+st.session_state.user_messages[username] = messages
 user_chat = st.session_state.user_messages[username]
+
 
 # fragment allows to reder only the messages without reloading the whole page
 @st.fragment

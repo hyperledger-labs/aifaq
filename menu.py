@@ -31,26 +31,30 @@ def authenticated_menu():
         f"[Contact us]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
- 
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
+    chatbot_label = config_data["company_name"] + " ChatBot"
+    st.sidebar.page_link("pages/chatbot.py", label=chatbot_label)
     st.sidebar.page_link("app.py", label="About")
+    st.sidebar.markdown(
+        f"[Contact us]({config_data['contact_page']})",
+        unsafe_allow_html=True
+    )
 
 def menu():
-    # Check authentication status
-    if "user_type" not in st.session_state or st.session_state.user_type is None:
+    # Check authentication status based on st.user.is_logged_in
+    if st.user.is_logged_in:
+        # Redirect to chatbot on first successful login
+        if "first_login" not in st.session_state:
+            st.session_state.first_login = True
+            st.switch_page("pages/chatbot.py")
+        
+        authenticated_menu()
+    else:
         unauthenticated_menu()
-        return
-
-    # Redirect to chatbot on first successful login
-    if "first_login" not in st.session_state:
-        st.session_state.first_login = True
-        st.switch_page("pages/chatbot.py")
-    
-    authenticated_menu()
 
 def menu_with_redirect():
-    if "user_type" not in st.session_state or st.session_state.user_type is None:
+    if not st.user.is_logged_in:
         st.switch_page("app.py")
     menu()

@@ -1,3 +1,4 @@
+from email.mime import text
 import yaml
 from bs4 import BeautifulSoup, NavigableString, Tag
 import re
@@ -272,4 +273,4 @@ def save_transcript(video_id, output_folder):
 
 # Function to escape markdown special characters
 def escape_markdown(text: str) -> str:
-    return re.sub(r'([\\`*_{}\[\]()#+\-!$])', r'\\\1', text)
+    return re.sub(r'([\\`_{}\[\](+\!$])', r'\\\1', text)
