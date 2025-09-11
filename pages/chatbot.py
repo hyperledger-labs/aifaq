@@ -110,4 +110,3 @@ if prompt := st.chat_input():
     reply_msg = {"id": reply_id, "role": "assistant", "content": response["answer"], "feedback": None}
     user_chat.append(reply_msg)
     render_message(reply_msg) # render the last message to show the feedback button
-

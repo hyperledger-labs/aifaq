@@ -22,7 +22,7 @@ if st.user.is_logged_in:
             st.session_state['user_type'] = user_data[3]
             st.session_state['username'] = user_data[1]
         else:
-            user_type = 'guest'
+            user_type = 'user'
             username = st.user.email
             st.session_state['user_type'] = user_type
             st.session_state['username'] = username
