@@ -8,6 +8,14 @@ from query_rewriting import query_rewriting_llm
 # Initialize DB
 init_db()
 
+if "user_type" not in st.session_state:
+    if st.user.is_logged_in:
+        st.session_state.user_type = "user"
+        st.session_state.username = st.user.email
+    else:
+        st.session_state.user_type = "guest"
+        st.session_state.username = "guest"
+
 # Gestione del menu basata sullo stato di autenticazione
 if st.user.is_logged_in:
     menu()
@@ -22,7 +30,7 @@ title = config_data["company_name"]
 title = "# " + title if title else "# AIFAQ"
 st.markdown(title)
 
-# filter public document in case of guest user
+# guest users have access only to public documents
 filter = None
 if st.session_state.user_type in ['guest']:
     filter = {"access": {"$eq": "public"}}
@@ -31,7 +39,7 @@ rag_chain = get_ragchain(filter)
 username = st.session_state.username
 
 def create_initial_message(username: str):
-    """Crea e salva il messaggio iniziale di benvenuto."""
+    # create and save the initial welcome message
     msg_id = save_message(username, "assistant", "How may I help you?")
     return [{
         "id": msg_id,
