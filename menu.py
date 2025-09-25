@@ -31,6 +31,7 @@ def authenticated_menu():
         f"[Contact us]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
+    st.sidebar.link_button("Powered by AIFAQ","https://aifaq.pro")
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
@@ -41,6 +42,7 @@ def unauthenticated_menu():
         f"[Contact us]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
+    st.sidebar.link_button("Powered by AIFAQ","https://aifaq.pro")
 
 def menu():
     # Check authentication status based on st.user.is_logged_in

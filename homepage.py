@@ -28,8 +28,9 @@ AIFAQ Inc. [website]({config_data["landing_page"]})
 ---
 
 ## {config_data["company_name"]}
-
 This chatbot is a {config_data["company_name"]} conversational AI tool. Please, register or login:
+
+### Sign in to keep your chat history!
 
 """
     return markdown_string
