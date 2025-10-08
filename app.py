@@ -35,8 +35,5 @@ else:
     st.session_state['user_type'] = 'guest'
     st.session_state['username'] = 'guest'
     
-    if st.button("Log in or Sign up"):
-        st.login("auth0")
-    
     # Show menu for unauthenticated users, which will now have a link to the chatbot
     unauthenticated_menu()

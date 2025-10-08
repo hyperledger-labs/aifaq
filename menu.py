@@ -38,11 +38,19 @@ def unauthenticated_menu():
     chatbot_label = config_data["company_name"] + " ChatBot"
     st.sidebar.page_link("pages/chatbot.py", label=chatbot_label)
     st.sidebar.page_link("app.py", label="About")
+    st.sidebar.markdown("**Sign in to keep your chat history!**")
+    if st.sidebar.button("Log in or Sign in"):
+        st.login("auth0")
+    
     st.sidebar.markdown(
         f"[Contact us]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
-    st.sidebar.link_button("Powered by AIFAQ", config_data['landing_page'])
+    st.sidebar.markdown(
+        f"[Powered by AIFAQ]({config_data['contact_page']})",
+        unsafe_allow_html=True
+    )
+    #st.sidebar.link_button("Powered by AIFAQ", config_data['landing_page'])
 
 def menu():
     # Check authentication status based on st.user.is_logged_in
