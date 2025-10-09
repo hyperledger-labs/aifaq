@@ -26,31 +26,34 @@ def authenticated_menu():
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
         st.sidebar.page_link("pages/user_management.py", label="User Management")
         st.sidebar.page_link("pages/analytics.py", label="Analytics")
-    st.sidebar.page_link("app.py", label="About")
     st.sidebar.markdown(
-        f"[Contact us]({config_data['contact_page']})",
+        f"[Speak to a mentor]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
     st.sidebar.link_button("Powered by AIFAQ", config_data['landing_page'])
+    st.sidebar.page_link("app.py", label="About")
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
     chatbot_label = config_data["company_name"] + " ChatBot"
     st.sidebar.page_link("pages/chatbot.py", label=chatbot_label)
-    st.sidebar.page_link("app.py", label="About")
-    st.sidebar.markdown("**Sign in to keep your chat history!**")
+    st.sidebar.markdown("Sign in to keep your chat history!")
     if st.sidebar.button("Log in or Sign in"):
         st.login("auth0")
     
     st.sidebar.markdown(
-        f"[Contact us]({config_data['contact_page']})",
+        f"[Back to FounderKeystone]({config_data['client_page']})",
         unsafe_allow_html=True
     )
     st.sidebar.markdown(
-        f"[Powered by AIFAQ]({config_data['contact_page']})",
+        f"[Speak to a mentor]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
-    #st.sidebar.link_button("Powered by AIFAQ", config_data['landing_page'])
+    st.sidebar.markdown(
+        f"[Powered by AIFAQ]({config_data['landing_page']})",
+        unsafe_allow_html=True
+    )
+    st.sidebar.page_link("app.py", label="About")
 
 def menu():
     # Check authentication status based on st.user.is_logged_in
