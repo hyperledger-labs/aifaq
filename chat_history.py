@@ -12,13 +12,14 @@ DB_FILE = config_data["dbpath"]
 def init_db():
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute('''
-            CREATE TABLE IF NOT EXISTS messages (
+CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL,
                 role TEXT NOT NULL,
                 content TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                feedback INTEGER DEFAULT NULL
+                feedback INTEGER DEFAULT NULL,
+                session_id TEXT DEFAULT NULL
             )
         ''')
         
@@ -26,7 +27,10 @@ def init_db():
         existing_columns = [col[1] for col in cursor.fetchall()]
 
         if "feedback" not in existing_columns:
-            conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')    
+            conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')
+
+        if "session_id" not in existing_columns:
+            conn.execute('ALTER TABLE messages ADD COLUMN session_id TEXT DEFAULT NULL')    
         
         conn.execute('''
             CREATE TABLE IF NOT EXISTS analytics (
@@ -41,11 +45,11 @@ def init_db():
         conn.commit()
 
 # create a table to store user information
-def save_message(username, role, content):
+def save_message(username, role, content, session_id=None):
     with sqlite3.connect(DB_FILE) as conn:
         cursor = conn.execute(
-            'INSERT INTO messages (username, role, content) VALUES (?, ?, ?)',
-            (username, role, content)
+            'INSERT INTO messages (username, role, content, session_id) VALUES (?, ?, ?, ?)',
+            (username, role, content, session_id)
         )
         conn.commit()
         return cursor.lastrowid

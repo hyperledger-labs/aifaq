@@ -4,9 +4,13 @@ import streamlit as st
 from menu import menu, unauthenticated_menu
 from chat_history import init_db, save_message, get_messages, on_feedback_change
 from query_rewriting import query_rewriting_llm
+import uuid
 
 # Initialize DB
 init_db()
+
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
 
 if "user_type" not in st.session_state:
     if st.user.is_logged_in:
@@ -40,7 +44,7 @@ username = st.session_state.username
 
 def create_initial_message(username: str):
     # create and save the initial welcome message
-    msg_id = save_message(username, "assistant", "How may I help you?")
+    msg_id = save_message(username, "assistant", "How may I help you?", st.session_state.session_id)
     return [{
         "id": msg_id,
         "role": "assistant",
@@ -102,7 +106,7 @@ for message in user_chat:
 # Handle user input
 # -------------------------------
 if prompt := st.chat_input():
-    msg_id = save_message(username, "user", prompt)
+    msg_id = save_message(username, "user", prompt, st.session_state.session_id)
     msg = {"id": msg_id, "role": "user", "content": prompt, "feedback": None}
     user_chat.append(msg)
 
@@ -114,7 +118,7 @@ if prompt := st.chat_input():
         response = rag_chain.invoke({"input": query})
         print(response, file=open('responses.txt', 'a', encoding='utf-8'))
 
-    reply_id = save_message(username, "assistant", response["answer"])
+    reply_id = save_message(username, "assistant", response["answer"], st.session_state.session_id)
     reply_msg = {"id": reply_id, "role": "assistant", "content": response["answer"], "feedback": None}
     user_chat.append(reply_msg)
     render_message(reply_msg) # render the last message to show the feedback button
