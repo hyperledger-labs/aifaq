@@ -26,7 +26,7 @@ def init_db():
         existing_columns = [col[1] for col in cursor.fetchall()]
 
         if "feedback" not in existing_columns:
-            conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')
+            conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')    
         
         conn.execute('''
             CREATE TABLE IF NOT EXISTS analytics (
@@ -48,7 +48,7 @@ def save_message(username, role, content):
             (username, role, content)
         )
         conn.commit()
-        return cursor.lastrowid  # <- Restituisce l'ID generato dall'autoincrement
+        return cursor.lastrowid
 
 
 # retrieve chat history for a specific user
