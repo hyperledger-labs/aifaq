@@ -30,8 +30,14 @@ def authenticated_menu():
         f"[Speak to a mentor]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
-    st.sidebar.link_button("Powered by AIFAQ", config_data['landing_page'])
-    st.sidebar.page_link("app.py", label="About")
+    st.sidebar.markdown(
+        f"[Powered by AIFAQ]({config_data['landing_page']})",
+        unsafe_allow_html=True
+    )
+    st.sidebar.markdown(
+        f'''<a href="{config_data['app_page']}" target="_self">About us</a>''',
+        unsafe_allow_html=True
+    )
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
@@ -53,7 +59,10 @@ def unauthenticated_menu():
         f"[Powered by AIFAQ]({config_data['landing_page']})",
         unsafe_allow_html=True
     )
-    st.sidebar.page_link("app.py", label="About")
+    st.sidebar.markdown(
+        f'''<a href="{config_data['app_page']}" target="_self">About us</a>''',
+        unsafe_allow_html=True
+    )
 
 def menu():
     # Check authentication status based on st.user.is_logged_in
