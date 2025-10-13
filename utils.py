@@ -273,4 +273,5 @@ def save_transcript(video_id, output_folder):
 
 # Function to escape markdown special characters
 def escape_markdown(text: str) -> str:
-    return re.sub(r'([\\`_{}\[\](+\!$])', r'\\\1', text)
+    return re.sub(r'(\$)', r'\\\1', text)
+    #return re.sub(r'([\\`_{}\[\](+\!$])', r'\\\1', text)
