@@ -49,8 +49,9 @@ def unauthenticated_menu():
         f"[Back to FounderKeystone]({config_data['client_page']})",
         unsafe_allow_html=True
     )
+    # Display contact page
     st.sidebar.markdown(
-        f"[Speak to a mentor]({config_data['contact_page']})",
+        f"[{config_data['contact_label']}]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
     st.sidebar.markdown(
