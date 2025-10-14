@@ -26,8 +26,9 @@ def authenticated_menu():
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
         st.sidebar.page_link("pages/user_management.py", label="User Management")
         st.sidebar.page_link("pages/analytics.py", label="Analytics")
+    # Display contact page
     st.sidebar.markdown(
-        f"[Speak to a mentor]({config_data['contact_page']})",
+        f"[{config_data['contact_label']}]({config_data['contact_page']})",
         unsafe_allow_html=True
     )
     st.sidebar.markdown(
