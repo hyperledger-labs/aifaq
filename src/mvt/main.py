@@ -3,9 +3,9 @@ from utils import load_yaml_file_with_db_prompts, get_prompt_from_file
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_community.vectorstores import FAISS
-from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import create_retrieval_chain
+from langchain_classic.chains import create_retrieval_chain
 from langchain_mistralai.embeddings import MistralAIEmbeddings
 #from langchain.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_core.documents import Document
