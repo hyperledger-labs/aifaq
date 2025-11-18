@@ -63,7 +63,7 @@ def get_ragchain(filter):
     "\n\n"
     "{context}"
     )
-    
+
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),

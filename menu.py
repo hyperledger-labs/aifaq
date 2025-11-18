@@ -46,7 +46,7 @@ def unauthenticated_menu():
         st.login("auth0")
     
     st.sidebar.markdown(
-        f"[Back to FounderKeystone]({config_data['client_page']})",
+        f"[Back to {config_data['company_name']}]({config_data['client_page']})",
         unsafe_allow_html=True
     )
     # Display contact page
