@@ -65,7 +65,7 @@ username = st.session_state.username
 
 def create_initial_message(username: str):
     # create and save the initial welcome message
-    msg_id = save_message(username, "assistant", "How may I help you?", st.session_state.session_id, st.session_state["client_ip"])
+    msg_id = save_message(username, "assistant", "How may I help you?", st.session_state.session_id)
 
     return [{
         "id": msg_id,
@@ -128,7 +128,7 @@ for message in user_chat:
 # Handle user input
 # -------------------------------
 if prompt := st.chat_input():
-    msg_id = save_message(username, "user", prompt, st.session_state.session_id)
+    msg_id = save_message(username, "user", prompt, st.session_state.session_id, st.session_state["client_ip"])
     msg = {"id": msg_id, "role": "user", "content": prompt, "feedback": None}
     user_chat.append(msg)
 
