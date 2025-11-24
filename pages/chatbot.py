@@ -26,6 +26,31 @@ if st.user.is_logged_in:
 else:
     unauthenticated_menu()
 
+# --- Get Client IP (Streamlit 1.47.0 + NGINX) ---
+def get_client_ip():
+    try:
+        headers = st.context.headers
+
+        # Nginx will pass this correctly
+        ip = headers.get("x-real-ip")
+
+        # Fallback: first element of X-Forwarded-For
+        if not ip:
+            xff = headers.get("x-forwarded-for")
+            if xff:
+                ip = xff.split(",")[0].strip()
+
+        return ip or "unknown"
+    except Exception as e:
+        return f"error: {e}"
+
+client_ip = get_client_ip()
+st.session_state["client_ip"] = client_ip
+
+st.markdown(f"**Your IP:** {client_ip}")
+# ------------------------------------------------
+
+
 config_path = "./config.yaml"
 logo_path = "https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true"
 config_data = load_yaml_file(config_path)
