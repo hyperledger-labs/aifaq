@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS messages (
                 content TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 feedback INTEGER DEFAULT NULL,
-                session_id TEXT DEFAULT NULL
+                session_id TEXT DEFAULT NULL,
+                ip_address TEXT DEFAULT NULL
             )
         ''')
         
@@ -30,7 +31,10 @@ CREATE TABLE IF NOT EXISTS messages (
             conn.execute('ALTER TABLE messages ADD COLUMN feedback INTEGER DEFAULT NULL')
 
         if "session_id" not in existing_columns:
-            conn.execute('ALTER TABLE messages ADD COLUMN session_id TEXT DEFAULT NULL')    
+            conn.execute('ALTER TABLE messages ADD COLUMN session_id TEXT DEFAULT NULL')
+
+        if "ip_address" not in existing_columns:
+            conn.execute('ALTER TABLE messages ADD COLUMN ip_address TEXT DEFAULT NULL')    
         
         conn.execute('''
             CREATE TABLE IF NOT EXISTS analytics (
@@ -45,11 +49,11 @@ CREATE TABLE IF NOT EXISTS messages (
         conn.commit()
 
 # create a table to store user information
-def save_message(username, role, content, session_id=None):
+def save_message(username, role, content, session_id=None, ipaddress=None):
     with sqlite3.connect(DB_FILE) as conn:
         cursor = conn.execute(
-            'INSERT INTO messages (username, role, content, session_id) VALUES (?, ?, ?, ?)',
-            (username, role, content, session_id)
+            'INSERT INTO messages (username, role, content, session_id, ip_address) VALUES (?, ?, ?, ?, ?)',
+            (username, role, content, session_id, ipaddress)
         )
         conn.commit()
         return cursor.lastrowid

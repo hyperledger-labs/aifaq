@@ -26,7 +26,6 @@ if st.user.is_logged_in:
 else:
     unauthenticated_menu()
 
-# --- Get Client IP (Streamlit 1.47.0 + NGINX) ---
 def get_client_ip():
     try:
         headers = st.context.headers
@@ -47,9 +46,6 @@ def get_client_ip():
 client_ip = get_client_ip()
 st.session_state["client_ip"] = client_ip
 
-st.markdown(f"**Your IP:** {client_ip}")
-# ------------------------------------------------
-
 
 config_path = "./config.yaml"
 logo_path = "https://github.com/hyperledger-labs/aifaq/blob/mvt-streamlit/images/logo.png?raw=true"
@@ -69,7 +65,8 @@ username = st.session_state.username
 
 def create_initial_message(username: str):
     # create and save the initial welcome message
-    msg_id = save_message(username, "assistant", "How may I help you?", st.session_state.session_id)
+    msg_id = save_message(username, "assistant", "How may I help you?", st.session_state.session_id, st.session_state["client_ip"])
+
     return [{
         "id": msg_id,
         "role": "assistant",
