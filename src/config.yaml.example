@@ -1,28 +1,68 @@
-llm_provider: "" # Options: "openai" or "mistral"
-model_name: "" # for OpenAI: "gpt-3.5-turbo" or "gpt-4", or "gpt-4-turbo", for Mistral: "mistral-medium" or "mistral-large-latest" or "mistral-small-2506"
-embedding_model: "" # "text-embedding-ada-002" or "text-embedding-3-small" for OpenAI or "mistral-embed" for Mistral
-use_query_rewriting: false # enable or disable query rewriting
+# === LLM SETTINGS ===
+llm_provider: "mistral"          # Options: "openai", "mistral"
+model_name: "mistral-medium-latest"
+embedding_model: "mistral-embed"
+temperature: 0.7
+
+# Enable / disable query rewriting
+use_query_rewriting: false
+query_rewriting_prompt: "Rewrite the user query to improve document retrieval accuracy."
+
+# === DATASET PATHS ===
 dataset_private_path: "./dataset/private"
 dataset_public_path: "./dataset/public"
+
+# Types of supported input sources
 web_urls: "web_urls"
 yt_video_links: "yt_video_links"
 text_files: "text_files"
 pdf_files: "pdf_files"
 rtdocs_files: "rtdocs_files"
 html_files: "html_files"
+
+# Vector DB persistence
 persist_directory: "faiss_index"
+
+# === APP CONFIGURATION ===
 host: "127.0.0.1"
 port: 8080
-system_prompt: ""
-query_rewriting_prompt: ""
-logo_pth: ""
-company_name: ""
-feedback_options: "thumbs" # thumbs, stars, or faces
+
+system_prompt: "You are an AI assistant. Use retrieved context to answer questions accurately. If the answer is not found, reply with: {{no_answer_message}}."
+
 no_answer_message: "I don't have the answer to that question"
 nr_documents: 5
-# analytics
+
+# === HISTORY ===
+default_chat_title: "New Chat"
+history_messages_nr: 6
+
+# === WEB SEARCH AGENT ===
+web_search: "no_answer"  # "disabled" to turn off web search entirely
+websearch_agent_code: "web_search_agent"
+websearch_agent_model: "mistral-large-latest"
+websearch_agent_name: "Websearch Agent"
+websearch_agent_description: "Agent able to search the web for additional information."
+websearch_agent_instructions: "You can perform a web search with `web_search` when needed."
+websearch_agent_tools: '{"type": "web_search"}'
+websearch_agent_completion_args: '{"temperature": 0.3, "top_p": 0.95}'
+
+# === LOGO & BRANDING (optional) ===
+logo_pth: ""
+company_name: ""
+
+# === FEEDBACK SETTINGS ===
+feedback_options: "thumbs"  # thumbs, stars, faces
+
+# === ANALYTICS ===
 analytics_model: "mistral-small-latest"
-analytics_prompt: "Given the following SQLite database schema: \n'''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text NOT NULL UNIQUE, email text NOT NULL UNIQUE, type text DEFAULT 'guest', user_group text, email_verified integer DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP); CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, role TEXT NOT NULL, content TEXT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, feedback INTEGER DEFAULT NULL);''' where 'role' field contains 'user' for questions and 'assistant' for answers, 'feedback' field is 1 for positive feedback or thumb up, 0 for negative or thumb down \nGenerate a SQL query to answer the user question \nReturn ONLY the SQL query, nothing else and do not use 'start of week' or 'start of day', use alias for count field. User question: "
+analytics_prompt: "Generate a SQL query to answer the analytical question using the messages table."
+
+# === DATABASE ===
 dbpath: "users.db"
-landing_page: "https://aifaq.pro/"
+
+# === PAGES (Optional UI Routing) ===
+landing_page: ""
 contact_page: ""
+client_page: ""
+app_page: "http://localhost:8501"
+contact_label: "Contact"

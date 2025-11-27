@@ -9,8 +9,7 @@ src/*.log
 
 # Config and data
 src/.env
-src/*.yaml
-src/*.yml
+src/config.yaml
 src/users.db
 
 # Streamlit
@@ -26,7 +25,7 @@ src/vectordb.txt
 src/dataset/
 src/dataset*/
 
-# Editor e sistema
+# Editor settings
 .DS_Store
 .idea/
 .vscode/
