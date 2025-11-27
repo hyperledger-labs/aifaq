@@ -3,33 +3,33 @@
 venv/
 
 # Temporary files and folders
+src/__pycache__/
 __pycache__/
-*.log
+src/*.log
 
 # Config and data
-.env
-*.yaml
-*.yml
-users.db
+src/.env
+src/*.yaml
+src/*.yml
+src/users.db
 
 # Streamlit
-.streamlit/
-streamlit.log
-streamlit_error.log
+src/.streamlit/
+src/streamlit.log
+src/streamlit_error.log
 
 # FAISS database
-faiss_index*/
-vectordb.txt
+src/faiss_index*/
+src/vectordb.txt
 
 # Local dataset
-dataset/
-dataset*/
+src/dataset/
+src/dataset*/
 
 # Editor e sistema
 .DS_Store
 .idea/
 .vscode/
 
-responses.txt
-.streamlit/
-users.db
+src/responses.txt
+src/.streamlit/
