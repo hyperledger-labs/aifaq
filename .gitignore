@@ -1,87 +1,35 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-.pytest_cache/
-
-# Virtual Environment
+# Virtual environment
 .venv/
 venv/
-env/
-ENV/
 
-# Data and model files
-dataset/
-rtdocs/
-chromadb/
-faiss_index/
-*.db
-*.sqlite
-*.pkl
-*.bin
-*.pt
-*.pth
-*.onnx
-*.h5
-*.hdf5
-*.pb
-*.tar.gz
-*.zip
-*.model
-
-# IDE and editor files
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Logs
-logs/
+# Temporary files and folders
+__pycache__/
 *.log
 
-# Environment variables
+# Config and data
 .env
-.env.local
+*.yaml
+*.yml
+users.db
 
-# Large files that shouldn't be tracked
-*.csv
-*.json
-*.jsonl
-*.parquet
+# Streamlit
+.streamlit/
+streamlit.log
+streamlit_error.log
 
-# Keep sample data files for testing/examples
-!sample_data/*.csv
-!sample_data/*.json
+# FAISS database
+faiss_index*/
+vectordb.txt
 
-# Documentation build
-_build/
-_static/
-_templates/
+# Local dataset
+dataset/
+dataset*/
 
-config.yaml
-system_prompt.txt
-query_rewriting_prompt.txt
+# Editor e sistema
+.DS_Store
+.idea/
+.vscode/
+
 responses.txt
+secrets.toml
+users.db

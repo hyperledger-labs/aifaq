@@ -1,3 +1,4 @@
+from email.mime import text
 import yaml
 from bs4 import BeautifulSoup, NavigableString, Tag
 import re
@@ -13,39 +14,6 @@ def load_yaml_file(path):
     with open(path, 'r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     return data
-
-def load_yaml_file_with_db_prompts(path):
-    """Load YAML file and override prompts with database values if available"""
-    with open(path, 'r') as f:
-        data = yaml.load(f, Loader=yaml.FullLoader)
-    
-    # Try to load prompts from database
-    try:
-        from database import create_connection, get_prompt
-        conn = create_connection()
-        if conn:
-            # Get prompts from database
-            db_system_prompt = get_prompt(conn, "system_prompt")
-            db_query_rewriting_prompt = get_prompt(conn, "query_rewriting_prompt")
-            
-            # Override config values if database values exist
-            if db_system_prompt:
-                data["system_prompt"] = db_system_prompt
-            if db_query_rewriting_prompt:
-                data["query_rewriting_prompt"] = db_query_rewriting_prompt
-            
-            conn.close()
-    except Exception as e:
-        # If database loading fails, use config defaults
-        print(f"Warning: Could not load prompts from database: {e}")
-    
-    return data
-
-# This function returns the system prompt from the file specified in the config.
-def get_prompt_from_file(prompt_file: str):
-    with open(prompt_file, "r") as f:
-        return f.read().strip()
-
 
 
 # This function extracts text from HTML while preserving context relationships.
@@ -235,7 +203,6 @@ def bs4_lxml_improved(html: str) -> str:
     joined = BLANK_RE.sub("\n\n", joined.strip())
     return joined + "\n"
 
-
 def convert_youtube_short_to_full(short_url):
     """
     Converts a short YouTube URL (youtu.be) to the full format (youtube.com/watch?v=...)
@@ -304,19 +271,7 @@ def save_transcript(video_id, output_folder):
     except Exception as e:
         print(f"Error reading transcript: {e}")
 
-
-# Markdown escape function to prevent special characters from being interpreted as markdown
-MARKDOWN_ESCAPE_RE = re.compile(r'([\\`*_{}\[\]()#+\-!$])')
-
+# Function to escape markdown special characters
 def escape_markdown(text: str) -> str:
-    """
-    Escape special markdown characters to prevent them from being interpreted as markdown syntax.
-    This is particularly useful for currency symbols like $ that Streamlit interprets as math mode.
-    
-    Args:
-        text (str): The text to escape
-        
-    Returns:
-        str: The text with markdown special characters escaped
-    """
-    return MARKDOWN_ESCAPE_RE.sub(r'\\\1', text)
+    return re.sub(r'(\$)', r'\\\1', text)
+    #return re.sub(r'([\\`_{}\[\](+\!$])', r'\\\1', text)

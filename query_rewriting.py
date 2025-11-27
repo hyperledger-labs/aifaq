@@ -1,7 +1,9 @@
 import os
-from utils import load_yaml_file_with_db_prompts, get_prompt_from_file
+import openai
+from utils import load_yaml_file
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
+from langchain_openai import ChatOpenAI
 
 def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"):
     """
@@ -15,8 +17,8 @@ def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"
     - La query riscritta in modo più specifico.
     """
 
-    # Read config data with database prompt overrides
-    config_data = load_yaml_file_with_db_prompts("config.yaml")
+    # Read config data
+    config_data = load_yaml_file("config.yaml")
     load_dotenv(find_dotenv())
 
     # Get API keys
@@ -30,21 +32,21 @@ def query_rewriting_llm(user_query, context="Founder Institute Keystone Chapter"
             model=config_data["model_name"]
         )
     else:  # default to OpenAI
-        import openai
-        from langchain_openai import ChatOpenAI
         model = ChatOpenAI(
             openai_api_key=openai_api_key,
             model=config_data["model_name"],
             temperature=0.7
         )
 
-    # Read query rewriting prompt from config
-    query_rewriting_prompt = get_prompt_from_file(config_data["query_rewriting_prompt"])
+    query_rewriting_prompt = config_data["query_rewriting_prompt"]
 
     messages = [
         ("system", query_rewriting_prompt),
         ("human", user_query),
     ]
 
+    print(messages)
+
     response = model.invoke(messages)
+    print(response.content)
     return response.content

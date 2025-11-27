@@ -1,5 +1,5 @@
 import os
-from utils import load_yaml_file_with_db_prompts, get_prompt_from_file
+from utils import load_yaml_file
 from dotenv import load_dotenv, find_dotenv
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_community.vectorstores import FAISS
@@ -7,14 +7,16 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_mistralai.embeddings import MistralAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
 #from langchain.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_core.documents import Document
 from typing import List
 
 
 def get_ragchain(filter):
-    # Read config data with database prompt overrides
-    config_data = load_yaml_file_with_db_prompts("config.yaml")
+    # Read config data
+    config_data = load_yaml_file("config.yaml")
     load_dotenv(find_dotenv())
 
     # Get API keys
@@ -32,10 +34,9 @@ def get_ragchain(filter):
             model=config_data["model_name"]
         )
     else:  # default to OpenAI
-        from langchain_openai import ChatOpenAI
-        from langchain_openai import OpenAIEmbeddings
         embeddings = OpenAIEmbeddings(
-            openai_api_key=openai_api_key
+            openai_api_key=openai_api_key,
+            model=config_data["embedding_model"]
         )
         model = ChatOpenAI(
             openai_api_key=openai_api_key,
@@ -43,24 +44,18 @@ def get_ragchain(filter):
             temperature=0.7
         )
     
-    # Check if vector database exists
-    persist_dir = config_data["persist_directory"]
-    index_path = os.path.join(persist_dir, "index.faiss")
-    
-    if not os.path.exists(index_path):
-        raise FileNotFoundError(
-            f"Vector database not found at {index_path}. "
-            "Please run 'python ingest.py' first to create the knowledge base."
-        )
-
     # Load local vector db
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 
     # Define a retriever interface
-    retriever = docsearch.as_retriever(search_kwargs={"k": config_data["nr_retrieved_documents"], "filter": filter})
+    retriever = docsearch.as_retriever(search_kwargs={"k": config_data["nr_documents"], "filter": filter})
 
     # read prompt string from config file
-    prompt_str = get_prompt_from_file(config_data["system_prompt"])
+    prompt_str = config_data["system_prompt"]
+    no_answer_message = config_data["no_answer_message"]
+
+    # Replace placeholders in the prompt string
+    prompt_str = prompt_str.replace("{{no_answer_message}}", no_answer_message)
 
     # Answer question
     qa_system_prompt = (
@@ -68,7 +63,7 @@ def get_ragchain(filter):
     "\n\n"
     "{context}"
     )
-    
+
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
