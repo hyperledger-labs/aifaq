@@ -31,5 +31,5 @@ dataset*/
 .vscode/
 
 responses.txt
-secrets.toml
+.streamlit/
 users.db
