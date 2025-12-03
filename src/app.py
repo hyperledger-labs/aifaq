@@ -2,22 +2,37 @@ import streamlit as st
 from menu import menu, unauthenticated_menu
 from database import create_connection, create_table, get_user, insert_user
 from homepage import gethomepage
+from utils import load_yaml_file
 
-# Get markdown homepage
+# Load configuration
+config = load_yaml_file("config.yaml")
+demo = config.get("demo_mode", False)
+
+# Homepage markdown
 st.markdown(body=gethomepage(), unsafe_allow_html=True)
 
-# Initialize session state for user_type and username
+# Initialize session state
 if "user_type" not in st.session_state:
     st.session_state.user_type = None
 if "username" not in st.session_state:
     st.session_state.username = None
 
-# Check if user is authenticated
-if st.user.is_logged_in:
+# DEMO MODE → bypass authentication entirely
+if demo:
+    st.session_state['user_type'] = "guest"
+    st.session_state['username'] = "guest"
+    unauthenticated_menu()
+    st.info("Running in DEMO MODE - Login disabled.")
+    st.stop()
+
+# FULL AUTH MODE
+if hasattr(st, "user") and getattr(st.user, "is_logged_in", False):
+
     conn = create_connection()
     if conn is not None:
         create_table(conn)
         user_data = get_user(conn, st.user.email)
+
         if user_data is not None:
             st.session_state['user_type'] = user_data[3]
             st.session_state['username'] = user_data[1]
@@ -27,13 +42,10 @@ if st.user.is_logged_in:
             st.session_state['user_type'] = user_type
             st.session_state['username'] = username
             insert_user(conn, username, st.user.email, user_type)
-    
-    # Show authenticated menu
+
     menu()
-    
+
 else:
-    st.session_state['user_type'] = 'guest'
-    st.session_state['username'] = 'guest'
-    
-    # Show menu for unauthenticated users, which will now have a link to the chatbot
+    st.session_state['user_type'] = "guest"
+    st.session_state['username'] = "guest"
     unauthenticated_menu()

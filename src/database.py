@@ -40,7 +40,7 @@ def create_table(conn):
 
 # This function creates a new user in the database.
 # It takes a connection object, username, email, and type as parameters.
-def insert_user(conn, username, email, type):
+def insert_user(conn, username, email=None, type=None):
     sql = '''INSERT INTO users(username, email, type, created_at) VALUES(?,?,?,CURRENT_TIMESTAMP)'''
     cur = conn.cursor()
     cur.execute(sql, (username, email, type))
@@ -65,10 +65,10 @@ def update_user_email_verified(conn, email, email_verified):
 
 # This function retrieves user data from the database.
 # It takes a connection object and email as parameters.
-def get_user(conn, email):
+def get_user(conn, username):
     try:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE email = ?", (email,))
+        cur.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = cur.fetchone()
         return user
     except sqlite3.Error as e:

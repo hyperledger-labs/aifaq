@@ -1,3 +1,5 @@
+demo_mode: false
+
 # === LLM SETTINGS ===
 llm_provider: "mistral"          # Options: "openai", "mistral"
 model_name: "mistral-medium-latest"
