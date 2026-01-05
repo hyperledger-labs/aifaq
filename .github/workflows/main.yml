@@ -10,21 +10,6 @@ on:
       - "**"
 
 jobs:
-  format-frontend:
-    name: 'Format Frontend'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.3
-        with:
-          prettier_options: --write src/frontend/**/*.{ts,tsx}
-
-      - name: Post Formatting Check
-        run: git diff --exit-code
-
   format-core:
     name: 'Format Core'
     runs-on: ubuntu-latest
@@ -49,7 +34,7 @@ jobs:
 
       - name: Format Backend
         run: |
-          black src/core
+          black version_1/ version_2/
 
       - name: Post Formatting Check
         run: git diff --exit-code
