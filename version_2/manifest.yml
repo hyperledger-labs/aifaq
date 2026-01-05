@@ -1,0 +1,64 @@
+# Snowflake Native App Manifest
+manifest_version: 1
+
+# Application metadata
+version: "1.0.0"
+label: "AIFAQ Pro"
+description: "AI-powered FAQ assistant with document ingestion and team-based access control"
+author: "AIFAQ Pro Team"
+icon: "🏢"
+
+# Main entry point
+main_file: "app.py"
+streamlit:
+  page_title: "AIFAQ Pro"
+  page_icon: "🏢"
+  layout: "wide"
+  initial_sidebar_state: "expanded"
+
+# Required Snowflake privileges
+privileges:
+  cortex:
+    - COMPLETE
+    - PARSE_DOCUMENT
+    - EMBED_TEXT_768
+  storage:
+    - PUT_FILE
+    - GET_FILE
+    - LIST
+  database:
+    - CREATE_SCHEMA
+    - CREATE_TABLE
+    - CREATE_STAGE
+
+# Application configuration
+configuration:
+  database:
+    name: AIFAQ_BETA_DB
+    schema: APP_SCHEMA
+  stage:
+    name: DOC_STAGE
+    type: USER
+  
+# Default environment variables
+environment:
+  SNOWFLAKE_DEFAULT_CONNECTION_NAME: ${SNOWFLAKE_CONNECTION_NAME}
+  STREAMLIT_BROWSER_GATHER_USAGE_STATS: false
+
+# Resources
+resources:
+  - name: chat_sessions
+    type: table
+    label: "Chat Sessions"
+  - name: documents
+    type: table
+    label: "Uploaded Documents"
+  - name: chunks
+    type: table
+    label: "Document Chunks (Vector Embeddings)"
+
+# Required for marketplace
+marketplace:
+  category: "AI/ML"
+  license: "LICENSE"
+  documentation: "README.md"

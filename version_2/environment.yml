@@ -1,0 +1,29 @@
+name: aifaq_pro_env
+channels:
+  - snowflake
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Python version (use what's supported by Snowflake)
+  - python=3.10
+  
+  # Snowflake libraries
+  - snowflake-snowpark-python=1.11.0
+  - snowflake-ml-python=1.4.0
+  
+  # Streamlit (Snowflake's managed version)
+  - streamlit=1.28.2
+  - snowflake-streamlit=0.1.0
+  
+  # Data processing
+  - pandas=2.0.3
+  - numpy=1.24.3
+  
+  # Utilities
+  - pip
+  
+  - pip:
+    # Additional packages via pip if needed
+    - python-dateutil>=2.8.0
+    - pytz>=2023.3

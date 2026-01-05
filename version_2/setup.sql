@@ -1,0 +1,168 @@
+-- ==========================================
+-- AIFAQ PRO - SNOWFLAKE NATIVE APP SETUP
+-- ==========================================
+
+-- Create the application database and schema
+CREATE DATABASE IF NOT EXISTS {{ application_name }};
+CREATE SCHEMA IF NOT EXISTS {{ application_name }}.APP_SCHEMA;
+
+-- Use the application context
+USE SCHEMA {{ application_name }}.APP_SCHEMA;
+
+-- ==========================================
+-- STAGE FOR DOCUMENT STORAGE
+-- ==========================================
+CREATE STAGE IF NOT EXISTS DOC_STAGE
+    FILE_FORMAT = (
+        TYPE = 'CSV'  -- Default, will be overridden by PUT
+        FIELD_DELIMITER = NONE
+        RECORD_DELIMITER = NONE
+    )
+    DIRECTORY = ENABLE;
+
+-- Grant privileges on stage to application role
+GRANT READ ON STAGE DOC_STAGE TO APPLICATION ROLE {{ app_role }};
+GRANT WRITE ON STAGE DOC_SCHEMA TO APPLICATION ROLE {{ app_role }};
+
+-- ==========================================
+-- TABLES
+-- ==========================================
+
+-- User Teams Mapping
+CREATE TABLE IF NOT EXISTS APP_USER_TEAMS (
+    USERNAME VARCHAR(255) NOT NULL,
+    TEAM_NAME VARCHAR(100) NOT NULL,
+    UPDATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Role Access Mapping (Team -> Category)
+CREATE TABLE IF NOT EXISTS ROLE_ACCESS_MAPPING (
+    ROLE_NAME VARCHAR(100) NOT NULL,
+    ALLOWED_CATEGORY VARCHAR(100) NOT NULL,
+    CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Admin Users
+CREATE TABLE IF NOT EXISTS ADMIN_USERS (
+    USERNAME VARCHAR(255) PRIMARY KEY,
+    GRANTED_BY VARCHAR(255),
+    GRANTED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Teams Definition
+CREATE TABLE IF NOT EXISTS TEAMS (
+    TEAM_NAME VARCHAR(100) PRIMARY KEY,
+    DESCRIPTION VARCHAR(500),
+    CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Chat Sessions
+CREATE TABLE IF NOT EXISTS CHAT_SESSIONS (
+    SESSION_ID VARCHAR(36) PRIMARY KEY,
+    USERNAME VARCHAR(255) NOT NULL,
+    TITLE VARCHAR(200),
+    CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP(),
+    UPDATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Chat Messages
+CREATE TABLE IF NOT EXISTS CHAT_MESSAGES (
+    MESSAGE_ID VARCHAR(36) PRIMARY KEY,
+    SESSION_ID VARCHAR(36) NOT NULL,
+    ROLE VARCHAR(10) NOT NULL,  -- 'user' or 'assistant'
+    CONTENT VARCHAR,  -- Use VARCHAR without length for large text
+    SOURCES VARCHAR(1000),
+    CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Documents
+CREATE TABLE IF NOT EXISTS DOCUMENTS (
+    DOC_ID VARCHAR(36) PRIMARY KEY,
+    FILENAME VARCHAR(255),
+    CATEGORY VARCHAR(100),
+    UPLOADED_BY VARCHAR(255),
+    UPLOAD_TS TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Document Chunks with Vector Embeddings
+CREATE TABLE IF NOT EXISTS CHUNKS (
+    CHUNK_ID VARCHAR(36) PRIMARY KEY,
+    DOC_ID VARCHAR(36) NOT NULL,
+    CHUNK_TEXT VARCHAR,  -- Use VARCHAR without length
+    CHUNK_VEC VECTOR(FLOAT, 768),  -- 768-dim embeddings from snowflake-arctic-embed-m
+    FOREIGN KEY (DOC_ID) REFERENCES DOCUMENTS(DOC_ID)
+);
+
+-- Application Categories
+CREATE TABLE IF NOT EXISTS APP_CATEGORIES (
+    CATEGORY_NAME VARCHAR(100) PRIMARY KEY,
+    DESCRIPTION VARCHAR(500),
+    CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- ==========================================
+-- INDEXES FOR PERFORMANCE
+-- ==========================================
+
+-- Index on USERNAME for faster lookups
+CREATE INDEX IF NOT EXISTS idx_user_teams_username ON APP_USER_TEAMS (USERNAME);
+CREATE INDEX IF NOT EXISTS idx_chat_sessions_username ON CHAT_SESSIONS (USERNAME);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON CHAT_MESSAGES (SESSION_ID);
+
+-- Index on CATEGORY for document filtering
+CREATE INDEX IF NOT EXISTS idx_documents_category ON DOCUMENTS (CATEGORY);
+CREATE INDEX IF NOT EXISTS idx_role_access_role ON ROLE_ACCESS_MAPPING (ROLE_NAME);
+
+-- ==========================================
+-- DEFAULT DATA
+-- ==========================================
+
+-- Insert default categories if empty
+INSERT INTO APP_CATEGORIES (CATEGORY_NAME, DESCRIPTION)
+SELECT 'GENERAL', 'General documentation'
+WHERE NOT EXISTS (SELECT 1 FROM APP_CATEGORIES WHERE CATEGORY_NAME = 'GENERAL');
+
+INSERT INTO APP_CATEGORIES (CATEGORY_NAME, DESCRIPTION)
+SELECT 'FINANCIAL', 'Financial documents and statements'
+WHERE NOT EXISTS (SELECT 1 FROM APP_CATEGORIES WHERE CATEGORY_NAME = 'FINANCIAL');
+
+INSERT INTO APP_CATEGORIES (CATEGORY_NAME, DESCRIPTION)
+SELECT 'TECHNICAL', 'Technical documentation'
+WHERE NOT EXISTS (SELECT 1 FROM APP_CATEGORIES WHERE CATEGORY_NAME = 'TECHNICAL');
+
+-- Insert default team if empty
+INSERT INTO TEAMS (TEAM_NAME, DESCRIPTION)
+SELECT 'GUEST', 'Default guest team with no access'
+WHERE NOT EXISTS (SELECT 1 FROM TEAMS WHERE TEAM_NAME = 'GUEST');
+
+-- Grant first user admin rights (will be current_user() during installation)
+INSERT INTO ADMIN_USERS (USERNAME, GRANTED_BY)
+SELECT CURRENT_USER(), 'SYSTEM_INSTALL'
+WHERE NOT EXISTS (SELECT 1 FROM ADMIN_USERS);
+
+-- Grant access to first admin
+INSERT INTO ROLE_ACCESS_MAPPING (ROLE_NAME, ALLOWED_CATEGORY)
+SELECT 'SUPER_ADMIN', 'GENERAL'
+WHERE NOT EXISTS (SELECT 1 FROM ROLE_ACCESS_MAPPING WHERE ROLE_NAME = 'SUPER_ADMIN');
+
+-- ==========================================
+-- GRANTS
+-- ==========================================
+
+-- Grant all privileges on tables to application role
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA {{ application_name }}.APP_SCHEMA TO APPLICATION ROLE {{ app_role }};
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL VIEWS IN SCHEMA {{ application_name }}.APP_SCHEMA TO APPLICATION ROLE {{ app_role }};
+
+-- Grant usage on schema
+GRANT USAGE ON SCHEMA {{ application_name }}.APP_SCHEMA TO APPLICATION ROLE {{ app_role }};
+
+-- Enable Cortex functions for the app
+GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO APPLICATION ROLE {{ app_role }};
+
+-- ==========================================
+-- POST-SETUP LOG
+-- ==========================================
+
+INSERT INTO TEAMS (TEAM_NAME, DESCRIPTION)
+VALUES ('SETUP_COMPLETE', 'Setup completed at ' || CURRENT_TIMESTAMP())
+ON CONFLICT (TEAM_NAME) DO NOTHING;
