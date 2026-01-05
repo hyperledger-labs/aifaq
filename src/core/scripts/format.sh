@@ -1,1 +1,0 @@
-black . --exclude \".venv/|/venv/\"
