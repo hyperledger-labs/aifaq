@@ -49,7 +49,7 @@ authenticator = "snowflake"
 #### Step 3: Deploy Application
 ```bash
 # Navigate to project folder
-cd project folder
+cd version_2
 
 # Deploy (creates package and app)
 snow app run
@@ -441,7 +441,7 @@ ALTER TABLE APP_USER_TEAMS ADD COLUMN IF NOT EXISTS EMAIL VARCHAR;
 
 Before deploying to production, verify:
 
-- [ ] All 7 files are present and validated
+- [ ] All 5 files are present and validated
 - [ ] `manifest.yml` has correct author/contact info
 - [ ] `setup.sql` has no syntax errors (test in worksheet)
 - [ ] `environment.yml` uses supported Python version (3.10)
