@@ -87,7 +87,7 @@ CREATE APPLICATION PACKAGE AIFAQ_PRO_PKG
 In Snowsight or Classic UI:
 1. Navigate to **Data > Databases > AIFAQ_PRO_PKG > Stages**
 2. Click on the automatically created stage
-3. Upload all 7 files using the **+ Files** button
+3. Upload all 5 files using the **+ Files** button
 
 Or use SQL:
 ```sql
@@ -136,7 +136,7 @@ CREATE APPLICATION AIFAQ_PRO_TEST
 #### Step 3: Upload & Release
 1. In your package, go to **Versions**
 2. Click **Create Version**
-3. Drag-and-drop all 7 files
+3. Drag-and-drop all 5 files
 4. Set version number to `1.0.0`
 5. Click **Create Release Directive**
 
