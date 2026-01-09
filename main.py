@@ -48,10 +48,14 @@ def get_ragchain(filter):
     docsearch = FAISS.load_local(config_data["persist_directory"], embeddings, allow_dangerous_deserialization=True)
 
     # Define a retriever interface
-    retriever = docsearch.as_retriever(search_kwargs={"k": 5, "filter": filter})
+    retriever = docsearch.as_retriever(search_kwargs={"k": config_data["nr_documents"], "filter": filter})
 
     # read prompt string from config file
     prompt_str = config_data["system_prompt"]
+    no_answer_message = config_data["no_answer_message"]
+
+    # Replace placeholders in the prompt string
+    prompt_str = prompt_str.replace("{{no_answer_message}}", no_answer_message)
 
     # Answer question
     qa_system_prompt = (
@@ -59,7 +63,7 @@ def get_ragchain(filter):
     "\n\n"
     "{context}"
     )
-    
+
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),

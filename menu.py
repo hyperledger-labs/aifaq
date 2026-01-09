@@ -25,26 +25,54 @@ def authenticated_menu():
         st.sidebar.page_link("pages/config_page_private.py", label="Config Private Page")
         st.sidebar.page_link("pages/build_knowledgebase.py", label="Build Knowledge Base")
         st.sidebar.page_link("pages/user_management.py", label="User Management")
-    st.sidebar.page_link("app.py", label="About")
+        st.sidebar.page_link("pages/analytics.py", label="Analytics")
+    # Display contact page
+    st.sidebar.markdown(
+        f"[{config_data['contact_label']}]({config_data['contact_page']})",
+        unsafe_allow_html=True
+    )
+    st.sidebar.markdown(
+        f"[Powered by AIFAQ]({config_data['landing_page']})",
+        unsafe_allow_html=True
+    )
+    st.sidebar.page_link("app.py", label="About us")
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
-    st.sidebar.page_link("app.py", label="About")
+    chatbot_label = config_data["company_name"] + " ChatBot"
+    st.sidebar.page_link("pages/chatbot.py", label=chatbot_label)
+    st.sidebar.markdown("Sign in to keep your chat history!")
+    if st.sidebar.button("Log in or Sign in"):
+        st.login("auth0")
+    
+    st.sidebar.markdown(
+        f"[Back to {config_data['company_name']}]({config_data['client_page']})",
+        unsafe_allow_html=True
+    )
+    # Display contact page
+    st.sidebar.markdown(
+        f"[{config_data['contact_label']}]({config_data['contact_page']})",
+        unsafe_allow_html=True
+    )
+    st.sidebar.markdown(
+        f"[Powered by AIFAQ]({config_data['landing_page']})",
+        unsafe_allow_html=True
+    )
+    st.sidebar.page_link("app.py", label="About us")
 
 def menu():
-    # Check authentication status
-    if "user_type" not in st.session_state or st.session_state.user_type is None:
+    # Check authentication status based on st.user.is_logged_in
+    if st.user.is_logged_in:
+        # Redirect to chatbot on first successful login
+        if "first_login" not in st.session_state:
+            st.session_state.first_login = True
+            st.switch_page("pages/chatbot.py")
+        
+        authenticated_menu()
+    else:
         unauthenticated_menu()
-        return
-
-    # Redirect to chatbot on first successful login
-    if "first_login" not in st.session_state:
-        st.session_state.first_login = True
-        st.switch_page("pages/chatbot.py")
-    
-    authenticated_menu()
 
 def menu_with_redirect():
-    if "user_type" not in st.session_state or st.session_state.user_type is None:
+    if not st.user.is_logged_in:
         st.switch_page("app.py")
     menu()

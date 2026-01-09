@@ -17,3 +17,12 @@ system_prompt: ""
 query_rewriting_prompt: ""
 logo_pth: ""
 company_name: ""
+feedback_options: "thumbs" # thumbs, stars, or faces
+no_answer_message: "I don't have the answer to that question"
+nr_documents: 5
+# analytics
+analytics_model: "mistral-small-latest"
+analytics_prompt: "Given the following SQLite database schema: \n'''CREATE TABLE IF NOT EXISTS users (id integer PRIMARY KEY, username text NOT NULL UNIQUE, email text NOT NULL UNIQUE, type text DEFAULT 'guest', user_group text, email_verified integer DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP); CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, role TEXT NOT NULL, content TEXT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, feedback INTEGER DEFAULT NULL);''' where 'role' field contains 'user' for questions and 'assistant' for answers, 'feedback' field is 1 for positive feedback or thumb up, 0 for negative or thumb down \nGenerate a SQL query to answer the user question \nReturn ONLY the SQL query, nothing else and do not use 'start of week' or 'start of day', use alias for count field. User question: "
+dbpath: "users.db"
+landing_page: "https://aifaq.pro/"
+contact_page: ""
