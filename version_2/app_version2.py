@@ -11,13 +11,14 @@ st.set_page_config(
     layout="wide",
     page_title="AIFAQ Pro",
     page_icon="🏢",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # ==========================================
 # ENHANCED UI STYLING (IMPROVED FOR ADMIN)
 # ==========================================
-st.markdown("""
+st.markdown(
+    """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
     
@@ -584,7 +585,9 @@ st.markdown("""
         font-size: 20px;
     }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ==========================================
 # CONSTANTS
@@ -604,7 +607,7 @@ RAG_CONFIG = {
     "rerank_candidates": 25,
     "max_chunk_text": 700,
     "chunk_overlap": 100,
-    "line_numbers": True
+    "line_numbers": True,
 }
 
 # Financial-specific RAG config
@@ -617,14 +620,50 @@ FINANCIAL_RAG_CONFIG = {
     "line_numbers": True,
     "number_boost_factor": 1.5,
     "financial_keywords": [
-        'revenue', 'profit', 'loss', 'income', 'expense', 'cost', 'margin',
-        'balance', 'sheet', 'cash', 'flow', 'statement', 'equity', 'asset',
-        'liability', 'ebitda', 'eps', 'dividend', 'tax', 'depreciation',
-        'quarter', 'q1', 'q2', 'q3', 'q4', 'annual', 'fiscal', 'guidance',
-        'million', 'billion', 'percentage', 'growth', 'decline', 'increase',
-        'decrease', 'yoy', 'year', 'over', 'year', 'quarter', 'qtr'
-    ]
+        "revenue",
+        "profit",
+        "loss",
+        "income",
+        "expense",
+        "cost",
+        "margin",
+        "balance",
+        "sheet",
+        "cash",
+        "flow",
+        "statement",
+        "equity",
+        "asset",
+        "liability",
+        "ebitda",
+        "eps",
+        "dividend",
+        "tax",
+        "depreciation",
+        "quarter",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "annual",
+        "fiscal",
+        "guidance",
+        "million",
+        "billion",
+        "percentage",
+        "growth",
+        "decline",
+        "increase",
+        "decrease",
+        "yoy",
+        "year",
+        "over",
+        "year",
+        "quarter",
+        "qtr",
+    ],
 }
+
 
 # ==========================================
 # DATABASE SESSION
@@ -633,7 +672,9 @@ FINANCIAL_RAG_CONFIG = {
 def get_db_session():
     return get_active_session()
 
+
 session = get_db_session()
+
 
 @st.cache_resource
 def init_schema():
@@ -646,7 +687,7 @@ def init_schema():
         f"CREATE TABLE IF NOT EXISTS {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES (MESSAGE_ID VARCHAR PRIMARY KEY, SESSION_ID VARCHAR, ROLE VARCHAR, CONTENT VARCHAR, SOURCES VARCHAR, CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP())",
         f"CREATE TABLE IF NOT EXISTS {DB_NAME}.{SCHEMA_NAME}.DOCUMENTS (DOC_ID VARCHAR PRIMARY KEY, FILENAME VARCHAR, CATEGORY VARCHAR, UPLOADED_BY VARCHAR, UPLOAD_TS TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP())",
         f"CREATE TABLE IF NOT EXISTS {DB_NAME}.{SCHEMA_NAME}.CHUNKS (CHUNK_ID VARCHAR PRIMARY KEY, DOC_ID VARCHAR, CHUNK_TEXT VARCHAR, CHUNK_VEC VECTOR(FLOAT, 768))",
-        f"CREATE TABLE IF NOT EXISTS {DB_NAME}.{SCHEMA_NAME}.APP_CATEGORIES (CATEGORY_NAME VARCHAR PRIMARY KEY, DESCRIPTION VARCHAR, CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP())"
+        f"CREATE TABLE IF NOT EXISTS {DB_NAME}.{SCHEMA_NAME}.APP_CATEGORIES (CATEGORY_NAME VARCHAR PRIMARY KEY, DESCRIPTION VARCHAR, CREATED_AT TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP())",
     ]
     for t in tables:
         try:
@@ -655,7 +696,9 @@ def init_schema():
             pass
     return True
 
+
 init_schema()
+
 
 # ==========================================
 # HELPERS
@@ -665,6 +708,7 @@ def esc(t):
         return ""
     return str(t).replace("'", "''")
 
+
 def qry(sql, default=None):
     try:
         result = session.sql(sql).collect()
@@ -672,6 +716,7 @@ def qry(sql, default=None):
     except Exception as e:
         print(f"Query error: {e}")
         return default
+
 
 def val(sql, default=None):
     try:
@@ -681,7 +726,7 @@ def val(sql, default=None):
         first_row = r[0]
         if first_row is None:
             return default
-        if hasattr(first_row, '__getitem__'):
+        if hasattr(first_row, "__getitem__"):
             try:
                 value = first_row[0]
                 return value if value is not None else default
@@ -692,6 +737,7 @@ def val(sql, default=None):
         print(f"Value error: {e}")
         return default
 
+
 def df_page(sql, pg=0, sz=50):
     try:
         return session.sql(f"{sql} LIMIT {sz} OFFSET {pg*sz}").to_pandas()
@@ -699,34 +745,44 @@ def df_page(sql, pg=0, sz=50):
         print(f"Dataframe error: {e}")
         return None
 
+
 # ==========================================
 # USER FUNCTIONS
 # ==========================================
 def get_current_user():
     r = val("SELECT CURRENT_USER()", "UNKNOWN")
-    return str(r).replace('"', '').upper() if r else "UNKNOWN"
+    return str(r).replace('"', "").upper() if r else "UNKNOWN"
+
 
 def check_is_admin(username):
     if not username:
         return False
-    result = qry(f"SELECT 1 FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS WHERE UPPER(USERNAME)='{esc(username.upper())}'")
+    result = qry(
+        f"SELECT 1 FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS WHERE UPPER(USERNAME)='{esc(username.upper())}'"
+    )
     if result and len(result) > 0:
         return True
     admin_count = val(f"SELECT COUNT(*) FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS", 0)
     if not admin_count or admin_count == 0:
         try:
-            session.sql(f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS (USERNAME, GRANTED_BY) VALUES ('{esc(username.upper())}', 'SYSTEM_AUTO')").collect()
+            session.sql(
+                f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS (USERNAME, GRANTED_BY) VALUES ('{esc(username.upper())}', 'SYSTEM_AUTO')"
+            ).collect()
             return True
         except:
             return False
     return False
 
+
 @st.cache_data(ttl=60)
 def get_team(_u):
     if not _u:
         return "GUEST"
-    r = val(f"SELECT TEAM_NAME FROM {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS WHERE UPPER(USERNAME)='{esc(_u.upper())}' ORDER BY UPDATED_AT DESC LIMIT 1")
+    r = val(
+        f"SELECT TEAM_NAME FROM {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS WHERE UPPER(USERNAME)='{esc(_u.upper())}' ORDER BY UPDATED_AT DESC LIMIT 1"
+    )
     return str(r).upper() if r else "GUEST"
+
 
 @st.cache_data(ttl=60)
 def get_access(_t, _a):
@@ -734,8 +790,11 @@ def get_access(_t, _a):
         return "ALL"
     if not _t or _t == "GUEST":
         return "NONE"
-    result = val(f"SELECT LISTAGG(DISTINCT ALLOWED_CATEGORY, ', ') FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING WHERE UPPER(ROLE_NAME)='{esc(_t.upper())}'")
+    result = val(
+        f"SELECT LISTAGG(DISTINCT ALLOWED_CATEGORY, ', ') FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING WHERE UPPER(ROLE_NAME)='{esc(_t.upper())}'"
+    )
     return result if result else "NONE"
+
 
 # ==========================================
 # CATEGORY FUNCTIONS
@@ -756,23 +815,30 @@ def get_all_categories():
                 continue
     return sorted(categories)
 
+
 def create_category_db(name):
     if not name:
         return False, "Category name is required"
     try:
-        session.sql(f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.APP_CATEGORIES (CATEGORY_NAME) VALUES ('{esc(name.upper())}')").collect()
+        session.sql(
+            f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.APP_CATEGORIES (CATEGORY_NAME) VALUES ('{esc(name.upper())}')"
+        ).collect()
         return True, f"Category '{name}' added"
     except Exception as e:
         return False, str(e)
+
 
 def delete_category_db(name):
     if not name:
         return False, "Category name is required"
     try:
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.APP_CATEGORIES WHERE UPPER(CATEGORY_NAME)='{esc(name.upper())}'").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.APP_CATEGORIES WHERE UPPER(CATEGORY_NAME)='{esc(name.upper())}'"
+        ).collect()
         return True, f"Category '{name}' deleted"
     except Exception as e:
         return False, str(e)
+
 
 # ==========================================
 # TEAM FUNCTIONS
@@ -794,6 +860,7 @@ def get_teams():
                 continue
     return sorted(teams)
 
+
 @st.cache_data(ttl=30)
 def get_categories(_t):
     if not _t:
@@ -813,6 +880,7 @@ def get_categories(_t):
                 continue
     return categories
 
+
 # ==========================================
 # DATA LOADERS
 # ==========================================
@@ -820,19 +888,25 @@ def load_users(pg=0, sz=50):
     sql = f"SELECT u.USERNAME, COALESCE(u.TEAM_NAME,'GUEST') as TEAM, CASE WHEN a.USERNAME IS NOT NULL THEN '✓' ELSE '' END as ADMIN, u.UPDATED_AT FROM {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS u LEFT JOIN {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS a ON UPPER(u.USERNAME)=UPPER(a.USERNAME) ORDER BY u.USERNAME"
     return df_page(sql, pg, sz)
 
+
 def load_admins():
     try:
-        return session.sql(f"SELECT USERNAME, GRANTED_BY, GRANTED_AT FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS ORDER BY USERNAME").to_pandas()
+        return session.sql(
+            f"SELECT USERNAME, GRANTED_BY, GRANTED_AT FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS ORDER BY USERNAME"
+        ).to_pandas()
     except:
-        return pd.DataFrame(columns=['USERNAME', 'GRANTED_BY', 'GRANTED_AT'])
+        return pd.DataFrame(columns=["USERNAME", "GRANTED_BY", "GRANTED_AT"])
+
 
 def load_rules(pg=0, sz=50):
     sql = f"SELECT ROLE_NAME as TEAM, ALLOWED_CATEGORY as CATEGORY, CREATED_AT FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING ORDER BY ROLE_NAME, ALLOWED_CATEGORY"
     return df_page(sql, pg, sz)
 
+
 def load_docs(pg=0, sz=50):
     sql = f"SELECT DOC_ID, FILENAME, CATEGORY, UPLOADED_BY, UPLOAD_TS FROM {DB_NAME}.{SCHEMA_NAME}.DOCUMENTS ORDER BY UPLOAD_TS DESC"
     return df_page(sql, pg, sz)
+
 
 def load_members(team, pg=0, sz=50):
     if not team:
@@ -840,9 +914,11 @@ def load_members(team, pg=0, sz=50):
     sql = f"SELECT u.USERNAME, CASE WHEN a.USERNAME IS NOT NULL THEN '✓' ELSE '' END as ADMIN, u.UPDATED_AT as JOINED FROM {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS u LEFT JOIN {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS a ON UPPER(u.USERNAME)=UPPER(a.USERNAME) WHERE UPPER(u.TEAM_NAME)='{esc(team.upper())}' ORDER BY u.USERNAME"
     return df_page(sql, pg, sz)
 
+
 def count_tbl(tbl):
     result = val(f"SELECT COUNT(*) FROM {DB_NAME}.{SCHEMA_NAME}.{tbl}", 0)
     return result if result is not None else 0
+
 
 # ==========================================
 # USER MANAGEMENT
@@ -850,19 +926,22 @@ def count_tbl(tbl):
 def create_user(username, password, team=None):
     if not username:
         return False, "Username is required"
-    u = ''.join(c for c in username if c.isalnum() or c == '_').upper()
+    u = "".join(c for c in username if c.isalnum() or c == "_").upper()
     if not u or len(password) < 6:
         return False, "Invalid username or password < 6 chars"
     try:
         session.sql("CREATE ROLE IF NOT EXISTS AIFAQ_VIEWER_ROLE").collect()
-        session.sql(f"CREATE USER IF NOT EXISTS {u} PASSWORD='{esc(password)}' DEFAULT_ROLE=AIFAQ_VIEWER_ROLE MUST_CHANGE_PASSWORD=FALSE").collect()
+        session.sql(
+            f"CREATE USER IF NOT EXISTS {u} PASSWORD='{esc(password)}' DEFAULT_ROLE=AIFAQ_VIEWER_ROLE MUST_CHANGE_PASSWORD=FALSE"
+        ).collect()
         session.sql(f"GRANT ROLE AIFAQ_VIEWER_ROLE TO USER {u}").collect()
-        if team and team not in ('SUPER_ADMIN', 'GUEST', ''):
+        if team and team not in ("SUPER_ADMIN", "GUEST", ""):
             assign_team(u, team)
         get_teams.clear()
         return True, f"User '{u}' created"
     except Exception as e:
         return False, str(e)
+
 
 # ==========================================
 # PASSWORD RESET FUNCTION
@@ -873,10 +952,13 @@ def reset_user_password(username, new_password):
         return False, "Invalid username or password < 6 chars"
     try:
         # Use Snowflake's ALTER USER command
-        session.sql(f"ALTER USER {username} SET PASSWORD = '{esc(new_password)}'").collect()
+        session.sql(
+            f"ALTER USER {username} SET PASSWORD = '{esc(new_password)}'"
+        ).collect()
         return True, f"Password reset for user '{username}'"
     except Exception as e:
         return False, str(e)
+
 
 def assign_team(username, team):
     if not username or not team:
@@ -889,10 +971,13 @@ def assign_team(username, team):
     except Exception as e:
         return False, str(e)
 
+
 def bulk_assign(users, team):
     if not users or not team:
         return 0
-    vals = ", ".join([f"('{esc(u.upper())}', '{esc(team.upper())}')" for u in users if u])
+    vals = ", ".join(
+        [f"('{esc(u.upper())}', '{esc(team.upper())}')" for u in users if u]
+    )
     if not vals:
         return 0
     try:
@@ -904,6 +989,7 @@ def bulk_assign(users, team):
         print(f"Bulk assign error: {e}")
         return 0
 
+
 def bulk_delete(users, sf=False):
     if not users:
         return 0
@@ -911,8 +997,12 @@ def bulk_delete(users, sf=False):
     if not lst:
         return 0
     try:
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS WHERE UPPER(USERNAME) IN ({lst})").collect()
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS WHERE UPPER(USERNAME) IN ({lst})").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS WHERE UPPER(USERNAME) IN ({lst})"
+        ).collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS WHERE UPPER(USERNAME) IN ({lst})"
+        ).collect()
         if sf:
             for u in users:
                 if u:
@@ -923,38 +1013,52 @@ def bulk_delete(users, sf=False):
         print(f"Bulk delete error: {e}")
         return 0
 
+
 def create_team_db(name, desc=""):
     if not name:
         return False, "Team name is required"
     try:
-        session.sql(f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.TEAMS (TEAM_NAME, DESCRIPTION) VALUES ('{esc(name.upper())}', '{esc(desc)}')").collect()
+        session.sql(
+            f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.TEAMS (TEAM_NAME, DESCRIPTION) VALUES ('{esc(name.upper())}', '{esc(desc)}')"
+        ).collect()
         get_teams.clear()
         return True, f"Team '{name}' created"
     except Exception as e:
         return False, str(e)
+
 
 def delete_team_db(name):
     if not name:
         return False, "Team name is required"
     n = esc(name.upper())
     try:
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.TEAMS WHERE UPPER(TEAM_NAME)='{n}'").collect()
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING WHERE UPPER(ROLE_NAME)='{n}'").collect()
-        session.sql(f"UPDATE {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS SET TEAM_NAME='GUEST' WHERE UPPER(TEAM_NAME)='{n}'").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.TEAMS WHERE UPPER(TEAM_NAME)='{n}'"
+        ).collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING WHERE UPPER(ROLE_NAME)='{n}'"
+        ).collect()
+        session.sql(
+            f"UPDATE {DB_NAME}.{SCHEMA_NAME}.APP_USER_TEAMS SET TEAM_NAME='GUEST' WHERE UPPER(TEAM_NAME)='{n}'"
+        ).collect()
         get_teams.clear()
         get_team.clear()
         return True, f"Team '{name}' deleted"
     except Exception as e:
         return False, str(e)
 
+
 def add_admin_db(username, by):
     if not username:
         return False, "Username is required"
     try:
-        session.sql(f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS (USERNAME, GRANTED_BY) VALUES ('{esc(username.upper())}', '{esc(by.upper() if by else 'SYSTEM')}')").collect()
+        session.sql(
+            f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS (USERNAME, GRANTED_BY) VALUES ('{esc(username.upper())}', '{esc(by.upper() if by else 'SYSTEM')}')"
+        ).collect()
         return True, f"'{username}' is now admin"
     except Exception as e:
         return False, str(e)
+
 
 def remove_admin_db(username, curr):
     if not username:
@@ -962,10 +1066,13 @@ def remove_admin_db(username, curr):
     if curr and username.upper() == curr.upper():
         return False, "Cannot remove yourself"
     try:
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS WHERE UPPER(USERNAME)='{esc(username.upper())}'").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ADMIN_USERS WHERE UPPER(USERNAME)='{esc(username.upper())}'"
+        ).collect()
         return True, f"Removed admin: '{username}'"
     except Exception as e:
         return False, str(e)
+
 
 def grant_cat(team, cat):
     if not team or not cat:
@@ -978,20 +1085,26 @@ def grant_cat(team, cat):
     except Exception as e:
         return False, str(e)
 
+
 def revoke_cat(team, cat):
     if not team or not cat:
         return False, "Team and category are required"
     try:
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING WHERE UPPER(ROLE_NAME)='{esc(team.upper())}' AND UPPER(ALLOWED_CATEGORY)='{esc(cat.upper())}'").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.ROLE_ACCESS_MAPPING WHERE UPPER(ROLE_NAME)='{esc(team.upper())}' AND UPPER(ALLOWED_CATEGORY)='{esc(cat.upper())}'"
+        ).collect()
         get_access.clear()
         return True, "Revoked"
     except Exception as e:
         return False, str(e)
 
+
 def bulk_grant(team, cats):
     if not cats or not team:
         return 0
-    vals = ", ".join([f"('{esc(team.upper())}', '{esc(c.upper())}')" for c in cats if c])
+    vals = ", ".join(
+        [f"('{esc(team.upper())}', '{esc(c.upper())}')" for c in cats if c]
+    )
     if not vals:
         return 0
     try:
@@ -1002,6 +1115,7 @@ def bulk_grant(team, cats):
     except Exception as e:
         print(f"Bulk grant error: {e}")
         return 0
+
 
 def bulk_revoke(rules):
     """rules: list of tuples (team, category)"""
@@ -1015,6 +1129,7 @@ def bulk_revoke(rules):
         print(f"Bulk revoke error: {e}")
         return 0
 
+
 # ==========================================
 # ENHANCED DOCUMENT INGESTION
 # ==========================================
@@ -1022,15 +1137,19 @@ def ingest_doc(file, cat):
     """Enhanced ingestion with line numbers and financial-aware chunking"""
     if not file or not cat:
         return False, "File and category are required"
-    
+
     try:
         name = "".join(c for c in file.name if c.isalnum() or c in "._-")
         doc_id = str(uuid.uuid4())
-        
+
         # Upload to stage
-        session.file.put_stream(file, f"@{DB_NAME}.{SCHEMA_NAME}.DOC_STAGE/{name}", 
-                               auto_compress=False, overwrite=True)
-        
+        session.file.put_stream(
+            file,
+            f"@{DB_NAME}.{SCHEMA_NAME}.DOC_STAGE/{name}",
+            auto_compress=False,
+            overwrite=True,
+        )
+
         # Parse document
         parse_sql = f"""
             SELECT SNOWFLAKE.CORTEX.PARSE_DOCUMENT(
@@ -1039,40 +1158,43 @@ def ingest_doc(file, cat):
             ):content::STRING as content
         """
         content_result = session.sql(parse_sql).collect()
-        
+
         if not content_result or len(content_result) == 0:
             return False, "Failed to parse document"
-        
-        full_content = content_result[0]['CONTENT']
-        
+
+        full_content = content_result[0]["CONTENT"]
+
         # Enhanced chunking with line numbers
         chunks = create_enhanced_chunks(full_content, doc_id, cat)
-        
+
         # Insert document record
-        session.sql(f"""
+        session.sql(
+            f"""
             INSERT INTO {DB_NAME}.{SCHEMA_NAME}.DOCUMENTS 
             (DOC_ID, FILENAME, CATEGORY, UPLOADED_BY) 
             VALUES ('{doc_id}', '{esc(name)}', '{esc(cat.upper())}', CURRENT_USER())
-        """).collect()
-        
+        """
+        ).collect()
+
         return True, f"Document indexed with {len(chunks)} chunks"
-        
+
     except Exception as e:
         return False, str(e)
+
 
 def create_enhanced_chunks(content, doc_id, category):
     """Create enhanced chunks with line numbers and financial document awareness"""
     if not content:
         return []
-    
-    lines = content.split('\n')
+
+    lines = content.split("\n")
     chunks = []
     chunk_id = 0
-    
+
     # Determine if this is a financial document
     is_financial = is_financial_document(content, category)
     config = FINANCIAL_RAG_CONFIG if is_financial else RAG_CONFIG
-    
+
     # Enhanced chunking strategy
     if is_financial:
         # For financial docs, preserve table structures and statements
@@ -1080,24 +1202,29 @@ def create_enhanced_chunks(content, doc_id, category):
     else:
         # Standard chunking with line numbers
         chunks = chunk_standard_document(lines, doc_id, config)
-    
+
     return chunks
+
 
 def is_financial_document(content, category):
     """Detect if document contains financial content"""
     content_lower = content.lower()
     category_lower = category.lower()
-    
+
     # Check category first
-    if any(kw in category_lower for kw in ['finance', 'financial', 'accounting', 'audit', 'fiscal']):
+    if any(
+        kw in category_lower
+        for kw in ["finance", "financial", "accounting", "audit", "fiscal"]
+    ):
         return True
-    
+
     # Check content for financial keywords
-    financial_keywords = FINANCIAL_RAG_CONFIG['financial_keywords']
+    financial_keywords = FINANCIAL_RAG_CONFIG["financial_keywords"]
     keyword_count = sum(1 for kw in financial_keywords if kw in content_lower)
-    
+
     # If more than 5 financial keywords, treat as financial doc
     return keyword_count > 5
+
 
 def chunk_financial_document(lines, doc_id, config):
     """Special chunking for financial documents"""
@@ -1106,41 +1233,46 @@ def chunk_financial_document(lines, doc_id, config):
     current_lines = []
     chunk_size = 0
     chunk_id = 0
-    
+
     for idx, line in enumerate(lines, 1):
         line_len = len(line)
-        
+
         # Add line with number prefix
         numbered_line = f"[L{idx:04d}] {line}"
         current_chunk.append(numbered_line)
         current_lines.append(idx)
         chunk_size += line_len
-        
+
         # Check if we should chunk here (financial statement boundaries)
-        if should_chunk_financial_line(line, chunk_size, config['max_chunk_text']):
+        if should_chunk_financial_line(line, chunk_size, config["max_chunk_text"]):
             if current_chunk:
-                chunk_text = '\n'.join(current_chunk)
+                chunk_text = "\n".join(current_chunk)
                 # Add metadata about line range
                 chunk_text = f"=== LINES {current_lines[0]}-{current_lines[-1]} ===\n{chunk_text}"
-                
+
                 create_chunk_record(doc_id, chunk_text, chunk_id)
                 chunks.append(chunk_text)
-                
+
                 # Reset with overlap
-                overlap_start = max(0, len(current_chunk) - config['chunk_overlap'] // 50)
+                overlap_start = max(
+                    0, len(current_chunk) - config["chunk_overlap"] // 50
+                )
                 current_chunk = current_chunk[overlap_start:]
                 current_lines = current_lines[overlap_start:]
                 chunk_size = sum(len(l) for l in current_chunk)
                 chunk_id += 1
-    
+
     # Add remaining chunk
     if current_chunk:
-        chunk_text = '\n'.join(current_chunk)
-        chunk_text = f"=== LINES {current_lines[0]}-{current_lines[-1]} ===\n{chunk_text}"
+        chunk_text = "\n".join(current_chunk)
+        chunk_text = (
+            f"=== LINES {current_lines[0]}-{current_lines[-1]} ===\n{chunk_text}"
+        )
         create_chunk_record(doc_id, chunk_text, chunk_id)
         chunks.append(chunk_text)
-    
+
     return chunks
+
 
 def chunk_standard_document(lines, doc_id, config):
     """Standard chunking with line numbers"""
@@ -1149,67 +1281,85 @@ def chunk_standard_document(lines, doc_id, config):
     current_lines = []
     chunk_size = 0
     chunk_id = 0
-    
+
     for idx, line in enumerate(lines, 1):
         line_len = len(line)
-        
+
         # Add line with number prefix
         numbered_line = f"[L{idx:04d}] {line}"
         current_chunk.append(numbered_line)
         current_lines.append(idx)
         chunk_size += line_len
-        
+
         # Simple size-based chunking
-        if chunk_size >= config['max_chunk_text']:
+        if chunk_size >= config["max_chunk_text"]:
             if current_chunk:
-                chunk_text = '\n'.join(current_chunk)
+                chunk_text = "\n".join(current_chunk)
                 chunk_text = f"=== LINES {current_lines[0]}-{current_lines[-1]} ===\n{chunk_text}"
-                
+
                 create_chunk_record(doc_id, chunk_text, chunk_id)
                 chunks.append(chunk_text)
-                
+
                 # Reset with overlap
-                overlap_start = max(0, len(current_chunk) - config['chunk_overlap'] // 50)
+                overlap_start = max(
+                    0, len(current_chunk) - config["chunk_overlap"] // 50
+                )
                 current_chunk = current_chunk[overlap_start:]
                 current_lines = current_lines[overlap_start:]
                 chunk_size = sum(len(l) for l in current_chunk)
                 chunk_id += 1
-    
+
     # Add remaining chunk
     if current_chunk:
-        chunk_text = '\n'.join(current_chunk)
-        chunk_text = f"=== LINES {current_lines[0]}-{current_lines[-1]} ===\n{chunk_text}"
+        chunk_text = "\n".join(current_chunk)
+        chunk_text = (
+            f"=== LINES {current_lines[0]}-{current_lines[-1]} ===\n{chunk_text}"
+        )
         create_chunk_record(doc_id, chunk_text, chunk_id)
         chunks.append(chunk_text)
-    
+
     return chunks
+
 
 def should_chunk_financial_line(line, current_size, max_size):
     """Determine if we should chunk at this line (financial doc logic)"""
     if current_size >= max_size:
         return True
-    
+
     line_upper = line.strip().upper()
-    
+
     # Chunk at financial statement boundaries
-    if any(boundary in line_upper for boundary in 
-           ['BALANCE SHEET', 'INCOME STATEMENT', 'CASH FLOW', 
-            'STATEMENT OF', 'QUARTER ENDED', 'YEAR ENDED',
-            'ASSETS', 'LIABILITIES', 'EQUITY', 'REVENUE']):
+    if any(
+        boundary in line_upper
+        for boundary in [
+            "BALANCE SHEET",
+            "INCOME STATEMENT",
+            "CASH FLOW",
+            "STATEMENT OF",
+            "QUARTER ENDED",
+            "YEAR ENDED",
+            "ASSETS",
+            "LIABILITIES",
+            "EQUITY",
+            "REVENUE",
+        ]
+    ):
         return True
-    
+
     # Chunk at empty lines after tables
-    if line.strip() == '' and current_size > max_size * 0.7:
+    if line.strip() == "" and current_size > max_size * 0.7:
         return True
-    
+
     return False
+
 
 def create_chunk_record(doc_id, chunk_text, chunk_id):
     """✅ FIXED: Insert chunk into database using SELECT (not VALUES) with single EMBED_MODEL"""
     chunk_uuid = str(uuid.uuid4())
-    
+
     # ✅ Use global EMBED_MODEL constant and SELECT syntax to fix SQL compilation error
-    session.sql(f"""
+    session.sql(
+        f"""
         INSERT INTO {DB_NAME}.{SCHEMA_NAME}.CHUNKS 
         (CHUNK_ID, DOC_ID, CHUNK_TEXT, CHUNK_VEC)
         SELECT 
@@ -1217,9 +1367,11 @@ def create_chunk_record(doc_id, chunk_text, chunk_id):
             '{doc_id}',
             '{esc(chunk_text)}',
             SNOWFLAKE.CORTEX.EMBED_TEXT_768('{EMBED_MODEL}', '{esc(chunk_text)}')
-    """).collect()
-    
+    """
+    ).collect()
+
     return chunk_uuid
+
 
 def delete_docs(ids):
     if not ids:
@@ -1229,13 +1381,18 @@ def delete_docs(ids):
         return 0
     try:
         # Delete from chunks first (foreign key relationship)
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.CHUNKS WHERE DOC_ID IN ({lst})").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.CHUNKS WHERE DOC_ID IN ({lst})"
+        ).collect()
         # Then delete from documents
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.DOCUMENTS WHERE DOC_ID IN ({lst})").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.DOCUMENTS WHERE DOC_ID IN ({lst})"
+        ).collect()
         return len(ids)
     except Exception as e:
         print(f"Document delete error: {e}")
         return 0
+
 
 # ==========================================
 # FINANCIAL QUERY DETECTION
@@ -1244,23 +1401,37 @@ def is_financial_query(query):
     """Detect if query is financial in nature"""
     if not query:
         return False
-    
+
     query_lower = query.lower()
-    financial_keywords = FINANCIAL_RAG_CONFIG['financial_keywords']
-    
+    financial_keywords = FINANCIAL_RAG_CONFIG["financial_keywords"]
+
     # Count financial keyword matches
     keyword_matches = sum(1 for kw in financial_keywords if kw in query_lower)
-    
+
     # Check for numbers/metrics
-    has_numbers = bool(re.search(r'\d+(\.\d+)?\s*(million|billion|m|b|%|percent)?', query_lower))
-    
+    has_numbers = bool(
+        re.search(r"\d+(\.\d+)?\s*(million|billion|m|b|%|percent)?", query_lower)
+    )
+
     # Check for financial questions
-    is_question = any(phrase in query_lower for phrase in 
-                     ['how much', 'in quarter',
-                      'revenue', 'profit', 'loss', 'income', 'tax rate'])
-    
+    is_question = any(
+        phrase in query_lower
+        for phrase in [
+            "how much",
+            "in quarter",
+            "revenue",
+            "profit",
+            "loss",
+            "income",
+            "tax rate",
+        ]
+    )
+
     # Query is financial if it has multiple keywords or numbers + financial terms
-    return (keyword_matches >= 2) or (has_numbers and keyword_matches >= 1) or is_question
+    return (
+        (keyword_matches >= 2) or (has_numbers and keyword_matches >= 1) or is_question
+    )
+
 
 # ==========================================
 # CHAT FUNCTIONS
@@ -1270,50 +1441,67 @@ def new_chat(user, title="New Chat"):
         return None
     sid = str(uuid.uuid4())
     try:
-        session.sql(f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS (SESSION_ID, USERNAME, TITLE) VALUES ('{sid}', '{esc(user.upper())}', '{esc(title)}')").collect()
+        session.sql(
+            f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS (SESSION_ID, USERNAME, TITLE) VALUES ('{sid}', '{esc(user.upper())}', '{esc(title)}')"
+        ).collect()
         return sid
     except Exception as e:
         print(f"New chat error: {e}")
         return None
 
+
 def save_msg(sid, role, content, sources=None):
     if not sid or not role:
         return False
     mid = str(uuid.uuid4())
-    src = ','.join(sources) if sources else ''
-    content_safe = content if content else ''
+    src = ",".join(sources) if sources else ""
+    content_safe = content if content else ""
     try:
-        session.sql(f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES (MESSAGE_ID, SESSION_ID, ROLE, CONTENT, SOURCES) VALUES ('{mid}', '{esc(sid)}', '{esc(role)}', '{esc(content_safe)}', '{esc(src)}')").collect()
-        session.sql(f"UPDATE {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS SET UPDATED_AT=CURRENT_TIMESTAMP() WHERE SESSION_ID='{esc(sid)}'").collect()
+        session.sql(
+            f"INSERT INTO {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES (MESSAGE_ID, SESSION_ID, ROLE, CONTENT, SOURCES) VALUES ('{mid}', '{esc(sid)}', '{esc(role)}', '{esc(content_safe)}', '{esc(src)}')"
+        ).collect()
+        session.sql(
+            f"UPDATE {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS SET UPDATED_AT=CURRENT_TIMESTAMP() WHERE SESSION_ID='{esc(sid)}'"
+        ).collect()
         return True
     except Exception as e:
         print(f"Save message error: {e}")
         return False
 
+
 def get_chats(user, pg=0, sz=15):
     if not user:
-        return pd.DataFrame(columns=['SESSION_ID', 'TITLE', 'UPDATED_AT'])
+        return pd.DataFrame(columns=["SESSION_ID", "TITLE", "UPDATED_AT"])
     sql = f"SELECT SESSION_ID, TITLE, UPDATED_AT FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS WHERE UPPER(USERNAME)='{esc(user.upper())}' ORDER BY UPDATED_AT DESC"
     return df_page(sql, pg, sz)
 
+
 def get_msgs(sid):
     if not sid:
-        return pd.DataFrame(columns=['ROLE', 'CONTENT'])
+        return pd.DataFrame(columns=["ROLE", "CONTENT"])
     try:
-        return session.sql(f"SELECT ROLE, CONTENT FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES WHERE SESSION_ID='{esc(sid)}' ORDER BY CREATED_AT").to_pandas()
+        return session.sql(
+            f"SELECT ROLE, CONTENT FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES WHERE SESSION_ID='{esc(sid)}' ORDER BY CREATED_AT"
+        ).to_pandas()
     except:
-        return pd.DataFrame(columns=['ROLE', 'CONTENT'])
+        return pd.DataFrame(columns=["ROLE", "CONTENT"])
+
 
 def del_chat(sid):
     if not sid:
         return False
     try:
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES WHERE SESSION_ID='{esc(sid)}'").collect()
-        session.sql(f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS WHERE SESSION_ID='{esc(sid)}'").collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_MESSAGES WHERE SESSION_ID='{esc(sid)}'"
+        ).collect()
+        session.sql(
+            f"DELETE FROM {DB_NAME}.{SCHEMA_NAME}.CHAT_SESSIONS WHERE SESSION_ID='{esc(sid)}'"
+        ).collect()
         return True
     except Exception as e:
         print(f"Delete chat error: {e}")
         return False
+
 
 def load_chat(sid):
     if not sid:
@@ -1321,9 +1509,12 @@ def load_chat(sid):
     st.session_state.sid = sid
     df = get_msgs(sid)
     if df is not None and not df.empty:
-        st.session_state.msgs = [{'role': r['ROLE'], 'content': r['CONTENT']} for _, r in df.iterrows()]
+        st.session_state.msgs = [
+            {"role": r["ROLE"], "content": r["CONTENT"]} for _, r in df.iterrows()
+        ]
     else:
         st.session_state.msgs = []
+
 
 # ==========================================
 # MARKDOWN TO HTML CONVERTER (ENHANCED)
@@ -1332,102 +1523,104 @@ def md_to_html(text):
     """Convert markdown to clean, well-formatted HTML"""
     if not text:
         return ""
-    
+
     text = str(text)
-    
+
     # Code blocks first (before other processing)
     def replace_code_block(match):
         code = match.group(1).strip()
-        code = code.replace('<', '&lt;').replace('>', '&gt;')
-        return f'<pre><code>{code}</code></pre>'
-    text = re.sub(r'```(?:\w+)?\n?(.*?)```', replace_code_block, text, flags=re.DOTALL)
-    
+        code = code.replace("<", "&lt;").replace(">", "&gt;")
+        return f"<pre><code>{code}</code></pre>"
+
+    text = re.sub(r"```(?:\w+)?\n?(.*?)```", replace_code_block, text, flags=re.DOTALL)
+
     # Inline code
-    text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
-    
+    text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+
     # Headers with better spacing
-    text = re.sub(r'^### (.+)$', r'<h3>\1</h3>', text, flags=re.MULTILINE)
-    text = re.sub(r'^## (.+)$', r'<h2>\1</h2>', text, flags=re.MULTILINE)
-    text = re.sub(r'^# (.+)$', r'<h1>\1</h1>', text, flags=re.MULTILINE)
-    
+    text = re.sub(r"^### (.+)$", r"<h3>\1</h3>", text, flags=re.MULTILINE)
+    text = re.sub(r"^## (.+)$", r"<h2>\1</h2>", text, flags=re.MULTILINE)
+    text = re.sub(r"^# (.+)$", r"<h1>\1</h1>", text, flags=re.MULTILINE)
+
     # Bold and italic
-    text = re.sub(r'\*\*\*(.+?)\*\*\*', r'<strong><em>\1</em></strong>', text)
-    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
-    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
-    
+    text = re.sub(r"\*\*\*(.+?)\*\*\*", r"<strong><em>\1</em></strong>", text)
+    text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", text)
+
     # Lists with proper structure
-    lines = text.split('\n')
+    lines = text.split("\n")
     result = []
     in_list = False
     list_type = None
-    
+
     for line in lines:
         stripped = line.strip()
-        
+
         # Handle unordered lists
-        if stripped.startswith('- ') or stripped.startswith('* '):
-            if not in_list or list_type != 'ul':
+        if stripped.startswith("- ") or stripped.startswith("* "):
+            if not in_list or list_type != "ul":
                 if in_list:
-                    result.append(f'</{list_type}>')
-                result.append('<ul>')
+                    result.append(f"</{list_type}>")
+                result.append("<ul>")
                 in_list = True
-                list_type = 'ul'
-            result.append(f'<li>{stripped[2:]}</li>')
-            
+                list_type = "ul"
+            result.append(f"<li>{stripped[2:]}</li>")
+
         # Handle ordered lists
-        elif re.match(r'^\d+\. ', stripped):
-            if not in_list or list_type != 'ol':
+        elif re.match(r"^\d+\. ", stripped):
+            if not in_list or list_type != "ol":
                 if in_list:
-                    result.append(f'</{list_type}>')
-                result.append('<ol>')
+                    result.append(f"</{list_type}>")
+                result.append("<ol>")
                 in_list = True
-                list_type = 'ol'
-            
+                list_type = "ol"
+
             cleaned_text = re.sub(r"^\d+\. ", "", stripped)
-            result.append(f'<li>{cleaned_text}</li>')
-            
+            result.append(f"<li>{cleaned_text}</li>")
+
         else:
             if in_list:
-                result.append(f'</{list_type}>')
+                result.append(f"</{list_type}>")
                 in_list = False
                 list_type = None
             result.append(line)
-    
+
     if in_list:
-        result.append(f'</{list_type}>')
-    
-    text = '\n'.join(result)
-    
+        result.append(f"</{list_type}>")
+
+    text = "\n".join(result)
+
     # Links
-    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
-    
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
+
     # Paragraphs - only wrap non-block elements
     def wrap_paragraphs(match):
         content = match.group(1)
         # Don't wrap if it's already a block element
-        if content.strip().startswith(('<h', '<ul', '<ol', '<pre', '<div', '<table')):
+        if content.strip().startswith(("<h", "<ul", "<ol", "<pre", "<div", "<table")):
             return content
-        return f'<p>{content}</p>'
-    
+        return f"<p>{content}</p>"
+
     # Split by double newlines and wrap in paragraphs
-    paragraphs = re.split(r'\n\s*\n', text)
+    paragraphs = re.split(r"\n\s*\n", text)
     new_paragraphs = []
-    
+
     for para in paragraphs:
         para = para.strip()
         if not para:
             continue
-            
-        if para.startswith(('<h', '<ul', '<ol', '<pre', '<div', '<table')):
+
+        if para.startswith(("<h", "<ul", "<ol", "<pre", "<div", "<table")):
             new_paragraphs.append(para)
         else:
             # Replace single newlines with <br> within paragraphs
-            para = para.replace('\n', '<br>')
-            new_paragraphs.append(f'<p>{para}</p>')
-    
-    text = '\n\n'.join(new_paragraphs)
-    
+            para = para.replace("\n", "<br>")
+            new_paragraphs.append(f"<p>{para}</p>")
+
+    text = "\n\n".join(new_paragraphs)
+
     return text
+
 
 # ==========================================
 # ENHANCED RAG SEARCH
@@ -1436,19 +1629,19 @@ def search(query, team, admin, mode="quick"):
     """Enhanced search with financial logic and fallback"""
     if not query or not str(query).strip():
         return "Please enter a valid question.", []
-    
+
     query = str(query).strip()
-    
+
     try:
         # Detect if this is a financial query
         is_financial = is_financial_query(query)
         config = FINANCIAL_RAG_CONFIG if is_financial else RAG_CONFIG
-        
+
         model = MODEL_LARGE if (mode == "deep" or is_financial) else MODEL_SMALL
-        
+
         if is_financial:
             st.info("🔍 Detected financial query - using enhanced financial search")
-        
+
         cat_filter = ""
         if not admin:
             cats = get_categories(team)
@@ -1457,72 +1650,73 @@ def search(query, team, admin, mode="quick"):
             cat_list = "', '".join([str(c) for c in cats if c])
             if cat_list:
                 cat_filter = f"AND UPPER(d.CATEGORY) IN ('{cat_list}')"
-        
+
         escaped_query = esc(query)
-        
+
         # First search attempt
         search_sql = build_search_sql(escaped_query, cat_filter, config, is_financial)
-        
+
         try:
             df = session.sql(search_sql).to_pandas()
         except Exception as sql_err:
             return f"Database search error: {sql_err}", []
-        
+
         # Fallback search if no results and financial query
         if (df is None or df.empty) and is_financial:
             st.warning("🔍 No results found, trying fallback search...")
             df = fallback_search(escaped_query, cat_filter, config)
-        
+
         if df is None or df.empty:
             return "No relevant information found in your documents.", []
-        
+
         # Process results with number extraction for financial queries
         context_parts, sources = process_search_results(df, config, is_financial)
-        
+
         if not context_parts:
             return "No relevant information found in documents.", []
-        
+
         context = "\n\n---\n\n".join(context_parts)
-        
+
         # Enhanced prompts
         prompt = build_enhanced_prompt(query, context, mode, is_financial)
-        
+
         try:
             max_prompt_len = 28000
             if len(prompt) > max_prompt_len:
                 prompt = prompt[:max_prompt_len] + "..."
-            
+
             answer_sql = f"SELECT SNOWFLAKE.CORTEX.COMPLETE('{model}', '{esc(prompt)}')"
             result = qry(answer_sql, None)
-            
+
             if not result or not isinstance(result, list) or len(result) == 0:
                 return "Error: No response from AI model.", sources
-            
+
             first_row = result[0]
             if first_row is None:
                 return "Error: Null response from AI model.", sources
-            
+
             answer = None
             try:
-                if hasattr(first_row, '__getitem__'):
+                if hasattr(first_row, "__getitem__"):
                     answer = first_row[0]
-                elif hasattr(first_row, 'asDict'):
+                elif hasattr(first_row, "asDict"):
                     row_dict = first_row.asDict()
                     if row_dict:
                         answer = list(row_dict.values())[0]
             except:
                 pass
-            
+
             if answer is None:
                 return "Error: Could not extract AI response.", sources
-            
+
             return str(answer), sources
-            
+
         except Exception as e:
             return f"Error: {str(e)}", []
-              
+
     except Exception as e:
         return f"Search error: {str(e)}", ""
+
 
 def build_search_sql(query, cat_filter, config, is_financial=False):
     """Build enhanced search SQL with financial boosting"""
@@ -1530,12 +1724,14 @@ def build_search_sql(query, cat_filter, config, is_financial=False):
     number_boost = ""
     boost_select = ""
     if is_financial:
-        numbers = re.findall(r'\d+(?:\.\d+)?', query)
+        numbers = re.findall(r"\d+(?:\.\d+)?", query)
         if numbers:
-            number_conditions = " OR ".join([
-                f"REGEXP_LIKE(LOWER(CHUNK_TEXT), '\\b{num}\\b')"
-                for num in numbers[:3]
-            ])
+            number_conditions = " OR ".join(
+                [
+                    f"REGEXP_LIKE(LOWER(CHUNK_TEXT), '\\b{num}\\b')"
+                    for num in numbers[:3]
+                ]
+            )
             number_boost = f"""
                 , number_boost AS (
                     SELECT
@@ -1605,7 +1801,8 @@ def build_search_sql(query, cat_filter, config, is_financial=False):
     """
 
     return search_sql
-    
+
+
 def fallback_search(query, cat_filter, config):
     """Fallback search with relaxed parameters for financial queries"""
     fallback_sql = f"""
@@ -1637,49 +1834,57 @@ def fallback_search(query, cat_filter, config):
         ORDER BY score DESC
         LIMIT {config['max_chunks']}
     """
-    
+
     try:
         return session.sql(fallback_sql).to_pandas()
     except:
         return None
 
+
 def process_search_results(df, config, is_financial):
     """Process search results and extract sources"""
     context_parts = []
     sources = []
-    
+
     for _, row in df.iterrows():
         try:
-            chunk_text = str(row['CHUNK_TEXT']) if 'CHUNK_TEXT' in row else ''
-            filename = str(row['FILENAME']) if 'FILENAME' in row else 'Unknown'
-            category = str(row['CATEGORY']) if 'CATEGORY' in row else 'Unknown'
-            
+            chunk_text = str(row["CHUNK_TEXT"]) if "CHUNK_TEXT" in row else ""
+            filename = str(row["FILENAME"]) if "FILENAME" in row else "Unknown"
+            category = str(row["CATEGORY"]) if "CATEGORY" in row else "Unknown"
+
             # Remove line number metadata for context but keep it for reference
-            clean_chunk = re.sub(r'=== LINES \d+-\d+ ===\n', '', chunk_text)
-            clean_chunk = re.sub(r'\[L\d{4}\] ', '', clean_chunk)
-            
+            clean_chunk = re.sub(r"=== LINES \d+-\d+ ===\n", "", chunk_text)
+            clean_chunk = re.sub(r"\[L\d{4}\] ", "", clean_chunk)
+
             # Truncate if needed
-            safe_text = clean_chunk[:config['max_chunk_text']] if len(clean_chunk) > config['max_chunk_text'] else clean_chunk
-            
+            safe_text = (
+                clean_chunk[: config["max_chunk_text"]]
+                if len(clean_chunk) > config["max_chunk_text"]
+                else clean_chunk
+            )
+
             # Add line references for financial queries
-            if is_financial and 'start_line' in row:
+            if is_financial and "start_line" in row:
                 line_ref = f" (Lines {row['start_line']}-{row['end_line']})"
             else:
                 line_ref = ""
-            
-            context_parts.append(f"**{filename}** (Category: {category}){line_ref}\n{safe_text}")
-            
+
+            context_parts.append(
+                f"**{filename}** (Category: {category}){line_ref}\n{safe_text}"
+            )
+
             if filename not in sources:
                 sources.append(filename)
         except Exception as e:
             print(f"Row processing error: {e}")
             continue
-    
+
     return context_parts, sources
+
 
 def build_enhanced_prompt(query, context, mode, is_financial):
     """Build enhanced prompt with financial accuracy focus"""
-    
+
     if is_financial:
         # Financial-specific prompt
         if mode == "deep":
@@ -1742,34 +1947,35 @@ INSTRUCTIONS:
 - Be concise but complete.
 - Cite sources when possible.
 [/INST]"""
-    
+
     return prompt
+
 
 # ==========================================
 # SESSION STATE
 # ==========================================
-if 'sid' not in st.session_state:
+if "sid" not in st.session_state:
     st.session_state.sid = None
-if 'msgs' not in st.session_state:
+if "msgs" not in st.session_state:
     st.session_state.msgs = []
-if 'view' not in st.session_state:
-    st.session_state.view = 'chat'
-if 'pg' not in st.session_state:
+if "view" not in st.session_state:
+    st.session_state.view = "chat"
+if "pg" not in st.session_state:
     st.session_state.pg = {}
-if 'ai_mode' not in st.session_state:
-    st.session_state.ai_mode = 'quick'
+if "ai_mode" not in st.session_state:
+    st.session_state.ai_mode = "quick"
 # Selection states for bulk operations
-if 'selected_items' not in st.session_state:
+if "selected_items" not in st.session_state:
     st.session_state.selected_items = {
-        'users': set(),
-        'teams': set(),
-        'rules': set(),
-        'docs': set()
+        "users": set(),
+        "teams": set(),
+        "rules": set(),
+        "docs": set(),
     }
 # Admin edit states
-if 'edit_team' not in st.session_state:
+if "edit_team" not in st.session_state:
     st.session_state.edit_team = None
-if 'edit_cat_access' not in st.session_state:
+if "edit_cat_access" not in st.session_state:
     st.session_state.edit_cat_access = None
 
 # ==========================================
@@ -1780,175 +1986,203 @@ curr_admin = check_is_admin(curr_user)
 curr_team = "SUPER_ADMIN" if curr_admin else get_team(curr_user)
 curr_access = get_access(curr_team, curr_admin)
 
+
 # ==========================================
 # UI RENDERING HELPERS (ENHANCED FOR ADMIN)
 # ==========================================
 def render_bulk_action_bar(item_type, items, delete_func, assign_func=None):
     """Render a unified bulk action bar"""
     selected = st.session_state.selected_items[item_type]
-    
+
     if not selected:
         return
-    
+
     with st.container():
         st.markdown('<div class="bulk-action-bar">', unsafe_allow_html=True)
         cols = st.columns([2, 1, 1, 1])
-        
+
         cols[0].markdown(f"**📌 {len(selected)} item(s) selected**")
-        
-        if assign_func and item_type == 'users':
+
+        if assign_func and item_type == "users":
             teams = get_teams()
-            target_team = cols[1].selectbox("Assign to", teams, key=f"bulk_assign_{item_type}")
+            target_team = cols[1].selectbox(
+                "Assign to", teams, key=f"bulk_assign_{item_type}"
+            )
             if cols[2].button("✓ Assign", use_container_width=True):
                 assign_func(list(selected), target_team)
                 st.success(f"✅ Assigned {len(selected)} users to {target_team}")
                 st.session_state.selected_items[item_type].clear()
                 st.rerun()
-        
+
         # Delete button with confirmation
         confirm_key = f"confirm_delete_{item_type}"
         if cols[3].button("🗑️ Delete", use_container_width=True, type="primary"):
-            if st.checkbox(f"⚠️ Confirm delete {len(selected)} item(s)?", key=confirm_key):
+            if st.checkbox(
+                f"⚠️ Confirm delete {len(selected)} item(s)?", key=confirm_key
+            ):
                 count = delete_func(list(selected))
                 st.success(f"✅ Deleted {count} item(s)")
                 st.session_state.selected_items[item_type].clear()
                 st.rerun()
-        
+
         if cols[0].button("Clear Selection", key=f"clear_{item_type}"):
             st.session_state.selected_items[item_type].clear()
             st.rerun()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
 
 def render_select_all(item_type, df, id_column):
     """Render select all checkbox"""
     col1, col2, col3, col4 = st.columns([1, 4, 3, 3])
-    
+
     if col1.checkbox("Select All", key=f"select_all_{item_type}"):
         ids = df[id_column].tolist() if df is not None and not df.empty else []
         st.session_state.selected_items[item_type] = set(ids)
+
 
 def render_item_row(item_type, item_id, content_items, is_selected):
     """Render a single item row with checkbox"""
     row_class = "item-row selected" if is_selected else "item-row"
     st.markdown(f'<div class="{row_class}">', unsafe_allow_html=True)
-    
-    cols = st.columns([1, 8]) # Checkbox + content
-    
+
+    cols = st.columns([1, 8])  # Checkbox + content
+
     # Checkbox
     if cols[0].checkbox("", key=f"sel_{item_type}_{item_id}", value=is_selected):
         st.session_state.selected_items[item_type].add(item_id)
     else:
         st.session_state.selected_items[item_type].discard(item_id)
-    
+
     # Content
     with cols[1]:
         col_count = len(content_items)
         content_cols = st.columns(col_count)
         for i, content in enumerate(content_items):
             content_cols[i].write(content)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
 
 # ==========================================
 # UI INTEGRATION
 # ==========================================
 # In the User Management view, add password reset per user:
 
+
 # Add this to the user row rendering in the 'users' view:
 def render_user_row_with_password_reset(username, team, is_admin):
     """Enhanced user row with password reset button"""
-    is_selected = username in st.session_state.selected_items['users']
-    
-    st.markdown(f'<div class="item-row {"selected" if is_selected else ""}">', unsafe_allow_html=True)
+    is_selected = username in st.session_state.selected_items["users"]
+
+    st.markdown(
+        f'<div class="item-row {"selected" if is_selected else ""}">',
+        unsafe_allow_html=True,
+    )
     cols = st.columns([0.5, 4, 3, 2, 1.5, 1.5])
-    
+
     # Checkbox
     if cols[0].checkbox("", key=f"sel_users_{username}", value=is_selected):
-        st.session_state.selected_items['users'].add(username)
+        st.session_state.selected_items["users"].add(username)
     else:
-        st.session_state.selected_items['users'].discard(username)
-    
+        st.session_state.selected_items["users"].discard(username)
+
     # User info
     cols[1].write(f"`{username}`")
     cols[2].write(team)
     cols[3].write(admin)
-    
+
     # Password reset button
     if cols[4].button("🔑 Reset", key=f"reset_pwd_{username}"):
-        st.session_state[f'reset_modal_{username}'] = True
-    
+        st.session_state[f"reset_modal_{username}"] = True
+
     # Delete button
     if cols[5].button("🗑️", key=f"del_user_{username}"):
         count = bulk_delete([username])
         if count > 0:
             st.success("✅ User deleted")
             st.rerun()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
     # Password reset modal
-    if st.session_state.get(f'reset_modal_{username}', False):
+    if st.session_state.get(f"reset_modal_{username}", False):
         with st.expander(f"🔑 Reset Password for {username}", expanded=True):
             with st.form(f"reset_form_{username}"):
-                new_pwd = st.text_input("New Password", type="password", key=f"new_pwd_{username}")
-                confirm_pwd = st.text_input("Confirm Password", type="password", key=f"confirm_pwd_{username}")
+                new_pwd = st.text_input(
+                    "New Password", type="password", key=f"new_pwd_{username}"
+                )
+                confirm_pwd = st.text_input(
+                    "Confirm Password", type="password", key=f"confirm_pwd_{username}"
+                )
                 col_a, col_b = st.columns(2)
                 if col_a.form_submit_button("Reset", type="primary"):
                     if new_pwd == confirm_pwd and len(new_pwd) >= 6:
                         ok, msg = reset_user_password(username, new_pwd)
                         if ok:
                             st.success(f"✅ {msg}")
-                            del st.session_state[f'reset_modal_{username}']
+                            del st.session_state[f"reset_modal_{username}"]
                             st.rerun()
                         else:
                             st.error(f"❌ {msg}")
                     else:
                         st.error("❌ Passwords don't match or too short")
                 if col_b.form_submit_button("Cancel"):
-                    del st.session_state[f'reset_modal_{username}']
+                    del st.session_state[f"reset_modal_{username}"]
                     st.rerun()
+
 
 # ==========================================
 # SIDEBAR (ENHANCED WITH ADMIN DASHBOARD SUMMARY)
 # ==========================================
 with st.sidebar:
-    st.markdown('''
+    st.markdown(
+        """
     <div class="logo-box">
         <div class="logo-icon">🏢</div>
         <div class="logo-name">AIFAQ Pro</div>
     </div>
-    ''', unsafe_allow_html=True)
-    
+    """,
+        unsafe_allow_html=True,
+    )
+
     if curr_admin:
-        st.markdown('<span class="badge badge-admin">Admin</span>', unsafe_allow_html=True)
+        st.markdown(
+            '<span class="badge badge-admin">Admin</span>', unsafe_allow_html=True
+        )
     else:
-        st.markdown(f'<span class="badge badge-user">{curr_team}</span>', unsafe_allow_html=True)
-    
+        st.markdown(
+            f'<span class="badge badge-user">{curr_team}</span>', unsafe_allow_html=True
+        )
+
     st.caption(f"User: `{curr_user}`")
     st.divider()
-    
+
     if st.button("✨ New Chat", use_container_width=True, type="primary"):
         st.session_state.sid = None
         st.session_state.msgs = []
-        st.session_state.view = 'chat'
+        st.session_state.view = "chat"
         st.rerun()
-    
+
     st.markdown('<div class="section-title">Recent Chats</div>', unsafe_allow_html=True)
-    chats = get_chats(curr_user, st.session_state.pg.get('chats', 0), 8)
-    
+    chats = get_chats(curr_user, st.session_state.pg.get("chats", 0), 8)
+
     if chats is not None and not chats.empty:
         for _, r in chats.iterrows():
             c1, c2 = st.columns([5, 1])
-            title_raw = r.get('TITLE', 'Chat') if hasattr(r, 'get') else r['TITLE']
-            title_str = str(title_raw) if title_raw else 'Chat'
+            title_raw = r.get("TITLE", "Chat") if hasattr(r, "get") else r["TITLE"]
+            title_str = str(title_raw) if title_raw else "Chat"
             title = title_str[:18] + "..." if len(title_str) > 18 else title_str
-            session_id = str(r.get('SESSION_ID', '') if hasattr(r, 'get') else r['SESSION_ID'])
-            
+            session_id = str(
+                r.get("SESSION_ID", "") if hasattr(r, "get") else r["SESSION_ID"]
+            )
+
             with c1:
-                if st.button(f"💬 {title}", key=f"c_{session_id[:8]}", use_container_width=True):
+                if st.button(
+                    f"💬 {title}", key=f"c_{session_id[:8]}", use_container_width=True
+                ):
                     load_chat(session_id)
-                    st.session_state.view = 'chat'
+                    st.session_state.view = "chat"
                     st.rerun()
             with c2:
                 if st.button("×", key=f"d_{session_id[:8]}"):
@@ -1959,10 +2193,12 @@ with st.sidebar:
                     st.rerun()
     else:
         st.caption("No conversations yet")
-    
+
     if curr_admin:
         st.divider()
-        st.markdown('<div class="section-title">Admin Dashboard</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-title">Admin Dashboard</div>', unsafe_allow_html=True
+        )
         # Quick stats
         col1, col2 = st.columns(2)
         col1.metric("Users", count_tbl("APP_USER_TEAMS"))
@@ -1971,21 +2207,29 @@ with st.sidebar:
         col1, col2 = st.columns(2)
         with col1:
             if st.button("👥 Users", use_container_width=True):
-                st.session_state.view = 'users'
-                st.session_state.selected_items = {k: set() for k in st.session_state.selected_items} # Clear selections
+                st.session_state.view = "users"
+                st.session_state.selected_items = {
+                    k: set() for k in st.session_state.selected_items
+                }  # Clear selections
                 st.rerun()
             if st.button("🔐 Access", use_container_width=True):
-                st.session_state.view = 'access'
-                st.session_state.selected_items = {k: set() for k in st.session_state.selected_items}
+                st.session_state.view = "access"
+                st.session_state.selected_items = {
+                    k: set() for k in st.session_state.selected_items
+                }
                 st.rerun()
         with col2:
             if st.button("🏷️ Teams", use_container_width=True):
-                st.session_state.view = 'teams'
-                st.session_state.selected_items = {k: set() for k in st.session_state.selected_items}
+                st.session_state.view = "teams"
+                st.session_state.selected_items = {
+                    k: set() for k in st.session_state.selected_items
+                }
                 st.rerun()
             if st.button("📂 Docs", use_container_width=True):
-                st.session_state.view = 'docs'
-                st.session_state.selected_items = {k: set() for k in st.session_state.selected_items}
+                st.session_state.view = "docs"
+                st.session_state.selected_items = {
+                    k: set() for k in st.session_state.selected_items
+                }
                 st.rerun()
 
 # ==========================================
@@ -2000,121 +2244,133 @@ view = st.session_state.view
 # ==========================================
 # CHAT VIEW (IMPROVED RENDERING)
 # =========================================#
-if view == 'chat':
+if view == "chat":
     # Messages Container
     if st.session_state.msgs:
         for m in st.session_state.msgs:
-            role = m.get('role', '')
-            content = m.get('content', '')
-            
-            if role == 'user':
-                safe_content = str(content).replace('<', '&lt;').replace('>', '&gt;')
-                st.markdown(f'<div class="message-container"><div class="user-msg">{safe_content}</div></div>', unsafe_allow_html=True)
+            role = m.get("role", "")
+            content = m.get("content", "")
+
+            if role == "user":
+                safe_content = str(content).replace("<", "&lt;").replace(">", "&gt;")
+                st.markdown(
+                    f'<div class="message-container"><div class="user-msg">{safe_content}</div></div>',
+                    unsafe_allow_html=True,
+                )
             else:
                 # Parse AI response
                 answer_content = str(content)
                 sources = []
                 thinking_html = ""
-                
+
                 # Extract sources
                 if "📚 **Sources:**" in answer_content:
                     parts = answer_content.split("📚 **Sources:**")
                     answer_content = parts[0].strip()
                     if len(parts) > 1:
-                        sources = [s.strip() for s in parts[1].split(',') if s.strip()]
-                
+                        sources = [s.strip() for s in parts[1].split(",") if s.strip()]
+
                 # Extract thinking section
                 if "## Analysis" in answer_content and "## Answer" in answer_content:
                     parts = answer_content.split("## Answer")
                     thinking = parts[0].replace("## Analysis", "").strip()
                     answer_content = parts[1].strip() if len(parts) > 1 else ""
-                    
-                    thinking_html = f'''
+
+                    thinking_html = f"""
                     <div class="thinking-box">
                         <div class="thinking-label">🧠 Analysis</div>
                         <div class="ai-msg-content">{md_to_html(thinking)}</div>
                     </div>
-                    '''
-                
+                    """
+
                 # Convert main answer to HTML
                 answer_html = md_to_html(answer_content)
-                
+
                 # Build final AI message
                 ai_message_html = f'<div class="message-container"><div class="ai-msg">'
-                
+
                 if thinking_html:
                     ai_message_html += thinking_html
-                
+
                 ai_message_html += f'<div class="ai-msg-content">{answer_html}</div>'
-                
+
                 # Add sources
                 if sources:
-                    source_tags = ''.join([f'<span class="source-tag">📄 {s}</span>' for s in sources])
-                    ai_message_html += f'''
+                    source_tags = "".join(
+                        [f'<span class="source-tag">📄 {s}</span>' for s in sources]
+                    )
+                    ai_message_html += f"""
                     <div class="sources-box">
                         <div class="sources-label">📚 Sources</div>
                         {source_tags}
                     </div>
-                    '''
-                
-                ai_message_html += '</div></div>'
-                
+                    """
+
+                ai_message_html += "</div></div>"
+
                 st.markdown(ai_message_html, unsafe_allow_html=True)
-    
+
     # Mode Selector
     mode_cols = st.columns([1, 1, 3])
     with mode_cols[0]:
         if st.button(
-            "⚡ Quick" if st.session_state.ai_mode != 'quick' else "⚡ Quick ✓",
+            "⚡ Quick" if st.session_state.ai_mode != "quick" else "⚡ Quick ✓",
             use_container_width=True,
-            type="primary" if st.session_state.ai_mode == 'quick' else "secondary"
+            type="primary" if st.session_state.ai_mode == "quick" else "secondary",
         ):
-            st.session_state.ai_mode = 'quick'
+            st.session_state.ai_mode = "quick"
             st.rerun()
     with mode_cols[1]:
         if st.button(
-            "🧠 Deep" if st.session_state.ai_mode != 'deep' else "🧠 Deep ✓",
+            "🧠 Deep" if st.session_state.ai_mode != "deep" else "🧠 Deep ✓",
             use_container_width=True,
-            type="primary" if st.session_state.ai_mode == 'deep' else "secondary"
+            type="primary" if st.session_state.ai_mode == "deep" else "secondary",
         ):
-            st.session_state.ai_mode = 'deep'
+            st.session_state.ai_mode = "deep"
             st.rerun()
     with mode_cols[2]:
-        model_name = MODEL_LARGE if st.session_state.ai_mode == 'deep' else MODEL_SMALL
+        model_name = MODEL_LARGE if st.session_state.ai_mode == "deep" else MODEL_SMALL
         st.caption(f"Model: **{model_name}**")
-    
+
     # Chat Input
     query = st.chat_input("Ask a question about your documents...")
-    
+
     # Process query
     if query:
         if not st.session_state.sid:
             title = query[:45] + "..." if len(query) > 45 else query
             st.session_state.sid = new_chat(curr_user, title)
-        
-        st.session_state.msgs.append({'role': 'user', 'content': query})
-        save_msg(st.session_state.sid, 'user', query)
-        
+
+        st.session_state.msgs.append({"role": "user", "content": query})
+        save_msg(st.session_state.sid, "user", query)
+
         with st.spinner("🔍 Searching documents..."):
-            answer, sources = search(query, curr_team, curr_admin, mode=st.session_state.ai_mode)
+            answer, sources = search(
+                query, curr_team, curr_admin, mode=st.session_state.ai_mode
+            )
             if sources:
                 answer += f"\n\n📚 **Sources:** {', '.join(sources)}"
-        
-        st.session_state.msgs.append({'role': 'assistant', 'content': answer})
-        save_msg(st.session_state.sid, 'assistant', answer, sources)
+
+        st.session_state.msgs.append({"role": "assistant", "content": answer})
+        save_msg(st.session_state.sid, "assistant", answer, sources)
         st.rerun()
 
 # ==========================================
 # ADMIN VIEWS WITH ENHANCED UI
 # =========================================#
-elif view == 'users' and curr_admin:
-    st.markdown('<div class="page-title">👥 User Management</div>', unsafe_allow_html=True)
-    
+elif view == "users" and curr_admin:
+    st.markdown(
+        '<div class="page-title">👥 User Management</div>', unsafe_allow_html=True
+    )
+
     c1, c2 = st.columns([1, 2], gap="large")
-    
+
     with c1:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">➕ Create User</h3></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">➕ Create User</h3></div>',
+            unsafe_allow_html=True,
+        )
         with st.form("create_user_form", clear_on_submit=True):
             new_username = st.text_input("Username")
             new_password = st.text_input("Password", type="password")
@@ -2128,26 +2384,33 @@ elif view == 'users' and curr_admin:
                 elif new_password != confirm_password:
                     st.error("❌ Passwords do not match.")
                 else:
-                    ok, msg = create_user(new_username, new_password, new_team if new_team != "None" else None)
+                    ok, msg = create_user(
+                        new_username,
+                        new_password,
+                        new_team if new_team != "None" else None,
+                    )
                     if ok:
                         st.success(f"✅ {msg}")
                         st.rerun()
                     else:
                         st.error(f"❌ {msg}")
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+        st.markdown("</div>", unsafe_allow_html=True)
+
     with c2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">📋 All Users</h3></div>', unsafe_allow_html=True)
-        
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">📋 All Users</h3></div>',
+            unsafe_allow_html=True,
+        )
+
         df = load_users()
         if df is not None and not df.empty:
             # Deduplicate users to prevent key conflicts
-            df = df.drop_duplicates(subset=['USERNAME'], keep='first')
-            
+            df = df.drop_duplicates(subset=["USERNAME"], keep="first")
+
             # Bulk Action Bar (for assign & delete)
-            render_bulk_action_bar('users', df, bulk_delete, bulk_assign)
-            
+            render_bulk_action_bar("users", df, bulk_delete, bulk_assign)
+
             # Table Header
             h1, h2, h3, h4, h5, h6 = st.columns([0.5, 4, 3, 2, 1.5, 1.5])
             h2.write("**Username**")
@@ -2155,26 +2418,31 @@ elif view == 'users' and curr_admin:
             h4.write("**Admin**")
             h5.write("")
             h6.write("")
-            
+
             # User Rows with Password Reset
             for idx, (_, row) in enumerate(df.iterrows()):
-                username = row['USERNAME'].strip()  # Clean whitespace
-                team = row['TEAM']
-                admin = row['ADMIN']
+                username = row["USERNAME"].strip()  # Clean whitespace
+                team = row["TEAM"]
+                admin = row["ADMIN"]
                 render_user_row_with_password_reset(username, team, admin)
         else:
             st.info("No users found.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
-elif view == 'teams' and curr_admin:
-    st.markdown('<div class="page-title">🏷️ Team Management</div>', unsafe_allow_html=True)
-    
+        st.markdown("</div>", unsafe_allow_html=True)
+
+elif view == "teams" and curr_admin:
+    st.markdown(
+        '<div class="page-title">🏷️ Team Management</div>', unsafe_allow_html=True
+    )
+
     c1, c2 = st.columns([1, 2], gap="large")
-    
+
     with c1:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">➕ Create Team</h3></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">➕ Create Team</h3></div>',
+            unsafe_allow_html=True,
+        )
         with st.form("create_team_form", clear_on_submit=True):
             new_team_name = st.text_input("Team Name")
             new_desc = st.text_input("Description (optional)")
@@ -2186,8 +2454,11 @@ elif view == 'teams' and curr_admin:
                     st.rerun()
                 else:
                     st.error(f"❌ {msg}")
-        
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">📋 Existing Teams</h3></div>', unsafe_allow_html=True)
+
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">📋 Existing Teams</h3></div>',
+            unsafe_allow_html=True,
+        )
         teams = get_teams()
         if teams:
             for team in teams:
@@ -2205,14 +2476,19 @@ elif view == 'teams' and curr_admin:
                             st.rerun()
                         else:
                             st.error(f"❌ {msg}")
-            
+
             # Edit team modal
             if st.session_state.edit_team:
                 edit_team = st.session_state.edit_team
                 with st.expander(f"✏️ Editing: {edit_team}", expanded=True):
                     with st.form("edit_team_form"):
                         new_name = st.text_input("New Team Name", value=edit_team)
-                        new_desc = st.text_input("New Description", value=val(f"SELECT DESCRIPTION FROM {DB_NAME}.{SCHEMA_NAME}.TEAMS WHERE TEAM_NAME='{esc(edit_team)}'"))
+                        new_desc = st.text_input(
+                            "New Description",
+                            value=val(
+                                f"SELECT DESCRIPTION FROM {DB_NAME}.{SCHEMA_NAME}.TEAMS WHERE TEAM_NAME='{esc(edit_team)}'"
+                            ),
+                        )
                         col_a, col_b = st.columns(2)
                         if col_a.form_submit_button("Save Changes", type="primary"):
                             # Simple update: delete old, create new if name changes
@@ -2220,7 +2496,9 @@ elif view == 'teams' and curr_admin:
                                 delete_team_db(edit_team)
                                 create_team_db(new_name, new_desc)
                             else:
-                                session.sql(f"UPDATE {DB_NAME}.{SCHEMA_NAME}.TEAMS SET DESCRIPTION='{esc(new_desc)}' WHERE TEAM_NAME='{esc(edit_team)}'").collect()
+                                session.sql(
+                                    f"UPDATE {DB_NAME}.{SCHEMA_NAME}.TEAMS SET DESCRIPTION='{esc(new_desc)}' WHERE TEAM_NAME='{esc(edit_team)}'"
+                                ).collect()
                             st.success("✅ Team updated")
                             st.session_state.edit_team = None
                             st.rerun()
@@ -2229,11 +2507,14 @@ elif view == 'teams' and curr_admin:
                             st.rerun()
         else:
             st.info("No teams yet.")
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+        st.markdown("</div>", unsafe_allow_html=True)
+
     with c2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">🔍 Team Details</h3></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">🔍 Team Details</h3></div>',
+            unsafe_allow_html=True,
+        )
         selected_team = st.selectbox("Select Team", get_teams())
         if selected_team:
             members = load_members(selected_team)
@@ -2241,16 +2522,21 @@ elif view == 'teams' and curr_admin:
                 st.dataframe(members, hide_index=True, use_container_width=True)
             else:
                 st.info("No members in this team.")
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-elif view == 'access' and curr_admin:
-    st.markdown('<div class="page-title">🔐 Access Control</div>', unsafe_allow_html=True)
-    
+elif view == "access" and curr_admin:
+    st.markdown(
+        '<div class="page-title">🔐 Access Control</div>', unsafe_allow_html=True
+    )
+
     c1, c2 = st.columns([1, 2], gap="large")
-    
+
     with c1:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">➕ Grant Team Access</h3></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">➕ Grant Team Access</h3></div>',
+            unsafe_allow_html=True,
+        )
         teams = get_teams()
         all_cats = get_all_categories()
         with st.form("grant_access_form", clear_on_submit=True):
@@ -2260,36 +2546,47 @@ elif view == 'access' and curr_admin:
             if submitted and grant_team and grant_cats:
                 n = bulk_grant(grant_team, grant_cats)
                 st.success(f"✅ Granted {n} categories")
-        
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">👑 Manage Admins</h3></div>', unsafe_allow_html=True)
+
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">👑 Manage Admins</h3></div>',
+            unsafe_allow_html=True,
+        )
         admins = load_admins()
         if admins is not None and not admins.empty:
             # Deduplicate admins to prevent key conflicts
-            admins = admins.drop_duplicates(subset=['USERNAME'], keep='first')
-            
+            admins = admins.drop_duplicates(subset=["USERNAME"], keep="first")
+
             # Info about system grants
             st.caption("ℹ️ Admins granted by 'SYSTEM' cannot be removed")
-            
+
             # Use enumerate to ensure unique keys
             for idx, (_, row) in enumerate(admins.iterrows()):
                 col1, col2 = st.columns([4, 1])
-                username = row['USERNAME'].strip()  # Clean any trailing spaces
-                granted_by = row['GRANTED_BY']
-                
+                username = row["USERNAME"].strip()  # Clean any trailing spaces
+                granted_by = row["GRANTED_BY"]
+
                 # Check if this is a system-granted admin
-                is_system_grant = granted_by and str(granted_by).upper().startswith('SYSTEM')
-                
+                is_system_grant = granted_by and str(granted_by).upper().startswith(
+                    "SYSTEM"
+                )
+
                 with col1:
                     st.write(f"`{username}` (Granted by: {granted_by})")
-                
+
                 with col2:
                     if is_system_grant:
-                        st.button("🚫", key=f"revoke_admin_{username}_{idx}", 
-                                 disabled=True, 
-                                 help="Cannot remove system-granted admins")
+                        st.button(
+                            "🚫",
+                            key=f"revoke_admin_{username}_{idx}",
+                            disabled=True,
+                            help="Cannot remove system-granted admins",
+                        )
                     else:
-                        if st.button("🗑️", key=f"revoke_admin_{username}_{idx}", 
-                                   help=f"Revoke admin from {username}"):
+                        if st.button(
+                            "🗑️",
+                            key=f"revoke_admin_{username}_{idx}",
+                            help=f"Revoke admin from {username}",
+                        ):
                             ok, msg = remove_admin_db(username, curr_user)
                             if ok:
                                 st.success(f"✅ {msg}")
@@ -2298,7 +2595,7 @@ elif view == 'access' and curr_admin:
                                 st.error(f"❌ {msg}")
         else:
             st.info("No admins yet.")
-        
+
         with st.expander("➕ Grant Admin Access"):
             with st.form("grant_admin_form", clear_on_submit=True):
                 grant_user = st.text_input("Username to Grant Admin")
@@ -2310,9 +2607,12 @@ elif view == 'access' and curr_admin:
                         st.rerun()
                     else:
                         st.error(f"❌ {msg}")
-        
+
         # Category Management (Centralized)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">🏷️ Manage Categories</h3></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">🏷️ Manage Categories</h3></div>',
+            unsafe_allow_html=True,
+        )
         with st.expander("➕ Add New Category", expanded=False):
             with st.form("add_cat_access", clear_on_submit=True):
                 new_cat = st.text_input("Category Name")
@@ -2324,7 +2624,7 @@ elif view == 'access' and curr_admin:
                             st.rerun()
                         else:
                             st.error(f"❌ {msg}")
-        
+
         categories = get_all_categories()
         if categories:
             for cat in categories:
@@ -2342,7 +2642,7 @@ elif view == 'access' and curr_admin:
                             st.rerun()
                         else:
                             st.error(f"❌ {msg}")
-            
+
             if st.session_state.edit_cat_access:
                 edit_cat = st.session_state.edit_cat_access
                 with st.expander(f"✏️ Editing: {edit_cat}", expanded=True):
@@ -2361,34 +2661,47 @@ elif view == 'access' and curr_admin:
                             st.rerun()
         else:
             st.info("No categories yet.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
     with c2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">📋 Access Rules</h3></div>', unsafe_allow_html=True)
-        
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">📋 Access Rules</h3></div>',
+            unsafe_allow_html=True,
+        )
+
         df = load_rules()
         if df is not None and not df.empty:
-            render_bulk_action_bar('rules', df, lambda rules: bulk_revoke([(r['TEAM'], r['CATEGORY']) for _, r in df.iterrows() if (r['TEAM'], r['CATEGORY']) in rules]))
-            
-            render_select_all('rules', df, None)  # No single ID, use composite
-            
+            render_bulk_action_bar(
+                "rules",
+                df,
+                lambda rules: bulk_revoke(
+                    [
+                        (r["TEAM"], r["CATEGORY"])
+                        for _, r in df.iterrows()
+                        if (r["TEAM"], r["CATEGORY"]) in rules
+                    ]
+                ),
+            )
+
+            render_select_all("rules", df, None)  # No single ID, use composite
+
             h1, h2, h3, h4 = st.columns([0.5, 4, 4, 1])
             h2.write("**Team**")
             h3.write("**Category**")
             h4.write("")
-            
+
             # Deduplicate rules to prevent key conflicts
-            df = df.drop_duplicates(subset=['TEAM', 'CATEGORY'], keep='first')
-            
+            df = df.drop_duplicates(subset=["TEAM", "CATEGORY"], keep="first")
+
             for idx, (_, row) in enumerate(df.iterrows()):
-                team = row['TEAM']
-                cat = row['CATEGORY']
+                team = row["TEAM"]
+                cat = row["CATEGORY"]
                 rule_id = (team, cat)
-                is_selected = rule_id in st.session_state.selected_items['rules']
-                render_item_row('rules', rule_id, [team, cat], is_selected)
-                
+                is_selected = rule_id in st.session_state.selected_items["rules"]
+                render_item_row("rules", rule_id, [team, cat], is_selected)
+
                 if not is_selected:
                     dcol = st.columns([0.5, 4, 4, 1])[3]
                     # Add idx to ensure unique key
@@ -2401,20 +2714,25 @@ elif view == 'access' and curr_admin:
                             st.error(f"❌ {msg}")
         else:
             st.info("No rules yet.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
-elif view == 'docs' and curr_admin:
-    st.markdown('<div class="page-title">📂 Document Management</div>', unsafe_allow_html=True)
-    
+        st.markdown("</div>", unsafe_allow_html=True)
+
+elif view == "docs" and curr_admin:
+    st.markdown(
+        '<div class="page-title">📂 Document Management</div>', unsafe_allow_html=True
+    )
+
     c1, c2 = st.columns([1, 2], gap="large")
-    
+
     with c1:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">📤 Upload Document</h3></div>', unsafe_allow_html=True)
-        uploaded_file = st.file_uploader("Choose a file", type=['pdf', 'txt', 'docx'])
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">📤 Upload Document</h3></div>',
+            unsafe_allow_html=True,
+        )
+        uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt", "docx"])
         all_cats = get_all_categories()
-        
+
         if all_cats:
             selected_cat = st.selectbox("Assign to Category", all_cats)
         else:
@@ -2431,22 +2749,27 @@ elif view == 'docs' and curr_admin:
                         st.error(f"❌ {msg}")
         elif uploaded_file and not selected_cat:
             st.info("Please create or select a category first.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
     with c2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<div class="admin-card-header"><h3 class="admin-icon">📑 Uploaded Documents</h3></div>', unsafe_allow_html=True)
-        
+        st.markdown(
+            '<div class="admin-card-header"><h3 class="admin-icon">📑 Uploaded Documents</h3></div>',
+            unsafe_allow_html=True,
+        )
+
         df = load_docs()
         if df is not None and not df.empty:
-            df['UPLOAD_TS'] = pd.to_datetime(df['UPLOAD_TS']).dt.strftime('%Y-%m-%d %H:%M')
+            df["UPLOAD_TS"] = pd.to_datetime(df["UPLOAD_TS"]).dt.strftime(
+                "%Y-%m-%d %H:%M"
+            )
 
             # Bulk Action Bar
-            render_bulk_action_bar('docs', df, delete_docs)
+            render_bulk_action_bar("docs", df, delete_docs)
 
             # Select All Row
-            render_select_all('docs', df, 'DOC_ID')
+            render_select_all("docs", df, "DOC_ID")
 
             # Table Header
             h1, h2, h3, h4, h5, h6 = st.columns([0.5, 4, 2.5, 2.5, 2, 1])
@@ -2458,15 +2781,20 @@ elif view == 'docs' and curr_admin:
 
             # Document Rows
             for _, row in df.iterrows():
-                doc_id = row['DOC_ID']
-                is_selected = doc_id in st.session_state.selected_items['docs']
+                doc_id = row["DOC_ID"]
+                is_selected = doc_id in st.session_state.selected_items["docs"]
 
-                render_item_row('docs', doc_id, [
-                    row['FILENAME'],
-                    f"`{row['CATEGORY']}`",
-                    row['UPLOADED_BY'],
-                    row['UPLOAD_TS']
-                ], is_selected)
+                render_item_row(
+                    "docs",
+                    doc_id,
+                    [
+                        row["FILENAME"],
+                        f"`{row['CATEGORY']}`",
+                        row["UPLOADED_BY"],
+                        row["UPLOAD_TS"],
+                    ],
+                    is_selected,
+                )
 
                 # Individual delete button in last column
                 if not is_selected:  # Avoid double controls
@@ -2478,9 +2806,9 @@ elif view == 'docs' and curr_admin:
                             st.rerun()
         else:
             st.info("No documents uploaded yet.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
 else:
-    st.session_state.view = 'chat'
+    st.session_state.view = "chat"
     st.rerun()
