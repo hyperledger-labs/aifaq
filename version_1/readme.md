@@ -111,14 +111,37 @@ Snowflake will create a default file called: **streamlit_app.py**
 ## Step 6: Install Python Dependencies
 
 Snowflake Streamlit apps require **manual dependency installation**.
+There is **no automatic `requirements.txt` resolution**, so all libraries must be added explicitly.
 
-1. In the Streamlit app UI, locate the **Python Packages / Environment** section.
-2. Under the selected **Python version**, manually add all required libraries.
-3. Add them **one by one**, exactly as required by `app.py`.
+### Steps
 
-(There is no automatic `requirements.txt` resolution in Snowflake Streamlit.)
+1. In the Streamlit app UI, open **Python Packages / Environment**.
+2. Select the required **Python version**.
+3. Add the following libraries **one by one**:
 
-Once all dependencies are installed, Snowflake will reinitialize the app.
+### Required Python Libraries
+
+* `streamlit`
+* `snowflake-snowpark-python`
+* `pandas`
+* `pypdf`
+* `python-pptx`
+* `openpyxl`
+* `xlrd` *(required only for legacy `.xls` Excel files)*
+
+> ⚠️ **Do NOT add** built-in Python modules such as `uuid`, `re`, `datetime`, `io`, or `time`.
+
+4. After adding all libraries, **save** the environment.
+
+Snowflake will automatically **reinitialize the app** once the environment is updated.
+
+
+### Validation Checklist
+
+* PDF uploads work → `pypdf` installed
+* PowerPoint uploads work → `python-pptx` installed
+* Excel uploads work → `openpyxl` (and `xlrd` if `.xls`) installed
+* Snowflake Cortex / Snowpark works → `snowflake-snowpark-python` installed
 
 ---
 

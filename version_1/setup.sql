@@ -1,53 +1,126 @@
--- Create database
-CREATE OR REPLACE DATABASE AI_FAQ_DB;
+-- ============================================================
+-- COMPLETE DATABASE SETUP FOR AI DOCUMENT ASSISTANT
+-- ============================================================
 
--- Create warehouse  
-CREATE OR REPLACE WAREHOUSE AI_FAQ_WH 
-  WAREHOUSE_SIZE = 'XSMALL'
-  WAREHOUSE_TYPE = 'STANDARD' 
-  AUTO_SUSPEND = 300 
-  AUTO_RESUME = TRUE;
+-- ============================================================
+-- STEP 1: CREATE DATABASE AND SCHEMA
+-- ============================================================
 
--- Use the new database and warehouse  
-USE DATABASE AI_FAQ_DB;
-USE WAREHOUSE AI_FAQ_WH;
+-- Create database (skip if you already have one)
+CREATE DATABASE IF NOT EXISTS AIFAQ_VERSION1_DB;
 
--- Create DOCUMENTS table
+-- Use the database
+USE DATABASE AIFAQ_VERSION1_DB;
+
+-- Create schema
+CREATE SCHEMA IF NOT EXISTS APP_SCHEMA;
+
+-- Use the schema
+USE SCHEMA APP_SCHEMA;
+
+-- ============================================================
+-- STEP 2: CREATE WAREHOUSE (if you don't have one)
+-- ============================================================
+
+CREATE WAREHOUSE IF NOT EXISTS AIFAQ_WAREHOUSE
+    WAREHOUSE_SIZE = 'X-SMALL'
+    AUTO_SUSPEND = 60
+    AUTO_RESUME = TRUE
+    INITIALLY_SUSPENDED = FALSE;
+
+-- Use the warehouse
+USE WAREHOUSE AIFAQ_WAREHOUSE;
+
+-- ============================================================
+-- STEP 3: CREATE TABLES
+-- ============================================================
+
+-- 1. DOCUMENTS TABLE - Stores metadata about uploaded documents
 CREATE OR REPLACE TABLE DOCUMENTS (
-  DOC_ID VARCHAR(36) PRIMARY KEY,
-  FILENAME VARCHAR(255) NOT NULL,
-  FILE_TYPE VARCHAR(50),
-  FILE_SIZE NUMBER,
-  IS_PUBLIC BOOLEAN DEFAULT FALSE,
-  UPLOADED_AT TIMESTAMP_LTZ(9) DEFAULT CURRENT_TIMESTAMP()
+    DOC_ID VARCHAR(255) NOT NULL PRIMARY KEY,
+    FILENAME VARCHAR(500) NOT NULL,
+    FILE_TYPE VARCHAR(50) NOT NULL,
+    FILE_SIZE INTEGER NOT NULL,
+    IS_PUBLIC BOOLEAN DEFAULT FALSE,
+    UPLOADED_AT TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP()
 );
 
--- Create CHUNKS table  
+-- 2. CHUNKS TABLE - Stores document text chunks for RAG
 CREATE OR REPLACE TABLE CHUNKS (
-  CHUNK_ID VARCHAR(50) PRIMARY KEY,
-  DOC_ID VARCHAR(36) NOT NULL,
-  CHUNK_INDEX NUMBER NOT NULL,
-  CHUNK_TEXT VARCHAR(10000) NOT NULL,
-  FOREIGN KEY (DOC_ID) REFERENCES DOCUMENTS(DOC_ID)
+    CHUNK_ID VARCHAR(255) NOT NULL PRIMARY KEY,
+    DOC_ID VARCHAR(255) NOT NULL,
+    CHUNK_INDEX INTEGER NOT NULL,
+    CHUNK_TEXT TEXT NOT NULL
 );
 
--- Create EMBEDDINGS table
+-- 3. EMBEDDINGS TABLE - Stores vector embeddings for semantic search
 CREATE OR REPLACE TABLE EMBEDDINGS (
-  CHUNK_ID VARCHAR(50) PRIMARY KEY,
-  EMBEDDING ARRAY,
-  FOREIGN KEY (CHUNK_ID) REFERENCES CHUNKS(CHUNK_ID)
+    CHUNK_ID VARCHAR(255) NOT NULL PRIMARY KEY,
+    EMBEDDING VECTOR(FLOAT, 768) NOT NULL
 );
 
--- Create CHAT_HISTORY table  
+-- 4. CHAT_HISTORY TABLE - Stores conversation history
 CREATE OR REPLACE TABLE CHAT_HISTORY (
-  CHAT_ID VARCHAR(36) PRIMARY KEY,
-  SESSION_ID VARCHAR(36) NOT NULL,
-  QUERY_TEXT VARCHAR(10000) NOT NULL,
-  RESPONSE_TEXT VARCHAR(10000),  
-  QUERY_TIMESTAMP TIMESTAMP_LTZ(9) DEFAULT CURRENT_TIMESTAMP()  
+    CHAT_ID VARCHAR(255) NOT NULL PRIMARY KEY,
+    SESSION_ID VARCHAR(255) NOT NULL,
+    QUERY_TEXT TEXT NOT NULL,
+    RESPONSE_TEXT TEXT,
+    QUERY_TIMESTAMP TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP()
 );
 
--- Grant privileges to SYSADMIN role
-GRANT ALL ON DATABASE AI_FAQ_DB TO ROLE SYSADMIN;
-GRANT ALL ON WAREHOUSE AI_FAQ_WH TO ROLE SYSADMIN;
-GRANT ALL ON ALL TABLES IN SCHEMA AI_FAQ_DB.PUBLIC TO ROLE SYSADMIN;
+-- ============================================================
+-- STEP 4: GRANT PERMISSIONS (Adjust role as needed)
+-- ============================================================
+
+-- Grant usage on database and schema
+GRANT USAGE ON DATABASE AIFAQ_VERSION1_DB TO ROLE PUBLIC;
+GRANT USAGE ON SCHEMA AIFAQ_VERSION1_DB.APP_SCHEMA TO ROLE PUBLIC;
+
+-- Grant permissions on tables
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA AIFAQ_VERSION1_DB.APP_SCHEMA TO ROLE PUBLIC;
+
+-- Grant permissions for future tables
+GRANT SELECT, INSERT, UPDATE, DELETE ON FUTURE TABLES IN SCHEMA AIFAQ_VERSION1_DB.APP_SCHEMA TO ROLE PUBLIC;
+
+-- Grant warehouse usage
+GRANT USAGE ON WAREHOUSE AIFAQ_WAREHOUSE TO ROLE PUBLIC;
+
+-- ============================================================
+-- STEP 5: VERIFY CORTEX FUNCTIONS ARE AVAILABLE
+-- ============================================================
+
+-- Test embedding function (should return a vector)
+SELECT SNOWFLAKE.CORTEX.EMBED_TEXT_768('snowflake-arctic-embed-m', 'Test text for embedding') AS test_embedding;
+
+-- Test LLM completion function
+SELECT SNOWFLAKE.CORTEX.COMPLETE('mistral-7b', 'Say hello in one word') AS test_completion;
+
+-- ============================================================
+-- STEP 6: VERIFY SETUP
+-- ============================================================
+
+-- Show all tables
+SHOW TABLES IN SCHEMA AIFAQ_VERSION1_DB.APP_SCHEMA;
+
+-- Describe each table
+DESCRIBE TABLE DOCUMENTS;
+DESCRIBE TABLE CHUNKS;
+DESCRIBE TABLE EMBEDDINGS;
+DESCRIBE TABLE CHAT_HISTORY;
+
+-- Show current context
+SELECT 
+    CURRENT_DATABASE() AS current_database,
+    CURRENT_SCHEMA() AS current_schema,
+    CURRENT_WAREHOUSE() AS current_warehouse,
+    CURRENT_ROLE() AS current_role;
+
+-- ============================================================
+-- SETUP COMPLETE!
+-- ============================================================
+
+-- Summary of what was created:
+-- Database: AIFAQ_VERSION1_DB
+-- Schema: APP_SCHEMA
+-- Warehouse: AIFAQ_WAREHOUSE
+-- Tables: DOCUMENTS, CHUNKS, EMBEDDINGS, CHAT_HISTORY
