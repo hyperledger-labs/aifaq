@@ -356,7 +356,7 @@ def extract_pdf_full(f):
     """Full PDF extraction using pypdf (Snowflake compatible)"""
     try:
         from pypdf import PdfReader
-        
+
         reader = PdfReader(f)
         text_parts = []
         # Read ALL pages
