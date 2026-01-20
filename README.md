@@ -28,7 +28,7 @@ The prototype demonstrates a complete pipeline for ingesting, embedding, storing
   Route queries to Snowflake Cortex or external OpenSource LLM models through secure external functions.
 
 - **Multi-Document Knowledge Retrieval**  
-   Supports structured and unstructured data.
+  Supports structred and unstructred data.
 
 - **Persistent Chat Sessions**  
   Full session history stored in Snowflake with easy retrieval.
@@ -92,7 +92,7 @@ The prototype demonstrates a complete pipeline for ingesting, embedding, storing
 ## Folder Descriptions
 
 ### `version_1/` 
-A simplified demonstration build intended for quick snowflake evaluation and to get hands on for beginners.
+A simplified demonstration build intended for quick snowflake evaluation adn to get hands on for beginners.
 
 Includes:
 - Lightweight ingestion + embedding flow  

@@ -53,27 +53,27 @@ st.markdown(
     
     /* Main app background with subtle gradient */
     .stApp {{
-        background: {theme["bg_main"]} !important;
+        background: {theme['bg_main']} !important;
     }}
     
     /* Sidebar with elegant design */
     section[data-testid="stSidebar"] {{
-        background: linear-gradient(180deg, {theme["bg_sidebar"]} 0%, {theme["bg_main"]} 100%) !important;
-        border-right: 1px solid {theme["border"]} !important;
+        background: linear-gradient(180deg, {theme['bg_sidebar']} 0%, {theme['bg_main']} 100%) !important;
+        border-right: 1px solid {theme['border']} !important;
         box-shadow: 2px 0 12px rgba(0,0,0,0.03);
     }}
     
     section[data-testid="stSidebar"] * {{
-        color: {theme["text_primary"]} !important;
+        color: {theme['text_primary']} !important;
     }}
     
     /* All text colors */
     .stMarkdown, .stText, p, span, div {{
-        color: {theme["text_primary"]} !important;
+        color: {theme['text_primary']} !important;
     }}
     
     h1, h2, h3, h4, h5, h6 {{
-        color: {theme["text_primary"]} !important;
+        color: {theme['text_primary']} !important;
         font-weight: 600 !important;
     }}
     
@@ -83,8 +83,8 @@ st.markdown(
         font-weight: 500 !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         border: none !important;
-        color: {theme["text_primary"]} !important;
-        background-color: {theme["bg_secondary"]} !important;
+        color: {theme['text_primary']} !important;
+        background-color: {theme['bg_secondary']} !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
         padding: 0.6rem 1.2rem !important;
         font-size: 0.95rem !important;
@@ -92,20 +92,20 @@ st.markdown(
     
     .stButton > button:hover {{
         transform: translateY(-2px);
-        box-shadow: 0 8px 16px {theme["button_hover_shadow"]} !important;
-        background-color: {theme["expander_bg"]} !important;
+        box-shadow: 0 8px 16px {theme['button_hover_shadow']} !important;
+        background-color: {theme['expander_bg']} !important;
     }}
     
     /* Primary buttons with gradient and glow */
     .stButton > button[kind="primary"] {{
-        background: {theme["message_user_bg"]} !important;
+        background: {theme['message_user_bg']} !important;
         color: white !important;
         font-weight: 600 !important;
-        box-shadow: 0 4px 12px {theme["button_hover_shadow"]} !important;
+        box-shadow: 0 4px 12px {theme['button_hover_shadow']} !important;
     }}
     
     .stButton > button[kind="primary"]:hover {{
-        box-shadow: 0 8px 20px {theme["button_hover_shadow"]} !important;
+        box-shadow: 0 8px 20px {theme['button_hover_shadow']} !important;
         transform: translateY(-3px);
     }}
     
@@ -113,10 +113,10 @@ st.markdown(
     .stTextInput > div > div > input,
     .stTextArea > div > div > textarea {{
         border-radius: 16px !important;
-        border: 2px solid {theme["input_border"]} !important;
+        border: 2px solid {theme['input_border']} !important;
         font-size: 15px !important;
-        background-color: {theme["input_bg"]} !important;
-        color: {theme["text_primary"]} !important;
+        background-color: {theme['input_bg']} !important;
+        color: {theme['text_primary']} !important;
         padding: 14px 18px !important;
         transition: all 0.3s ease !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
@@ -124,7 +124,7 @@ st.markdown(
     
     .stTextInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {{
-        border-color: {theme["input_focus"]} !important;
+        border-color: {theme['input_focus']} !important;
         box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12), 
                    0 4px 8px rgba(0,0,0,0.08) !important;
         outline: none !important;
@@ -133,34 +133,34 @@ st.markdown(
     
     /* Select box with modern design */
     div[data-testid="stSelectbox"] {{
-        color: {theme["text_primary"]} !important;
+        color: {theme['text_primary']} !important;
     }}
     
     div[data-testid="stSelectbox"] > div > div {{
         border-radius: 14px !important;
-        border: 2px solid {theme["input_border"]} !important;
-        background-color: {theme["input_bg"]} !important;
+        border: 2px solid {theme['input_border']} !important;
+        background-color: {theme['input_bg']} !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
         transition: all 0.3s ease !important;
     }}
     
     div[data-testid="stSelectbox"] > div > div:hover {{
-        border-color: {theme["input_focus"]} !important;
+        border-color: {theme['input_focus']} !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.06) !important;
     }}
     
     /* Enhanced file uploader */
     section[data-testid="stFileUploader"] {{
         border-radius: 16px !important;
-        border: 2px dashed {theme["file_upload_border"]} !important;
-        background: {theme["file_upload_bg"]} !important;
+        border: 2px dashed {theme['file_upload_border']} !important;
+        background: {theme['file_upload_bg']} !important;
         padding: 24px;
         transition: all 0.3s ease !important;
     }}
     
     section[data-testid="stFileUploader"]:hover {{
-        border-color: {theme["input_focus"]} !important;
-        background: {theme["bg_secondary"]} !important;
+        border-color: {theme['input_focus']} !important;
+        background: {theme['bg_secondary']} !important;
         transform: translateY(-2px);
         box-shadow: 0 8px 16px rgba(0,0,0,0.06) !important;
     }}
@@ -168,25 +168,25 @@ st.markdown(
     /* Beautiful expanders */
     .streamlit-expanderHeader {{
         border-radius: 12px !important;
-        background: {theme["expander_bg"]} !important;
+        background: {theme['expander_bg']} !important;
         font-weight: 500 !important;
-        color: {theme["text_primary"]} !important;
-        border: 1px solid {theme["border"]} !important;
+        color: {theme['text_primary']} !important;
+        border: 1px solid {theme['border']} !important;
         padding: 12px 16px !important;
         transition: all 0.3s ease !important;
     }}
     
     .streamlit-expanderHeader:hover {{
-        background: {theme["bg_secondary"]} !important;
-        border-color: {theme["input_focus"]} !important;
+        background: {theme['bg_secondary']} !important;
+        border-color: {theme['input_focus']} !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.05) !important;
     }}
     
     /* Info/Warning boxes with better design */
     .stAlert {{
-        background-color: {theme["bg_secondary"]} !important;
-        color: {theme["text_primary"]} !important;
-        border: 1px solid {theme["border"]} !important;
+        background-color: {theme['bg_secondary']} !important;
+        color: {theme['text_primary']} !important;
+        border: 1px solid {theme['border']} !important;
         border-radius: 12px !important;
         padding: 16px !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
@@ -194,24 +194,24 @@ st.markdown(
     
     /* Captions with better styling */
     .stCaptionContainer {{
-        color: {theme["text_secondary"]} !important;
+        color: {theme['text_secondary']} !important;
         font-size: 0.9rem !important;
     }}
     
     /* Enhanced progress bar */
     .stProgress > div > div > div {{
-        background: {theme["message_user_bg"]} !important;
+        background: {theme['message_user_bg']} !important;
         border-radius: 10px !important;
     }}
     
     .stProgress > div > div {{
-        background-color: {theme["bg_secondary"]} !important;
+        background-color: {theme['bg_secondary']} !important;
         border-radius: 10px !important;
     }}
     
     /* Checkbox styling */
     .stCheckbox {{
-        color: {theme["text_primary"]} !important;
+        color: {theme['text_primary']} !important;
     }}
     
     .stCheckbox > label {{
@@ -229,7 +229,7 @@ st.markdown(
         margin: 2rem 0 !important;
         border: none !important;
         height: 1px !important;
-        background: linear-gradient(90deg, transparent, {theme["border"]}, transparent) !important;
+        background: linear-gradient(90deg, transparent, {theme['border']}, transparent) !important;
     }}
     
     /* Improve spacing */
@@ -241,10 +241,10 @@ st.markdown(
     
     /* Metric styling */
     [data-testid="stMetric"] {{
-        background: {theme["bg_secondary"]} !important;
+        background: {theme['bg_secondary']} !important;
         padding: 16px !important;
         border-radius: 12px !important;
-        border: 1px solid {theme["border"]} !important;
+        border: 1px solid {theme['border']} !important;
     }}
     
     /* Tab styling */
@@ -265,17 +265,17 @@ st.markdown(
     }}
     
     ::-webkit-scrollbar-track {{
-        background: {theme["bg_secondary"]};
+        background: {theme['bg_secondary']};
         border-radius: 10px;
     }}
     
     ::-webkit-scrollbar-thumb {{
-        background: {theme["border"]};
+        background: {theme['border']};
         border-radius: 10px;
     }}
     
     ::-webkit-scrollbar-thumb:hover {{
-        background: {theme["input_border"]};
+        background: {theme['input_border']};
     }}
     </style>
 """,
@@ -291,15 +291,12 @@ except Exception as e:
 
 # -------------  CONSTANTS -------------
 LLM_OPTIONS = ["mistral-7b", "snowflake-arctic", "mixtral-8x7b"]
+DOCS_TBL = "DOCUMENTS"
+CHUNKS_TBL = "CHUNKS"
+EMB_TBL = "EMBEDDINGS"
+CHAT_TBL = "CHAT_HISTORY"
 
-# FULLY QUALIFIED TABLE NAMES - This is the key fix!
-DB_SCHEMA = "AIFAQ_VERSION1_DB.APP_SCHEMA"
-DOCS_TBL = f"{DB_SCHEMA}.DOCUMENTS"
-CHUNKS_TBL = f"{DB_SCHEMA}.CHUNKS"
-EMB_TBL = f"{DB_SCHEMA}.EMBEDDINGS"
-CHAT_TBL = f"{DB_SCHEMA}.CHAT_HISTORY"
-
-# Supported file extensions
+# Supported file extensions - TXT ADDED
 SUPPORTED_EXTENSIONS = {
     "pdf": "PDF",
     "pptx": "PowerPoint",
@@ -332,9 +329,7 @@ for k in ("sessions", "current", "llm", "last_upload_time", "kb_refresh"):
                 else (
                     0
                     if k == "last_upload_time"
-                    else False
-                    if k == "kb_refresh"
-                    else None
+                    else False if k == "kb_refresh" else None
                 )
             )
         ),
@@ -355,9 +350,9 @@ if not st.session_state.current:
 
 # -------------  FULL EXTRACTION -------------
 def extract_pdf_full(f):
-    """Full PDF extraction using pypdf (Snowflake compatible)"""
+    """Full PDF extraction"""
     try:
-        from pypdf import PdfReader
+        from PyPDF2 import PdfReader
 
         reader = PdfReader(f)
         text_parts = []
@@ -417,6 +412,7 @@ def extract_excel_full(f):
             df = pd.read_excel(excel_file, sheet_name=sheet_name)
 
             # Convert the entire DataFrame to string *without* truncation
+            # This ensures every character from the Excel file is read
             with pd.option_context(
                 "display.max_rows",
                 None,
@@ -493,21 +489,25 @@ def store_document_fast(
 ) -> bool:
     """
     OPTIMIZED: Store document, chunks, and embeddings using server-side processing.
+    NOW WITH IMMEDIATE COMMIT for instant knowledge base update.
     """
     doc_id = str(uuid.uuid4())
     try:
-        # 1. Insert document
+        # 1. Insert document (single operation) with immediate commit
         session.sql(
             f"INSERT INTO {DOCS_TBL} (DOC_ID,FILENAME,FILE_TYPE,FILE_SIZE,IS_PUBLIC,UPLOADED_AT) "
             f"VALUES ('{sanitize(doc_id)}','{sanitize(filename)}','{src_type}',{len(content)},"
             f"{public},CURRENT_TIMESTAMP())"
         ).collect()
 
+        # FORCE COMMIT - Critical for immediate visibility
+        session.sql("COMMIT").collect()
+
         # 2. Create and batch insert chunks
         chunks = chunk_text(content)
         if not chunks:
             st.warning(f"⚠️ {filename}: Document stored but no content to chunk")
-            return True
+            return True  # Document stored, but no content to chunk
 
         # Prepare chunk data
         chunk_data = []
@@ -528,13 +528,14 @@ def store_document_fast(
             chunks_df = pd.DataFrame(chunk_data)
             session.write_pandas(
                 chunks_df,
-                table_name="CHUNKS",
-                database="AIFAQ_VERSION1_DB",
-                schema="APP_SCHEMA",
+                table_name=CHUNKS_TBL,
                 auto_create_table=False,
                 overwrite=False,
                 quote_identifiers=False,
             )
+
+            # FORCE COMMIT after chunks
+            session.sql("COMMIT").collect()
 
             # 3. Generate and store embeddings
             session.sql(
@@ -549,6 +550,9 @@ def store_document_fast(
                     c.DOC_ID = '{sanitize(doc_id)}'
             """
             ).collect()
+
+            # FORCE COMMIT after embeddings
+            session.sql("COMMIT").collect()
 
             # Verify the document was stored
             verify = session.sql(
@@ -577,6 +581,7 @@ def store_document_fast(
             session.sql(
                 f"DELETE FROM {DOCS_TBL} WHERE DOC_ID='{sanitize(doc_id)}'"
             ).collect()
+            session.sql("COMMIT").collect()  # Commit cleanup
         except Exception as cleanup_e:
             st.error(f"❌ Cleanup failed for {filename}: {str(cleanup_e)}")
         return False
@@ -632,16 +637,16 @@ with st.sidebar:
     # Enhanced header
     st.markdown(
         f"""
-        <div style="padding:16px; background:{theme["bg_secondary"]}; border-radius:16px; 
-                     margin-bottom:20px; border:1px solid {theme["border"]};
+        <div style="padding:16px; background:{theme['bg_secondary']}; border-radius:16px; 
+                     margin-bottom:20px; border:1px solid {theme['border']};
                      box-shadow:0 2px 8px rgba(0,0,0,0.04);">
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-                <div style="width:32px; height:32px; background:{theme["message_user_bg"]}; 
+                <div style="width:32px; height:32px; background:{theme['message_user_bg']}; 
                             border-radius:8px; display:flex; align-items:center; justify-content:center;
-                            box-shadow:0 2px 6px {theme["button_hover_shadow"]};">
+                            box-shadow:0 2px 6px {theme['button_hover_shadow']};">
                     <span style="font-size:18px;">💬</span>
                 </div>
-                <h3 style="margin:0; color:{theme["text_primary"]}; font-size:18px; font-weight:600;">
+                <h3 style="margin:0; color:{theme['text_primary']}; font-size:18px; font-weight:600;">
                     AIFAQ Pro
                 </h3>
             </div>
@@ -657,7 +662,7 @@ with st.sidebar:
         f"""
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
             <span style="font-size:28px;">📚</span>
-            <h2 style="margin:0; color:{theme["text_primary"]}; font-size:22px; font-weight:700;">
+            <h2 style="margin:0; color:{theme['text_primary']}; font-size:22px; font-weight:700;">
                 Knowledge Base Management
             </h2>
         </div>
@@ -692,7 +697,7 @@ with st.sidebar:
             ext = file.name.split(".")[-1].lower()
             file_type = SUPPORTED_EXTENSIONS.get(ext, "TEXT")
 
-            # Extract content
+            # Extract content - this now reads 100% of all file types including TXT
             content = extract_file_content(file, file_type)
 
             if content:
@@ -702,12 +707,12 @@ with st.sidebar:
                         st.success(f"✅ {file.name} uploaded successfully!")
                     success_count += 1
 
-                    # Force immediate rerun after each successful upload
+                    # CRITICAL: Force immediate rerun after each successful upload
                     st.session_state.kb_refresh = True
                     st.session_state.last_upload_time = time.time()
                     progress_bar.progress((idx + 1) / len(files))
-                    time.sleep(0.3)
-                    st.rerun()
+                    time.sleep(0.3)  # Brief pause to show success message
+                    st.rerun()  # Immediate refresh to update knowledge base
                 else:
                     with status_container:
                         st.error(f"❌ {file.name} failed to upload")
@@ -719,6 +724,7 @@ with st.sidebar:
 
             progress_bar.progress((idx + 1) / len(files))
 
+        # This code only runs if all files processed without triggering rerun
         progress_bar.empty()
 
         if success_count > 0:
@@ -742,7 +748,7 @@ with st.sidebar:
             st.success("✅ Knowledge base updated!")
             st.session_state.kb_refresh = False
 
-        # Force fresh database query
+        # Force fresh database query - this ensures latest data
         df = get_user_docs()
 
         if df.empty:
@@ -804,6 +810,7 @@ with st.sidebar:
                     use_container_width=True,
                 ):
                     st.session_state.current = c["SESSION_ID"]
+                    # Load chat history from database
                     loaded_messages = load_chat_history(c["SESSION_ID"])
                     st.session_state.sessions[c["SESSION_ID"]] = {
                         "title": btn_label,
@@ -827,20 +834,20 @@ with st.sidebar:
 # -------------  MAIN CHAT INTERFACE -------------
 st.markdown(
     f"""
-    <div style="margin-bottom:32px; padding:24px; background:{theme["bg_secondary"]}; 
-                border-radius:20px; border:1px solid {theme["border"]};
+    <div style="margin-bottom:32px; padding:24px; background:{theme['bg_secondary']}; 
+                border-radius:20px; border:1px solid {theme['border']};
                 box-shadow:0 4px 12px rgba(0,0,0,0.04);">
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-            <div style="width:40px; height:40px; background:{theme["message_user_bg"]}; 
+            <div style="width:40px; height:40px; background:{theme['message_user_bg']}; 
                         border-radius:12px; display:flex; align-items:center; justify-content:center;
-                        box-shadow:0 4px 8px {theme["button_hover_shadow"]};">
+                        box-shadow:0 4px 8px {theme['button_hover_shadow']};">
                 <span style="font-size:24px;">💬</span>
             </div>
-            <h2 style="color:{theme["text_primary"]};font-weight:700;margin:0;font-size:28px;">
+            <h2 style="color:{theme['text_primary']};font-weight:700;margin:0;font-size:28px;">
                 Chat with AIFAQ Pro
             </h2>
         </div>
-        <p style="color:{theme["text_secondary"]};margin:0;font-size:15px;padding-left:52px;">
+        <p style="color:{theme['text_secondary']};margin:0;font-size:15px;padding-left:52px;">
             Private and secure AI-powered conversations with your enterprise data
         </p>
     </div>
@@ -867,7 +874,7 @@ if st.session_state.current not in st.session_state.sessions:
 
 messages = st.session_state.sessions[st.session_state.current]["messages"]
 
-# Display messages
+# Display messages - Beautiful modern design with enhanced styling
 chat_container = st.container()
 with chat_container:
     if not messages:
@@ -875,15 +882,15 @@ with chat_container:
             f"""
             <div style="text-align:center; padding:80px 20px;">
                 <div style="display:inline-block; padding:20px; border-radius:20px; 
-                            background:{theme["bg_secondary"]}; 
+                            background:{theme['bg_secondary']}; 
                             box-shadow:0 8px 24px rgba(0,0,0,0.06);
-                            border:1px solid {theme["border"]};">
-                    <h2 style="color:{theme["primary"]}; font-weight:600; margin:0 0 12px 0;">
+                            border:1px solid {theme['border']};">
+                    <h2 style="color:{theme['primary']}; font-weight:600; margin:0 0 12px 0;">
                         👋 Welcome to AIFAQ Pro AI Assistant
                     </h2>
-                    <p style="color:{theme["text_secondary"]}; font-size:16px; margin:0; line-height:1.6;">
+                    <p style="color:{theme['text_secondary']}; font-size:16px; margin:0; line-height:1.6;">
                         Upload to your knowledge base and start asking questions to unlock insights<br>
-                        <span style="font-size:14px; color:{theme["text_secondary"]}; opacity:0.8;">
+                        <span style="font-size:14px; color:{theme['text_secondary']}; opacity:0.8;">
                         Powered by advanced AI • Fast • Secure
                         </span>
                     </p>
@@ -898,36 +905,36 @@ with chat_container:
                 st.markdown(
                     f'<div style="display:flex;justify-content:flex-end;margin:20px 0;animation:slideIn 0.3s ease-out;">'
                     f'<div style="background:{theme["message_user_bg"]};'
-                    f"color:{theme['message_user_text']};"
+                    f'color:{theme["message_user_text"]};'
                     f"border-radius:20px 20px 4px 20px;"
                     f"padding:16px 20px;"
                     f"max-width:75%;"
-                    f"box-shadow:0 4px 12px {theme['button_hover_shadow']}, 0 2px 4px rgba(0,0,0,0.08);"
+                    f'box-shadow:0 4px 12px {theme["button_hover_shadow"]}, 0 2px 4px rgba(0,0,0,0.08);'
                     f"font-size:15px;"
                     f"line-height:1.6;"
                     f"font-weight:500;"
                     f"border:1px solid rgba(255,255,255,0.2);"
                     f"backdrop-filter:blur(10px);"
                     f'">'
-                    f"{msg['content']}</div></div>",
+                    f'{msg["content"]}</div></div>',
                     unsafe_allow_html=True,
                 )
             else:
                 st.markdown(
                     f'<div style="display:flex;justify-content:flex-start;margin:20px 0;animation:slideIn 0.3s ease-out;">'
                     f'<div style="background:{theme["message_ai_bg"]};'
-                    f"color:{theme['message_ai_text']};"
+                    f'color:{theme["message_ai_text"]};'
                     f"border-radius:20px 20px 20px 4px;"
                     f"padding:16px 20px;"
                     f"max-width:75%;"
                     f"box-shadow:0 2px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);"
                     f"font-size:15px;"
                     f"line-height:1.7;"
-                    f"border:1px solid {theme['message_ai_border']};"
+                    f'border:1px solid {theme["message_ai_border"]};'
                     f'position:relative;">'
                     f'<div style="position:absolute; top:-6px; left:-6px; width:12px; height:12px; '
                     f'background:{theme["accent_highlight"]}; border-radius:50%; opacity:0.6;"></div>'
-                    f"{msg['content']}</div></div>",
+                    f'{msg["content"]}</div></div>',
                     unsafe_allow_html=True,
                 )
 
@@ -950,28 +957,29 @@ with chat_container:
             unsafe_allow_html=True,
         )
 
-# Input form
+# Input form - Beautiful modern design with enhanced styling
 with st.form("chat_form", clear_on_submit=True):
+    # Enhanced input styling
     st.markdown(
         f"""
         <style>
         .stTextArea textarea {{
             border-radius: 20px !important;
-            border: 2px solid {theme["input_border"]} !important;
+            border: 2px solid {theme['input_border']} !important;
             padding: 18px 24px !important;
             font-size: 15px !important;
-            background: {theme["input_bg"]} !important;
+            background: {theme['input_bg']} !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }}
         .stTextArea textarea:focus {{
-            border-color: {theme["input_focus"]} !important;
+            border-color: {theme['input_focus']} !important;
             box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15), 
                         0 8px 16px rgba(0,0,0,0.08) !important;
             transform: translateY(-2px);
         }}
         .stTextArea textarea::placeholder {{
-            color: {theme["text_secondary"]} !important;
+            color: {theme['text_secondary']} !important;
             opacity: 0.6;
         }}
         </style>
@@ -987,13 +995,13 @@ with st.form("chat_form", clear_on_submit=True):
         key="chat_input",
     )
 
-    # Action buttons
+    # Action buttons with enhanced design
     col1, col2, col3 = st.columns([6, 1.5, 1])
     with col1:
         st.markdown(
             f"""
             <div style="display:flex; align-items:center; gap:8px; padding:8px 0;">
-                <span style="color:{theme["text_secondary"]}; font-size:14px;">
+                <span style="color:{theme['text_secondary']}; font-size:14px;">
                     💡 <strong>Tip:</strong> Be specific and detailed for best results
                 </span>
             </div>
@@ -1049,7 +1057,7 @@ with st.form("chat_form", clear_on_submit=True):
                         )
                     context = "\n\n---\n\n".join(context_parts)
 
-                    # Generate response using LLM
+                    # Generate response using LLM with source tracking
                     prompt_llm = (
                         f"You are a helpful assistant that answers questions based on the provided knowledge base context. "
                         f"Answer the user's question using only the information from the provided knowledge base. "
@@ -1070,28 +1078,34 @@ with st.form("chat_form", clear_on_submit=True):
                         else "The LLM service didn't return a response."
                     )
 
-                    # Cite sources
+                    # Cite only the PRIMARY source (highest similarity score)
+                    # Group by filename and get the highest similarity for each document
                     source_scores = (
                         rows.groupby("FILENAME")["SIMILARITY_SCORE"]
                         .max()
                         .sort_values(ascending=False)
                     )
 
+                    # Get top source(s) - only cite documents with similarity > 0.5 (strong match)
                     top_sources = []
                     for filename, score in source_scores.items():
-                        if score > 0.5:
+                        if score > 0.5:  # Strong relevance threshold
                             top_sources.append(filename)
-                            if len(top_sources) >= 2:
+                            if len(top_sources) >= 2:  # Max 2 sources
                                 break
 
+                    # If no strong matches, just use the top result
                     if not top_sources:
                         top_sources = [source_scores.index[0]]
 
+                    # Add source attribution - only the primary source(s) used
                     if len(top_sources) == 1:
                         sources_md = f"\n\n---\n**Source:** {top_sources[0]}"
                     else:
                         sources_list_md = "\n- ".join(top_sources)
-                        sources_md = f"\n\n---\n**Sources:**\n- {sources_list_md}"
+                        sources_md = (
+                            f"\n\n---\n" f"**Sources:**\n" f"- {sources_list_md}"
+                        )
                     answer += sources_md
 
             except Exception as e:
@@ -1115,14 +1129,11 @@ with st.form("chat_form", clear_on_submit=True):
                         }
                     ]
                 ),
-                table_name="CHAT_HISTORY",
-                database="AIFAQ_VERSION1_DB",
-                schema="APP_SCHEMA",
+                table_name=CHAT_TBL,
                 auto_create_table=False,
                 overwrite=False,
-                quote_identifiers=False,
             )
         except Exception:
-            pass
+            pass  # Chat history persistence is optional
 
         st.rerun()
