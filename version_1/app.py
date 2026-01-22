@@ -291,12 +291,15 @@ except Exception as e:
 
 # -------------  CONSTANTS -------------
 LLM_OPTIONS = ["mistral-7b", "snowflake-arctic", "mixtral-8x7b"]
-DOCS_TBL = "DOCUMENTS"
-CHUNKS_TBL = "CHUNKS"
-EMB_TBL = "EMBEDDINGS"
-CHAT_TBL = "CHAT_HISTORY"
 
-# Supported file extensions - TXT ADDED
+# FULLY QUALIFIED TABLE NAMES - This is the key fix!
+DB_SCHEMA = "AIFAQ_VERSION1_DB.APP_SCHEMA"
+DOCS_TBL = f"{DB_SCHEMA}.DOCUMENTS"
+CHUNKS_TBL = f"{DB_SCHEMA}.CHUNKS"
+EMB_TBL = f"{DB_SCHEMA}.EMBEDDINGS"
+CHAT_TBL = f"{DB_SCHEMA}.CHAT_HISTORY"
+
+# Supported file extensions
 SUPPORTED_EXTENSIONS = {
     "pdf": "PDF",
     "pptx": "PowerPoint",
@@ -350,10 +353,10 @@ if not st.session_state.current:
 
 # -------------  FULL EXTRACTION -------------
 def extract_pdf_full(f):
-    """Full PDF extraction"""
+    """Full PDF extraction using pypdf (Snowflake compatible)"""
     try:
-        from PyPDF2 import PdfReader
-
+        from pypdf import PdfReader
+        
         reader = PdfReader(f)
         text_parts = []
         # Read ALL pages
@@ -412,7 +415,6 @@ def extract_excel_full(f):
             df = pd.read_excel(excel_file, sheet_name=sheet_name)
 
             # Convert the entire DataFrame to string *without* truncation
-            # This ensures every character from the Excel file is read
             with pd.option_context(
                 "display.max_rows",
                 None,
@@ -489,25 +491,21 @@ def store_document_fast(
 ) -> bool:
     """
     OPTIMIZED: Store document, chunks, and embeddings using server-side processing.
-    NOW WITH IMMEDIATE COMMIT for instant knowledge base update.
     """
     doc_id = str(uuid.uuid4())
     try:
-        # 1. Insert document (single operation) with immediate commit
+        # 1. Insert document
         session.sql(
             f"INSERT INTO {DOCS_TBL} (DOC_ID,FILENAME,FILE_TYPE,FILE_SIZE,IS_PUBLIC,UPLOADED_AT) "
             f"VALUES ('{sanitize(doc_id)}','{sanitize(filename)}','{src_type}',{len(content)},"
             f"{public},CURRENT_TIMESTAMP())"
         ).collect()
 
-        # FORCE COMMIT - Critical for immediate visibility
-        session.sql("COMMIT").collect()
-
         # 2. Create and batch insert chunks
         chunks = chunk_text(content)
         if not chunks:
             st.warning(f"⚠️ {filename}: Document stored but no content to chunk")
-            return True  # Document stored, but no content to chunk
+            return True
 
         # Prepare chunk data
         chunk_data = []
@@ -528,14 +526,13 @@ def store_document_fast(
             chunks_df = pd.DataFrame(chunk_data)
             session.write_pandas(
                 chunks_df,
-                table_name=CHUNKS_TBL,
+                table_name="CHUNKS",
+                database="AIFAQ_VERSION1_DB",
+                schema="APP_SCHEMA",
                 auto_create_table=False,
                 overwrite=False,
                 quote_identifiers=False,
             )
-
-            # FORCE COMMIT after chunks
-            session.sql("COMMIT").collect()
 
             # 3. Generate and store embeddings
             session.sql(
@@ -550,9 +547,6 @@ def store_document_fast(
                     c.DOC_ID = '{sanitize(doc_id)}'
             """
             ).collect()
-
-            # FORCE COMMIT after embeddings
-            session.sql("COMMIT").collect()
 
             # Verify the document was stored
             verify = session.sql(
@@ -581,7 +575,6 @@ def store_document_fast(
             session.sql(
                 f"DELETE FROM {DOCS_TBL} WHERE DOC_ID='{sanitize(doc_id)}'"
             ).collect()
-            session.sql("COMMIT").collect()  # Commit cleanup
         except Exception as cleanup_e:
             st.error(f"❌ Cleanup failed for {filename}: {str(cleanup_e)}")
         return False
@@ -697,7 +690,7 @@ with st.sidebar:
             ext = file.name.split(".")[-1].lower()
             file_type = SUPPORTED_EXTENSIONS.get(ext, "TEXT")
 
-            # Extract content - this now reads 100% of all file types including TXT
+            # Extract content
             content = extract_file_content(file, file_type)
 
             if content:
@@ -707,12 +700,12 @@ with st.sidebar:
                         st.success(f"✅ {file.name} uploaded successfully!")
                     success_count += 1
 
-                    # CRITICAL: Force immediate rerun after each successful upload
+                    # Force immediate rerun after each successful upload
                     st.session_state.kb_refresh = True
                     st.session_state.last_upload_time = time.time()
                     progress_bar.progress((idx + 1) / len(files))
-                    time.sleep(0.3)  # Brief pause to show success message
-                    st.rerun()  # Immediate refresh to update knowledge base
+                    time.sleep(0.3)
+                    st.rerun()
                 else:
                     with status_container:
                         st.error(f"❌ {file.name} failed to upload")
@@ -724,7 +717,6 @@ with st.sidebar:
 
             progress_bar.progress((idx + 1) / len(files))
 
-        # This code only runs if all files processed without triggering rerun
         progress_bar.empty()
 
         if success_count > 0:
@@ -748,7 +740,7 @@ with st.sidebar:
             st.success("✅ Knowledge base updated!")
             st.session_state.kb_refresh = False
 
-        # Force fresh database query - this ensures latest data
+        # Force fresh database query
         df = get_user_docs()
 
         if df.empty:
@@ -810,7 +802,6 @@ with st.sidebar:
                     use_container_width=True,
                 ):
                     st.session_state.current = c["SESSION_ID"]
-                    # Load chat history from database
                     loaded_messages = load_chat_history(c["SESSION_ID"])
                     st.session_state.sessions[c["SESSION_ID"]] = {
                         "title": btn_label,
@@ -874,7 +865,7 @@ if st.session_state.current not in st.session_state.sessions:
 
 messages = st.session_state.sessions[st.session_state.current]["messages"]
 
-# Display messages - Beautiful modern design with enhanced styling
+# Display messages
 chat_container = st.container()
 with chat_container:
     if not messages:
@@ -957,9 +948,8 @@ with chat_container:
             unsafe_allow_html=True,
         )
 
-# Input form - Beautiful modern design with enhanced styling
+# Input form
 with st.form("chat_form", clear_on_submit=True):
-    # Enhanced input styling
     st.markdown(
         f"""
         <style>
@@ -995,7 +985,7 @@ with st.form("chat_form", clear_on_submit=True):
         key="chat_input",
     )
 
-    # Action buttons with enhanced design
+    # Action buttons
     col1, col2, col3 = st.columns([6, 1.5, 1])
     with col1:
         st.markdown(
@@ -1057,7 +1047,7 @@ with st.form("chat_form", clear_on_submit=True):
                         )
                     context = "\n\n---\n\n".join(context_parts)
 
-                    # Generate response using LLM with source tracking
+                    # Generate response using LLM
                     prompt_llm = (
                         f"You are a helpful assistant that answers questions based on the provided knowledge base context. "
                         f"Answer the user's question using only the information from the provided knowledge base. "
@@ -1078,27 +1068,23 @@ with st.form("chat_form", clear_on_submit=True):
                         else "The LLM service didn't return a response."
                     )
 
-                    # Cite only the PRIMARY source (highest similarity score)
-                    # Group by filename and get the highest similarity for each document
+                    # Cite sources
                     source_scores = (
                         rows.groupby("FILENAME")["SIMILARITY_SCORE"]
                         .max()
                         .sort_values(ascending=False)
                     )
 
-                    # Get top source(s) - only cite documents with similarity > 0.5 (strong match)
                     top_sources = []
                     for filename, score in source_scores.items():
-                        if score > 0.5:  # Strong relevance threshold
+                        if score > 0.5:
                             top_sources.append(filename)
-                            if len(top_sources) >= 2:  # Max 2 sources
+                            if len(top_sources) >= 2:
                                 break
 
-                    # If no strong matches, just use the top result
                     if not top_sources:
                         top_sources = [source_scores.index[0]]
 
-                    # Add source attribution - only the primary source(s) used
                     if len(top_sources) == 1:
                         sources_md = f"\n\n---\n**Source:** {top_sources[0]}"
                     else:
@@ -1129,11 +1115,14 @@ with st.form("chat_form", clear_on_submit=True):
                         }
                     ]
                 ),
-                table_name=CHAT_TBL,
+                table_name="CHAT_HISTORY",
+                database="AIFAQ_VERSION1_DB",
+                schema="APP_SCHEMA",
                 auto_create_table=False,
                 overwrite=False,
+                quote_identifiers=False,
             )
         except Exception:
-            pass  # Chat history persistence is optional
+            pass
 
         st.rerun()

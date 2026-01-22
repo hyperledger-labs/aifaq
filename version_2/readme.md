@@ -49,7 +49,7 @@ authenticator = "snowflake"
 #### Step 3: Deploy Application
 ```bash
 # Navigate to project folder
-cd project folder
+cd version_2
 
 # Deploy (creates package and app)
 snow app run
@@ -87,7 +87,7 @@ CREATE APPLICATION PACKAGE AIFAQ_PRO_PKG
 In Snowsight or Classic UI:
 1. Navigate to **Data > Databases > AIFAQ_PRO_PKG > Stages**
 2. Click on the automatically created stage
-3. Upload all 7 files using the **+ Files** button
+3. Upload all 5 files using the **+ Files** button
 
 Or use SQL:
 ```sql
@@ -136,7 +136,7 @@ CREATE APPLICATION AIFAQ_PRO_TEST
 #### Step 3: Upload & Release
 1. In your package, go to **Versions**
 2. Click **Create Version**
-3. Drag-and-drop all 7 files
+3. Drag-and-drop all 5 files
 4. Set version number to `1.0.0`
 5. Click **Create Release Directive**
 
@@ -441,7 +441,7 @@ ALTER TABLE APP_USER_TEAMS ADD COLUMN IF NOT EXISTS EMAIL VARCHAR;
 
 Before deploying to production, verify:
 
-- [ ] All 7 files are present and validated
+- [ ] All 5 files are present and validated
 - [ ] `manifest.yml` has correct author/contact info
 - [ ] `setup.sql` has no syntax errors (test in worksheet)
 - [ ] `environment.yml` uses supported Python version (3.10)
