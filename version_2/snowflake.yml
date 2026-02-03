@@ -1,0 +1,44 @@
+definition_version: "1"
+native_app:
+  name: AIFAQ_PRO
+  label: "AIFAQ Pro"
+  version: "1.0.0"
+  comment: "AI-powered FAQ assistant with document ingestion"
+
+  # Application package
+  package:
+    name: AIFAQ_PRO_PKG
+    distribution: PUBLIC  # For marketplace
+    comment: "Package for AIFAQ Pro Native App"
+
+  # Application
+  application:
+    name: AIFAQ_PRO_APP
+    from:
+      package: AIFAQ_PRO_PKG
+    debug: true
+    comment: "AIFAQ Pro application instance"
+
+  # Artifacts to include
+  artifacts:
+    - src: aifaq_app.py
+      dest: aifaq_app.py
+    - src: manifest.yml
+      dest: manifest.yml
+    - src: setup.sql
+      dest: setup.sql
+    - src: environment.yml
+      dest: environment.yml
+    - src: README.md
+      dest: README.md
+    - src: LICENSE
+      dest: LICENSE
+
+  # Configuration
+  configuration:
+    default_connection: my_snowflake_connection
+    default_warehouse: compute_wh
+    default_role: accountadmin
+
+# Project structure
+definition_version: "1"
