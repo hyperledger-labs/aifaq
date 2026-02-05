@@ -592,7 +592,7 @@ st.markdown(
 # ==========================================
 # CONSTANTS
 # ==========================================
-DB_NAME = "AIFAQ_BETA_DB"
+DB_NAME = "VERSION2_DB"
 SCHEMA_NAME = "APP_SCHEMA"
 MODEL_SMALL = "mistral-7b"
 MODEL_LARGE = "mixtral-8x7b"
