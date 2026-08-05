@@ -11,3 +11,6 @@ beautifulsoup4
 transformers
 fastapi
 uvicorn
+langchain-openai
+langchain-core
+openai
